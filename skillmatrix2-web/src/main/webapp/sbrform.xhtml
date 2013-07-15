@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/WEB-INF/templates/default.xhtml"
+	  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+   xmlns:rich="http://richfaces.org/rich"
+   xmlns:a4j="http://richfaces.org/a4j" >
+   
+
+	
+	<ui:define name="title">SBR</ui:define>
+	<ui:define name="content">
+
+	   <a4j:queue requestDelay="100" ignoreDupResponses="false"/>
+
+		<h2>
+			<h:outputText
+				value="#{sbrController.editing? 'Update SBR:' : 'Create SBR:'}" />
+		</h2>
+		<h:form id="sbr" styleClass="form">
+			<h:inputHidden value="#{sbrController.sbr.id}" />
+			<h:panelGrid columns="3">
+				<h:outputLabel value="Name:" for="name" />
+				<h:inputText value="#{sbrController.sbr.name}" id="name" />
+				<h:message for="name" errorClass="error" infoClass="success" />
+			</h:panelGrid>
+
+		
+			<rich:dataTable id="members" value="#{sbrController.memberHelper.model}" var="member" rows="5" styleClass="simpletablestyle" columnClasses="namecol,namecol,checkboxcol">
+				<f:facet name="caption">
+				<h3>Members (1.SBR)</h3>
+				</f:facet>
+				
+				<rich:column >
+					<f:facet name="header">
+					<a4j:commandLink value="Name " action="#{sbrController.memberHelper.sortByName}" execute="members" render="members" styleClass="whitelink" /><br/>
+					<h:inputText value="#{sbrController.memberHelper.nameFilter}" size="13" >
+						<a4j:ajax event="keyup" render="@body @footer" execute="members" />
+					</h:inputText>
+					</f:facet>
+					
+					<h:outputText value="#{member.name}" styleClass="name"/>
+				</rich:column>
+				<rich:column>
+				   <f:facet name="header">
+				     <a4j:commandLink value="Nick " action="#{sbrController.memberHelper.sortByNick}" execute="members" render="members" styleClass="whitelink" /><br/>
+				     <h:inputText value="#{sbrController.memberHelper.nickFilter}" size="8" >
+				     	<a4j:ajax event="keyup" render="@body @footer" execute="members" />
+				     </h:inputText>
+				   </f:facet>          
+				   
+				<h:outputText value="#{member.nick}" />
+				</rich:column>
+				
+				<rich:column>
+					<h:selectBooleanCheckbox value="#{sbrformHolder.membershipMap[member]}">
+						<a4j:ajax event="change" listener="#{sbrController.reloadCoaches}" execute="coaches" render="coaches" />
+					</h:selectBooleanCheckbox>
+				</rich:column>
+			
+				<f:facet name="footer">
+				  <rich:dataScroller for="members" maxPages="5" fastStep="10" execute="members"/>
+				</f:facet>
+			</rich:dataTable>
+				
+				
+			<h:panelGroup>
+
+				<h:panelGrid columns="3" styleClass="formsection">
+					<h:outputLabel value="Coach:" for="coaches" />
+					<h:panelGroup id="coaches">
+					<h:outputText value="First add some people." rendered="#{empty sbrController.availableCoaches}" />
+					<h:selectOneMenu value="#{sbrController.coachID}" rendered="#{not empty sbrController.availableCoaches}" >
+						<f:selectItems value="#{sbrController.availableCoaches}" var="coach" itemValue="#{coach.id}" itemLabel="#{coach.name}" />
+					</h:selectOneMenu>
+					</h:panelGroup>
+				</h:panelGrid>
+
+
+				<rich:dataTable id="pkgs" value="#{sbrController.pkgHelper.model}" var="pkg" rows="5" styleClass="simpletablestyle" columnClasses="namecol,checkboxcol">
+				   <f:facet name="caption">
+				   <h3>Tags</h3>
+				   </f:facet>
+					<rich:column>
+					      <f:facet name="header">
+					      <a4j:commandLink value="Tag name " action="#{sbrController.pkgHelper.sortByName}" execute="pkgs" render="pkgs" styleClass="whitelink"/><br/>
+					      <h:inputText value="#{sbrController.pkgHelper.nameFilter}" >
+					      	<a4j:ajax event="keyup" render="@body @footer" execute="pkgs" />
+                            <a4j:ajax event="mousedown" render="@body @footer" execute="pkgs"/>
+					      </h:inputText>
+					      </f:facet>
+
+					<h:outputText value="#{pkg.name}" styleClass="name" />
+					</rich:column>
+					
+
+					<rich:column>
+						<h:selectBooleanCheckbox value="#{sbrformHolder.packageMap[pkg]}" onchange="pkgchanged = true; return false;" />
+					</rich:column>
+				
+				<f:facet name="footer">
+					<rich:dataScroller for="pkgs" maxPages="5" fastStep="10" execute="pkgs" />
+				</f:facet>
+				</rich:dataTable>
+				
+			</h:panelGroup>
+
+			<h:messages globalOnly="true" errorClass="error" infoClass="success" />
+			<h:commandButton value="Submit" action="#{sbrController.submitSbr}"
+				onclick="return pkgchanged &amp;&amp; confirm('Are you sure?\nTags with no SBR will be deleted.')" styleClass="submit" />
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/WEB-INF/templates/default.xhtml"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+	<ui:define name="title">Import results</ui:define>
+	<ui:define name="content">
+		<h1>Import results</h1>
+		<ul class="importresults">
+		<li><h:outputText value="files imported: #{diffHolder.diffs.size()}"  style="font-weight: bold;"/>
+			<ul>
+				<li>
+					<h:outputText value="added entities: #{diffHolder.added}" style="color: #008000;"/><br/>
+				</li>
+				<li>
+					<h:outputText value="removed entities: #{diffHolder.removed}"  style="color: #e00000;" /><br/>
+				</li>
+				<li>
+					<h:outputText value="deprecated entities: #{diffHolder.deprecated}"  style="color: #890000;" /><br/>
+				</li>
+				<li>
+					<h:outputText value="undeprecated entities: #{diffHolder.undeprecated}" /><br/>
+				</li>
+				
+			</ul>
+		</li>
+		</ul>
+		
+		
+	</ui:define>
+</ui:composition>

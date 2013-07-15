@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   template="/WEB-INF/templates/default.xhtml">
+   
+   <ui:define name="title">Tag</ui:define>
+   <ui:define name="content">
+   
+   <h2><h:outputText value="#{packageController.editing? 'Edit tag:' : 'New tag:'}" /></h2>
+   <h:outputLink value="pkgform.jsf" rendered="#{packageController.editing}">Create new tag</h:outputLink>
+   
+   <h:form id="form" styleClass="form">
+   <h:inputHidden value="#{packageController.pkg.id}" />
+   <h:panelGrid columns="3">
+   
+   <h:outputLabel value="Name:" for="name" />
+   <h:inputText value="#{packageController.pkg.name}" id="name" />
+   <h:message for="name" errorClass="error"/>
+   
+    <h:outputLabel value="SBR" for="sbrs" />
+   <h:selectOneMenu value="#{packageController.sbrID}">
+    <f:selectItem itemValue="-1" itemLabel="-- no sbr --" noSelectionOption="true"/>
+   	<f:selectItems value="#{SBRs}" var="sbr" itemLabel="#{sbr.name}" itemValue="#{sbr.id}"></f:selectItems>
+   </h:selectOneMenu>
+   </h:panelGrid>	
+  <h:messages globalOnly="true" errorClass="error" infoClass="success"/>
+   <h:commandButton value="#{packageController.editing? 'Update' : 'Create'}" action="#{packageController.submitPackage}" styleClass="submit"/>
+   </h:form>
+   
+   
+   </ui:define>
+   </ui:composition>

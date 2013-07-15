@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   template="/WEB-INF/templates/default.xhtml"
+   xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+   xmlns:rich="http://richfaces.org/rich"
+   xmlns:a4j="http://richfaces.org/a4j" >
+   
+   <ui:define name="title">Tags</ui:define>
+   <ui:define name="content">
+   
+      <a4j:queue requestDelay="100" ignoreDupResponses="true"/>
+   
+   <h2>Tags:</h2>
+   <h:outputLink value="./pkgform.jsf">Add new tag</h:outputLink>
+   <h:form>
+   <rich:dataTable id="pkgs" value="#{packageController.sortHelper.model}" var="pkg" rows="15" styleClass="simpletablestyle" columnClasses="namecol,namecol,numcol,actioncol">
+   <rich:column>
+   	<f:facet name="header">
+   		<a4j:commandLink value="Name " action="#{packageController.sortHelper.sortByName}" render="pkgs" styleClass="whitelink"/><br/>
+   		<h:inputText value="#{packageController.sortHelper.nameFilter}" size="15" >
+   			<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+   		</h:inputText>
+   	</f:facet>
+   	<h:outputText value="#{pkg.name}" styleClass="name" /> 
+   </rich:column>
+   
+   <rich:column >
+   <f:facet name="header">
+	   <a4j:commandLink value="SBR name " action="#{packageController.sortHelper.sortBySbr}" render="pkgs" styleClass="whitelink"/><br/>
+	   <h:inputText value="#{packageController.sortHelper.sbrFilter}" size="10" >
+	   		<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+   	   </h:inputText>
+   </f:facet>
+   <h:outputText value="#{pkg.sbr.name}" />
+   </rich:column>
+   
+   <rich:column sortBy="#{packageController.getExperts(pkg)}" sortOrder="#{packageController.sortHelper.expertsOrder}">
+   	<f:facet name="header">
+   		<a4j:commandLink value="Experts" action="#{packageController.sortHelper.sortByExperts}" render="pkgs" styleClass="whitelink" />
+   	</f:facet>
+     <h:outputText value="#{packageController.getExperts(pkg)}" />
+   </rich:column>
+   
+   <rich:column >
+   	<f:facet name="header">Actions</f:facet>
+	<h:outputLink value="./pkgdetail.jsf?id=#{pkg.id}">view </h:outputLink>
+	<h:outputLink value="./pkgform.jsf?editid=#{pkg.id}">edit </h:outputLink>
+   	<h:commandLink onclick="return confirm('Do you really want to delete tag #{pkg.name}?')" action="#{packageController.deletePackage(pkg)}" value="delete" /> 
+   </rich:column>
+   
+   <f:facet name="footer">
+      <rich:dataScroller for="pkgs" maxPages="5" fastStep="10" />
+   </f:facet>
+   </rich:dataTable>
+
+   </h:form>
+   
+   
+   </ui:define>
+   </ui:composition>

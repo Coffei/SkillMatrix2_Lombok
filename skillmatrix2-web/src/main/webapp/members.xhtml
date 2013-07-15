@@ -1,0 +1,122 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+   xmlns:h="http://java.sun.com/jsf/html"
+   template="/WEB-INF/templates/default.xhtml"
+   xmlns:rich="http://richfaces.org/rich"
+   xmlns:a4j="http://richfaces.org/a4j">
+   
+   <ui:define name="title">Members</ui:define>
+   <ui:define name="content">
+   
+   <a4j:queue requestDelay="100" ignoreDupResponses="true" />
+   
+   <h2>Members</h2>
+   <h:outputLink value="./memberform.jsf" >Create new member</h:outputLink>
+   <h:panelGroup styleClass="simpletablestyle">
+   <h:form>
+   
+<!--    <rich:focus preserve="true"></rich:focus> -->
+   
+   <rich:dataTable value="#{membersController.sortHelper.model}" id="members" var="member" rows="15" styleClass="widetable" >
+<!--    columnClasses="namecol,namecol,namecol,langcol,numcol,actioncol" -->
+   		<rich:column styleClass="namecol">
+   			<f:facet name="header">
+   				<a4j:commandLink value="Name" action="#{membersController.sortHelper.sortByName}" render="members" styleClass="whitelink"/><br/>
+   				<h:inputText value="#{membersController.sortHelper.nameFilter}" size="13">
+   					<a4j:ajax event="keyup" render="@body @footer" execute="@this"  />
+   				</h:inputText>
+   			</f:facet>
+   			<h:outputText value="#{member.name}" styleClass="name"/>
+		</rich:column>
+		
+		<rich:column>
+			<f:facet name="header">
+				<a4j:commandLink value="Role" action="#{membersController.sortHelper.sortByRole()}" render="members" styleClass="whitelink"/><br/>
+				<h:selectOneMenu value="#{membersController.sortHelper.roleFilter}">
+					<f:selectItem itemLabel="-" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{membersController.roleEnumValues}" />
+					<a4j:ajax event="change" render="@body @footer" execute="@this" />
+				</h:selectOneMenu>		
+			</f:facet>
+			<h:outputText value="#{member.role}" />
+		</rich:column>
+		
+		<rich:column>
+			<f:facet name="header">
+				<a4j:commandLink value="Geo" action="#{membersController.sortHelper.sortByGeo()}" render="members" styleClass="whitelink" /><br />
+				<h:selectOneMenu value="#{membersController.sortHelper.geoFilter}">
+					<f:selectItem itemValue="" itemLabel="-"/>
+					<f:selectItems value="#{membersController.geoEnumValues}" />
+					<a4j:ajax event="change" render="@body @footer" execute="@this" />
+					<f:converter converterId="geoconverter" />
+				</h:selectOneMenu>
+			</f:facet>
+			<h:outputText value="#{member.geo}" />
+		</rich:column>
+		
+		<rich:column>
+			<f:facet name="header">
+				<a4j:commandLink value="Extension" action="#{membersController.sortHelper.sortByExtension()}" render="members" styleClass="whitelink"/><br />
+				<h:inputText value="#{membersController.sortHelper.extensionFilter}"  size="8" id="ext_filter">
+					<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+				</h:inputText>
+			</f:facet>
+			<h:outputText value="#{member.extension}" />
+		</rich:column>
+   		
+   			<rich:column styleClass="namecol">
+   			<f:facet name="header">
+   				<a4j:commandLink value="Nick  " action="#{membersController.sortHelper.sortByNick}" render="members" styleClass="whitelink" /><br/>
+   				<h:inputText value="#{membersController.sortHelper.nickFilter}" size="8" >
+   					<a4j:ajax event="keyup" render="@body @footer" execute="@this"  />
+   				</h:inputText>
+   			</f:facet>
+   			<h:outputText value="#{member.nick}" />
+   		</rich:column>
+
+   		<rich:column styleClass="namecol">
+   			<f:facet name="header">
+	   			<a4j:commandLink value="Email  " action="#{membersController.sortHelper.sortByEmail}" render="members" styleClass="whitelink" /><br/>
+	   			<h:inputText value="#{membersController.sortHelper.emailFilter}" size="15">
+   					<a4j:ajax event="keyup" render="@body @footer" execute="@this"  />
+	   			</h:inputText>
+   			</f:facet>
+   			<h:outputText value="#{member.email}" />
+   		</rich:column>
+   		
+   		<rich:column styleClass="langcol">
+   			<f:facet name="header">
+   				Languages<br/>
+   				<h:inputText value="#{membersController.sortHelper.languagesFilter}" size="8" >
+   					<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+   				</h:inputText>
+   			</f:facet>
+   			
+   		<h:outputText value="#{membersController.joinLanguages(member.knowledges)}" />	
+   		</rich:column>
+   		
+   		<rich:column sortBy="#{membersController.experts[member]}" id="experts" sortOrder="#{membersController.sortHelper.experts}" styleClass="numcol">
+   			<f:facet name="header">
+	   			<a4j:commandLink value="Expert" render="members" action="#{membersController.sortHelper.sortByExperts}" title="Number of tags the member has expert knowledge of" styleClass="whitelink" />
+   			</f:facet>
+   			<h:outputText value="#{membersController.experts[member]}" />
+   		</rich:column>
+   		
+   		<rich:column styleClass="actioncol">
+   			<f:facet name="header">Actions</f:facet>
+   				<h:outputLink value="memberdetail.jsf?id=#{member.id}">view </h:outputLink>
+   				<h:outputLink value="./memberform.jsf?editid=#{member.id}">edit </h:outputLink>
+   				<h:commandLink  onclick="return confirm('Do you really want to delete member #{member.name}?')" action="#{memberController.delete(member)}" value="delete" />
+   			
+   		</rich:column>
+   		<f:facet name="footer">
+   				<rich:dataScroller for="members" maxPages="5"  fastStep="10"/>
+   		</f:facet>
+	</rich:dataTable>
+
+	</h:form>
+   </h:panelGroup>
+   </ui:define>
+   </ui:composition>

@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/WEB-INF/templates/default.xhtml"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+	<ui:define name="title">Search results</ui:define>
+	<ui:define name="content">
+	
+	   <a4j:queue requestDelay="100" ignoreDupResponses="true"/>
+	   
+		<h1>Search results:</h1>
+
+		<ul>
+			<h:panelGroup rendered="#{searchResultsController.name ne null}">
+				<li><h:outputText
+						value="name contains '#{searchResultsController.name}'" /></li>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{searchResultsController.nick ne null}">
+				<li><h:outputText
+						value="nick contains '#{searchResultsController.nick}'" /></li>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{searchResultsController.email ne null}">
+				<li><h:outputText
+						value="email contains '#{searchResultsController.email}'" /></li>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{searchResultsController.languages ne null}">
+				<li>
+					<h:outputText value="languages contain #{searchResultsController.languages}" />
+				</li>
+			</h:panelGroup>
+			<h:panelGroup
+				rendered="#{searchResultsController.numlevel ne null and searchResultsController.numop ne null and searchResultsController.numval ne null}">
+				<li><h:outputText
+						value="number of knowledges at #{searchResultsController.readeableNumLevel} is #{searchResultsController.readeableNumOp} #{searchResultsController.numval}" /></li>
+			</h:panelGroup>
+			<a4j:repeat
+				value="#{searchResultsController.packages.entrySet().toArray()}"
+				var="entry">
+				<li><h:outputText
+						value="knowledge of #{searchResultsController.getPackageByID(entry.key).name} is at least #{searchResultsController.toReadeableLevel(entry.value)}" /></li>
+			</a4j:repeat>
+
+
+		</ul>
+
+
+		<h:panelGroup rendered="#{searchResultsController.memberHelper.model.isEmpty()}">
+			<h2>Nothing found.</h2>
+		</h:panelGroup>
+
+		<h:panelGroup>
+			<h:form rendered="#{not searchResultsController.memberHelper.model.isEmpty()}">
+				<rich:dataTable id="members"
+					value="#{searchResultsController.memberHelper.model}" var="member"
+					styleClass="simpletablestyle" rows="15"
+					columnClasses="namecol,namecol,namecol,langcol,actioncol">
+					 
+					<rich:column>
+						<f:facet name="header">
+							<a4j:commandLink value="Name"
+								action="#{searchResultsController.memberHelper.sortByName}"
+								render="members" styleClass="whitelink" /><br/>
+							<h:inputText
+								value="#{searchResultsController.memberHelper.nameFilter}"
+								size="13">
+								<a4j:ajax event="keyup" execute="@this" render="@body @footer" />
+							</h:inputText>
+						</f:facet>
+						<h:outputText value="#{member.name}" styleClass="name" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<a4j:commandLink value="Nick"
+								action="#{searchResultsController.memberHelper.sortByNick}"
+								render="members" styleClass="whitelink" /><br/>
+							<h:inputText
+								value="#{searchResultsController.memberHelper.nickFilter}"
+								size="8">
+								<a4j:ajax event="keyup" execute="@this" render="@body @footer" />
+							</h:inputText>
+						</f:facet>
+						<h:outputText value="#{member.nick}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<a4j:commandLink value="Email"
+								action="#{searchResultsController.memberHelper.sortByEmail}"
+								render="members" styleClass="whitelink" /><br/>
+							<h:inputText
+								value="#{searchResultsController.memberHelper.emailFilter}"
+								size="15">
+								<a4j:ajax event="keyup" execute="@this" render="@body @footer" />
+							</h:inputText>
+						</f:facet>
+						<h:outputText value="#{member.email}" />
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">
+							Languages<br/>
+							<h:inputText value="#{searchResultsController.memberHelper.languagesFilter}" size="8" >
+								<a4j:ajax event="keyup" execute="@this" render="@body @footer" />
+							</h:inputText>
+						</f:facet>
+					
+						<h:outputText value="#{searchResultsController.joinLanguages(member.knowledges)}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							Actions
+						</f:facet>
+						<h:outputLink value="memberdetail.jsf?id=#{member.id}">view </h:outputLink>
+						<h:outputLink value="memberform.jsf?editid=#{member.id}">edit</h:outputLink>
+					</rich:column>
+
+					<f:facet name="footer">
+						<rich:dataScroller for="members" fastStep="5" maxPages="5" />
+					</f:facet>
+
+				</rich:dataTable>
+			</h:form>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

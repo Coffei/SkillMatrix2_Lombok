@@ -1,0 +1,329 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/WEB-INF/templates/default.xhtml"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+	<ui:define name="title">Tag <h:outputText
+			value="#{packageDetail.package.name}"
+			rendered="#{packageDetail.package ne null}" />
+	</ui:define>
+	<ui:define name="content">
+	
+	   <a4j:queue requestDelay="100" ignoreDupResponses="true"/>
+	
+		<h:panelGroup rendered="#{packageDetail.package eq null}">
+			<h2>No tag found.</h2>
+			<h2>
+				<h:outputLink value="./pkgs.jsf">View all tags</h:outputLink>
+			</h2>
+		</h:panelGroup>
+
+		<h:panelGroup rendered="#{packageDetail.package ne null}">
+			<h1>
+				Tag:
+				<h:outputText value="#{packageDetail.package.name}" />
+			</h1>
+			<h2>
+				SBR:
+				<h:outputLink
+					value="sbrdetail.jsf?id=#{packageDetail.package.sbr.id}">
+					<h:outputText value="#{packageDetail.package.sbr.name}"
+						style="color: black; font-size: small;" />
+				</h:outputLink>
+			</h2>
+
+			<rich:collapsiblePanel
+				header="Experts (#{packageDetail.getMembersCount(2)})"
+				switchType="client">
+				<h:panelGroup rendered="#{packageDetail.memberHelpers[2].model.isEmpty()}">
+					<h3>
+						<h:outputText value="No experts." />
+					</h3>
+				</h:panelGroup>
+
+
+				<h:form rendered="#{not packageDetail.memberHelpers[2].model.isEmpty()}">
+					<rich:dataTable id="members"
+						value="#{packageDetail.memberHelpers[2].model}" var="member"
+						styleClass="simpletablestyle"
+						columnClasses="namecol,namecol,namecol,langcol,numcol,actioncol"
+						rows="8">
+						<rich:column>
+							<f:facet name="header">
+								<a4j:commandLink value="Name "
+									action="#{packageDetail.memberHelpers[2].sortByName()}"
+									render="members" styleClass="whitelink" /><br/>
+								<h:inputText
+									value="#{packageDetail.memberHelpers[2].nameFilter}" size="13">
+									<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+								</h:inputText>
+							</f:facet>
+							<h:outputText value="#{member.name}" styleClass="name" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+								<a4j:commandLink value="Nick  "
+									action="#{packageDetail.memberHelpers[2].sortByNick}"
+									render="members" styleClass="whitelink" /><br/>
+								<h:inputText
+									value="#{packageDetail.memberHelpers[2].nickFilter}" size="8">
+									<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+								</h:inputText>
+							</f:facet>
+							<h:outputText value="#{member.nick}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+								<a4j:commandLink value="Email  "
+									action="#{packageDetail.memberHelpers[2].sortByEmail}"
+									render="members" styleClass="whitelink" /><br/>
+								<h:inputText
+									value="#{packageDetail.memberHelpers[2].emailFilter}" size="15">
+									<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+								</h:inputText>
+							</f:facet>
+							<h:outputText value="#{member.email}" />
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header">
+								Languages<br/>
+								<h:inputText value="#{packageDetail.memberHelpers[2].languagesFilter}" size="8" >
+									<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+								</h:inputText>
+							</f:facet>
+						
+							<h:outputText value="#{packageDetail.joinLanguages(member.knowledges)}" />
+						</rich:column>
+
+
+						<rich:column sortBy="#{packageDetail.getExpertsCount(member)}"
+							id="experts" sortOrder="#{packageDetail.memberHelpers[2].experts}">
+							<f:facet name="header">
+								<a4j:commandLink value="Expert" render="members"
+									action="#{packageDetail.memberHelpers[2].sortByExperts}"
+									title="Number of tags the member has expert knowledge of"
+									styleClass="whitelink" />
+							</f:facet>
+							<h:outputText value="#{packageDetail.getExpertsCount(member)}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">Actions</f:facet>
+							<h:outputLink value="memberdetail.jsf?id=#{member.id}">view </h:outputLink>
+							<h:outputLink value="./memberform.jsf?editid=#{member.id}">edit </h:outputLink>
+							<h:commandLink
+								onclick="return confirm('Do you really want to delete member #{member.name}?')"
+								action="#{memberController.delete(member)}" value="delete" />
+
+						</rich:column>
+
+						<f:facet name="footer">
+							<rich:dataScroller for="members" maxPages="5" fastStep="10" />
+						</f:facet>
+					</rich:dataTable>
+				</h:form>
+			</rich:collapsiblePanel>
+
+			<rich:collapsiblePanel
+				header="Intermediates (#{packageDetail.getMembersCount(1)})"
+				switchType="client" expanded="false">
+				<h:panelGroup rendered="#{packageDetail.memberHelpers[1].model.isEmpty()}" >
+					<h3>
+						<h:outputText value="No intermediates."/>
+					</h3>
+				</h:panelGroup>
+
+				<h:form
+					rendered="#{not packageDetail.memberHelpers[1].model.isEmpty()}">
+					<rich:dataTable id="mediums"
+						value="#{packageDetail.memberHelpers[1].model}" var="member"
+						styleClass="simpletablestyle"
+						columnClasses="namecol,namecol,namecol,langcol,numcol,actioncol"
+						rows="8">
+						<rich:column >
+							<f:facet name="header">
+								<a4j:commandLink value="Name  "
+									action="#{packageDetail.memberHelpers[1].sortByName}"
+									render="mediums" styleClass="whitelink" /><br/>
+								<h:inputText value="#{packageDetail.memberHelpers[1].nameFilter}"
+									size="13">
+									<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+								</h:inputText>
+							</f:facet>
+							<h:outputText value="#{member.name}" styleClass="name" />
+						</rich:column>
+
+						<rich:column >
+							<f:facet name="header">
+								<a4j:commandLink value="Nick  "
+									action="#{packageDetail.memberHelpers[1].sortByNick}"
+									render="mediums" styleClass="whitelink" /><br/>
+								<h:inputText value="#{packageDetail.memberHelpers[1].nickFilter}"
+									size="8">
+									<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+								</h:inputText>
+							</f:facet>
+							<h:outputText value="#{member.nick}" />
+						</rich:column>
+
+						<rich:column >
+							<f:facet name="header">
+								<a4j:commandLink value="Email  "
+									action="#{packageDetail.memberHelpers[1].sortByEmail}"
+									render="mediums" styleClass="whitelink" /><br/>
+								<h:inputText value="#{packageDetail.memberHelpers[1].emailFilter}"
+									size="15">
+									<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+								</h:inputText>
+							</f:facet>
+							<h:outputText value="#{member.email}" />
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header">
+								Languages<br/>
+								<h:inputText value="#{packageDetail.memberHelpers[1].languagesFilter}" size="8" >
+									<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+								</h:inputText>
+							</f:facet>
+						
+							<h:outputText value="#{packageDetail.joinLanguages(member.knowledges)}" />
+						</rich:column>
+						
+
+
+						<rich:column sortBy="#{packageDetail.getExpertsCount(member)}"
+							id="experts" sortOrder="#{packageDetail.memberHelpers[1].experts}">
+							<f:facet name="header">
+								<a4j:commandLink value="Expert" render="mediums"
+									action="#{packageDetail.memberHelpers[1].sortByExperts}"
+									title="Number of tags the member has expert knowledge of"
+									styleClass="whitelink" />
+							</f:facet>
+							<h:outputText value="#{packageDetail.getExpertsCount(member)}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">Actions</f:facet>
+							<h:outputLink value="memberdetail.jsf?id=#{member.id}">view </h:outputLink>
+							<h:outputLink value="./memberform.jsf?editid=#{member.id}">edit </h:outputLink>
+							<h:commandLink
+								onclick="return confirm('Do you really want to delete member #{member.name}?')"
+								action="#{memberController.delete(member)}" value="delete" />
+
+						</rich:column>
+
+						<f:facet name="footer">
+							<rich:dataScroller for="mediums" maxPages="5" fastStep="10" />
+						</f:facet>
+					</rich:dataTable>
+				</h:form>
+
+			</rich:collapsiblePanel>
+
+			<rich:collapsiblePanel
+				header="Beginners (#{packageDetail.getMembersCount(0)})"
+				switchType="client" expanded="false">
+				<h:panelGroup rendered="#{packageDetail.memberHelpers[0].model.isEmpty()}"> 
+				<h3>
+					<h:outputText value="No beginners." />
+				</h3>
+				</h:panelGroup>
+				
+				<h:form
+					rendered="#{not packageDetail.memberHelpers[0].model.isEmpty()}">
+					<rich:dataTable id="beginners"
+						value="#{packageDetail.memberHelpers[0].model}" var="member"
+						styleClass="simpletablestyle"
+						columnClasses="namecol,namecol,namecol,numcol,actioncol"
+						rows="8">
+						<rich:column>
+							<f:facet name="header">
+								<a4j:commandLink value="Name  "
+									action="#{packageDetail.memberHelpers[0].sortByName}"
+									render="beginners" styleClass="whitelink" /><br/>
+								<h:inputText value="#{packageDetail.memberHelpers[0].nameFilter}"
+									size="13">
+									<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+								</h:inputText>
+							</f:facet>
+							<h:outputText value="#{member.name}" styleClass="name" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+								<a4j:commandLink value="Nick  "
+									action="#{packageDetail.memberHelpers[0].sortByNick}"
+									render="beginners" styleClass="whitelink" /><br/>
+								<h:inputText value="#{packageDetail.memberHelpers[0].nickFilter}"
+									size="8">
+									<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+								</h:inputText>
+							</f:facet>
+							<h:outputText value="#{member.nick}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">
+								<a4j:commandLink value="Email  "
+									action="#{packageDetail.memberHelpers[0].sortByEmail}"
+									render="beginners" styleClass="whitelink" /><br/>
+								<h:inputText value="#{packageDetail.memberHelpers[0].emailFilter}"
+									size="15">
+									<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+								</h:inputText>
+							</f:facet>
+							<h:outputText value="#{member.email}" />
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header">
+								Languages<br/>
+								<h:inputText value="#{packageDetail.memberHelpers[0].languagesFilter}" size="8" >
+									<a4j:ajax event="keyup" render="@body @footer" execute="@this" />
+								</h:inputText>
+							</f:facet>
+						
+							<h:outputText value="#{packageDetail.joinLanguages(member.knowledges)}" />
+						</rich:column>
+
+
+						<rich:column sortBy="#{packageDetail.getExpertsCount(member)}"
+							id="experts" sortOrder="#{packageDetail.memberHelpers[0].experts}">
+							<f:facet name="header">
+								<a4j:commandLink value="Expert" render="beginners"
+									action="#{packageDetail.memberHelpers[0].sortByExperts}"
+									title="Number of tags the member has expert knowledge of"
+									styleClass="whitelink" />
+							</f:facet>
+							<h:outputText value="#{packageDetail.getExpertsCount(member)}" />
+						</rich:column>
+
+						<rich:column>
+							<f:facet name="header">Actions</f:facet>
+							<h:outputLink value="memberdetail.jsf?id=#{member.id}">view </h:outputLink>
+							<h:outputLink value="./memberform.jsf?editid=#{member.id}">edit </h:outputLink>
+							<h:commandLink
+								onclick="return confirm('Do you really want to delete member #{member.name}?')"
+								action="#{memberController.delete(member)}" value="delete" />
+
+						</rich:column>
+
+						<f:facet name="footer">
+							<rich:dataScroller for="beginners" maxPages="5" fastStep="10" />
+						</f:facet>
+					</rich:dataTable>
+				</h:form>
+			</rich:collapsiblePanel>
+
+		</h:panelGroup>
+
+	</ui:define>
+</ui:composition>
