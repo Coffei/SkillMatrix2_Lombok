@@ -1,14 +1,12 @@
 package com.redhat.gss.skillmatrix.model.api;
 
 import com.redhat.gss.skillmatrix.model.GeoEnum;
-import com.redhat.gss.skillmatrix.model.RoleEnum;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,7 +20,7 @@ public class SbrApi {
     private Long id;
     private String name;
     private List<PackageHelper> tags;
-    private MemberHelper coach;
+    private List<CoachHelper> coaches;
     private List<MemberHelper> members;
 
     @XmlAttribute
@@ -40,8 +38,10 @@ public class SbrApi {
         return tags;
     }
 
-    public MemberHelper getCoach() {
-        return coach;
+    @XmlElementWrapper
+    @XmlElement(name = "coach")
+    public List<CoachHelper> getCoaches() {
+        return coaches;
     }
 
     @XmlElementWrapper
@@ -62,14 +62,37 @@ public class SbrApi {
         this.tags = tags;
     }
 
-    public void setCoach(MemberHelper coach) {
-        this.coach = coach;
+    public void setCoaches(List<CoachHelper> coaches) {
+        this.coaches = coaches;
     }
 
     public void setMembers(List<MemberHelper> members) {
         this.members = members;
     }
 
+
+    public static class CoachHelper {
+        private String sbrRole;
+        private MemberHelper member;
+
+        @XmlElement(name = "sbr-role")
+        public String getSbrRole() {
+            return sbrRole;
+        }
+
+        public void setSbrRole(String sbrRole) {
+            this.sbrRole = sbrRole;
+        }
+
+        @XmlElement
+        public MemberHelper getMember() {
+            return member;
+        }
+
+        public void setMember(MemberHelper member) {
+            this.member = member;
+        }
+    }
 
     public static class PackageHelper {
         private Long id;
@@ -106,11 +129,10 @@ public class SbrApi {
         private Long id;
         private String name;
         private String nick;
-        private GeoEnum geo;
-        private RoleEnum role;
+        private String geo;
+        private String role;
         private String email;
         private String extension;
-        private int level;
 
         @XmlAttribute
         public Long getId() {
@@ -126,11 +148,11 @@ public class SbrApi {
             return nick;
         }
 
-        public GeoEnum getGeo() {
+        public String getGeo() {
             return geo;
         }
 
-        public RoleEnum getRole() {
+        public String getRole() {
             return role;
         }
 
@@ -140,12 +162,6 @@ public class SbrApi {
 
         public String getExtension() {
             return extension;
-        }
-
-
-        @XmlAttribute(name = "sbr-level")
-        public int getLevel() {
-            return level;
         }
 
         public void setId(Long id) {
@@ -160,11 +176,11 @@ public class SbrApi {
             this.nick = nick;
         }
 
-        public void setGeo(GeoEnum geo) {
+        public void setGeo(String geo) {
             this.geo = geo;
         }
 
-        public void setRole(RoleEnum role) {
+        public void setRole(String role) {
             this.role = role;
         }
 
@@ -174,10 +190,6 @@ public class SbrApi {
 
         public void setExtension(String extension) {
             this.extension = extension;
-        }
-
-        public void setLevel(int level) {
-            this.level = level;
         }
     }
 

@@ -2,13 +2,7 @@ package com.redhat.gss.skillmatrix.model;
 
 import java.io.Serializable;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -33,7 +27,7 @@ public class Knowledge implements Serializable {
 	private Integer level;
 
 	@NotNull
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=false, fetch = FetchType.EAGER)
 	private Member member;
 	
 	/**

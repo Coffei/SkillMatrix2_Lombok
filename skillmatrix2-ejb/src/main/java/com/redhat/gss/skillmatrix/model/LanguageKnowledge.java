@@ -27,8 +27,40 @@ public class LanguageKnowledge extends Knowledge {
 	public void setLanguage(String language) {
 		this.language = language;
 	}
-	
-	
-	
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LanguageKnowledge that = (LanguageKnowledge) o;
+
+        if(getId()==null) {
+            if(that.getId()!=null)
+                return false;
+            //compare other fields
+            if(language==null? that.language!=null : !language.equals(that.language))
+                return false;
+
+            if(getLevel()==null? that.getLevel()!=null : !getLevel().equals(that.getLevel()))
+                return false;
+
+        } else if (!getId().equals(that.getId()))
+            return false;
+
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        result = 31 * (getId() != null ? getId().hashCode() : 1);
+        if(getId()==null) {
+            result += 37 * (language==null ? 1 : language.hashCode());
+            result += 29 * (getLevel()==null? 1 : getLevel().hashCode());
+        }
+        return result;
+    }
 }

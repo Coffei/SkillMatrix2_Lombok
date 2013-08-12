@@ -18,12 +18,12 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * Entity representing SBR.
+ * Entity representing an SBR.
+ * Relationship with {@link Member}- {@link Member} is the owner entity.
  * @author jtrantin
  *
  */
 @Entity
-@XmlRootElement
 public class SBR implements Serializable {
 	/**
 	 * Serial ID, change with care
@@ -34,8 +34,8 @@ public class SBR implements Serializable {
 	@GeneratedValue
 	private Long id;
 
-	@ManyToOne(optional=true)
-    private Member coach;
+	@OneToMany(mappedBy = "sbr")
+    private List<Coach> coaches;
 
 	@NotNull
 	@NotEmpty
@@ -44,13 +44,12 @@ public class SBR implements Serializable {
 	@OneToMany(mappedBy="sbr")
     private List<Package> packages;
 	
-	@OneToMany(mappedBy="sbr")
-    private List<MemberSbr> membersbrs;
+	@ManyToMany(mappedBy = "sbrs")
+    private List<Member> members;
 
 	/**
 	 * @return ID
 	 */
-    @XmlAttribute
 	public Long getId() {
 		return id;
 	}
@@ -62,7 +61,6 @@ public class SBR implements Serializable {
 	/**
 	 * @return list of packages within this SBR
 	 */
-    @XmlTransient
 	public List<Package> getPackages() {
 		return packages;
 	}
@@ -70,20 +68,19 @@ public class SBR implements Serializable {
 	public void setPackages(List<Package> packages) {
 		this.packages = packages;
 	}
-	
-	/**
-	 * @return coach of this SBR or null if no one is assigned.
-	 */
-    @XmlTransient
-	public Member getCoach() {
-		return coach;
-	}
 
-	public void setCoach(Member coach) {
-		this.coach = coach;
-	}
+    /**
+     * @return list of coaches of this SBR
+     */
+    public List<Coach> getCoaches() {
+        return coaches;
+    }
 
-	/**
+    public void setCoaches(List<Coach> coaches) {
+        this.coaches = coaches;
+    }
+
+    /**
 	 * @return name of this SBR
 	 */
 	public String getName() {
@@ -94,20 +91,19 @@ public class SBR implements Serializable {
 		this.name = name;
 	}
 
-	/**
-	 * @return list of MemberSbr.
-	 * @see MemberSbr
-	 */
-    @XmlTransient
-	public List<MemberSbr> getMembersbrs() {
-		return membersbrs;
-	}
+    /**
+     * @return list of members of this sbr
+     * @see Member
+     */
+    public List<Member> getMembers() {
+        return members;
+    }
 
-	public void setMembersbrs(List<MemberSbr> membersbrs) {
-		this.membersbrs = membersbrs;
-	}
+    public void setMembers(List<Member> members) {
+        this.members = members;
+    }
 
-	@Override
+    @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -127,8 +123,14 @@ public class SBR implements Serializable {
 		if (id == null) {
 			if (other.id != null)
 				return false;
+
+            if(name==null? other.name!=null : !name.equals(other.name))
+                return false;
+
 		} else if (!id.equals(other.id))
 			return false;
+
+
 		return true;
 	}
 

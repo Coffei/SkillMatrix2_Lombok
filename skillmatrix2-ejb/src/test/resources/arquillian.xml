@@ -15,9 +15,9 @@
    <!-- Example configuration for a remote JBoss AS 7 instance -->
    <container qualifier="jboss" default="true">
       <!-- If you want to use the JBOSS_HOME environment variable, just delete the jbossHome property -->
-      <configuration>
-         <property name="jbossHome">/home/jtrantin/workspace/jboss-as-7.1.1.Final</property>
-      </configuration>
+      <!--<configuration>-->
+         <!--<property name="jbossHome">/home/jtrantin/workspace/jboss-as-7.1.1.Final</property>-->
+      <!--</configuration>-->
    </container>
 
 </arquillian>

@@ -1,7 +1,6 @@
 package com.redhat.gss.skillmatrix.model.api;
 
 import com.redhat.gss.skillmatrix.model.GeoEnum;
-import com.redhat.gss.skillmatrix.model.RoleEnum;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;
@@ -20,8 +19,8 @@ public class MemberApi {
     private String email;
     private String nick;
     private String extension;
-    private GeoEnum geo;
-    private RoleEnum role;
+    private String geo;
+    private String role;
     private List<SbrHelper> sbrs;
     private List<KnowledgeHelper> knows;
     private List<String> langs;
@@ -71,19 +70,19 @@ public class MemberApi {
         this.extension = extension;
     }
 
-    public GeoEnum getGeo() {
+    public String getGeo() {
         return geo;
     }
 
-    public void setGeo(GeoEnum geo) {
+    public void setGeo(String geo) {
         this.geo = geo;
     }
 
-    public RoleEnum getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(RoleEnum role) {
+    public void setRole(String role) {
         this.role = role;
     }
     @XmlElementWrapper(name = "sbrs")
@@ -118,19 +117,8 @@ public class MemberApi {
 
     @XmlRootElement(name = "sbr")
     public static class SbrHelper {
-
-        private int level;
         private Long id;
         private String name;
-
-        @XmlAttribute
-        public int getLevel() {
-            return level;
-        }
-
-        public void setLevel(int level) {
-            this.level = level;
-        }
 
         @XmlAttribute
         public Long getId() {

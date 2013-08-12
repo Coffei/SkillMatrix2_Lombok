@@ -1,16 +1,14 @@
 package com.redhat.gss.skillmatrix.data.api;
 
+import com.redhat.gss.skillmatrix.model.Coach;
 import com.redhat.gss.skillmatrix.model.Member;
-import com.redhat.gss.skillmatrix.model.MemberSbr;
-import com.redhat.gss.skillmatrix.model.SBR;
 import com.redhat.gss.skillmatrix.model.Package;
+import com.redhat.gss.skillmatrix.model.SBR;
 import com.redhat.gss.skillmatrix.model.api.SbrApi;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,16 +24,21 @@ public class SbrApiBuilder {
         SbrApi api = new SbrApi();
         api.setId(sbr.getId());
         api.setName(sbr.getName());
-        //coach
-        if(sbr.getCoach()!=null) {
-            SbrApi.MemberHelper coachApi = buildMemberHelper(sbr.getCoach());
-            api.setCoach(coachApi);
+        //coaches
+        if(sbr.getCoaches()!=null && !sbr.getCoaches().isEmpty()) {
+            List<SbrApi.CoachHelper> coachesApi = new ArrayList<SbrApi.CoachHelper>(sbr.getCoaches().size());
+            for(Coach coach : sbr.getCoaches()) {
+                coachesApi.add(buildCoachHelper(coach));
+            }
+
+            api.setCoaches(coachesApi);
         }
+
         //members
-        List<SbrApi.MemberHelper> membersApi = new ArrayList<SbrApi.MemberHelper>(sbr.getMembersbrs().size());
-        for(MemberSbr member : sbr.getMembersbrs()) {
-            SbrApi.MemberHelper memberApi = buildMemberHelper(member.getMember());
-            memberApi.setLevel(member.getLevel());
+        List<SbrApi.MemberHelper> membersApi = new ArrayList<SbrApi.MemberHelper>(sbr.getMembers().size());
+        for(Member member : sbr.getMembers()) {
+            SbrApi.MemberHelper memberApi = buildMemberHelper(member);
+
             membersApi.add(memberApi);
         }
 
@@ -61,12 +64,21 @@ public class SbrApiBuilder {
         return apis;
     }
 
+    private SbrApi.CoachHelper buildCoachHelper(Coach coach) {
+        SbrApi.CoachHelper coachHelper = new SbrApi.CoachHelper();
+        coachHelper.setSbrRole(coach.getSbr_role());
+        coachHelper.setMember(buildMemberHelper(coach.getMember()));
+
+        return coachHelper;
+    }
+
+
     private SbrApi.MemberHelper buildMemberHelper(Member member) {
-        SbrApi.MemberHelper memberApi = new SbrApi.MemberHelper();
+       SbrApi.MemberHelper memberApi = new SbrApi.MemberHelper();
         memberApi.setName(member.getName());
         memberApi.setId(member.getId());
         memberApi.setRole(member.getRole());
-        memberApi.setGeo(member.getGeo());
+        memberApi.setGeo(new MemberApiBuilder().buildGeo(member.getGeo()));
         memberApi.setEmail(member.getEmail());
         memberApi.setNick(member.getNick());
         memberApi.setExtension(member.getExtension());

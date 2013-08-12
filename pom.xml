@@ -6,7 +6,7 @@
     <artifactId>skillmatrix2</artifactId>
     <version>1.0.Beta</version>
     <packaging>pom</packaging>
-    <name>skillmatrix application</name>
+    <name>SkillMatrix 2</name>
 
     <modules>
         <module>skillmatrix2-ejb</module>

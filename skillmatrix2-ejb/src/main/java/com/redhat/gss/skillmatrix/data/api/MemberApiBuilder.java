@@ -2,6 +2,9 @@ package com.redhat.gss.skillmatrix.data.api;
 
 import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.model.api.MemberApi;
+import org.joda.time.Duration;
+import org.joda.time.Interval;
+import org.joda.time.Period;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
@@ -22,21 +25,21 @@ public class MemberApiBuilder {
 
         api.setEmail(member.getEmail());
         api.setExtension(member.getExtension());
-        api.setGeo(member.getGeo());
+        api.setGeo(buildGeo(member.getGeo()));
         api.setId(member.getId());
         api.setName(member.getName());
         api.setNick(member.getNick());
         api.setRole(member.getRole());
 
-        List<MemberApi.SbrHelper> apiSbrs = new ArrayList<MemberApi.SbrHelper>(member.getMembersbrs().size());
-        for(MemberSbr sbr : member.getMembersbrs()) {
+        List<MemberApi.SbrHelper> apiSbrs = new ArrayList<MemberApi.SbrHelper>(member.getSbrs().size());
+        for(SBR sbr : member.getSbrs()) {
             MemberApi.SbrHelper sbrApi = new MemberApi.SbrHelper();
-            sbrApi.setName(sbr.getSbr().getName());
-            sbrApi.setId(sbr.getSbr().getId());
-            sbrApi.setLevel(sbr.getLevel());
+            sbrApi.setName(sbr.getName());
+            sbrApi.setId(sbr.getId());
 
             apiSbrs.add(sbrApi);
         }
+
         api.setSbrs(apiSbrs);
 
         List<MemberApi.KnowledgeHelper> knowledges = new ArrayList<MemberApi.KnowledgeHelper>();
@@ -57,6 +60,23 @@ public class MemberApiBuilder {
         api.setLangs(languages);
 
         return api;
+    }
+
+    String buildGeo(Geo geo) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(geo.getGeocode().toString());
+
+        builder.append(" (");
+        int offset = geo.getOffset();
+        if(offset < 0) {
+            builder.append("-");
+            offset *= -1;
+        }
+        Period offsetPeriod = new Duration(offset * 60 * 1000).toPeriod();
+
+        builder.append(String.format("%02d:02d)", offsetPeriod.getHours(), offsetPeriod.getMinutes()));
+
+        return builder.toString();
     }
 
     public List<MemberApi> buildMembers(List<Member> members) {

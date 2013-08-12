@@ -7,23 +7,18 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Entity representing a person.
+ * Relationship with {@link SBR}- {@link Member} (this entity) is the owner entity.
  * @author jtrantin
  *
  */
 @Entity
-@XmlRootElement
 public class Member implements Serializable {
-
 
 	/**
 	 * Serial ID, change with care
@@ -40,6 +35,9 @@ public class Member implements Serializable {
 	@Size(min = 1, max = 50)
 	private String name;
 
+    @Column(unique = true)
+    private String unifiedId;
+
 	@NotNull
 	@NotEmpty
 	@Email
@@ -47,20 +45,22 @@ public class Member implements Serializable {
 	
 	@NotNull
 	@NotEmpty
+    @Column(unique = true)
 	private String nick;
 	
 	@Pattern(regexp="[0-9]*", message="must contain only digits")
 	private String extension;
+
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+	private Geo geo;
 	
-	private GeoEnum geo;
-	
-	private RoleEnum role;
+	private String role;
 	
 
-	@OneToMany(mappedBy="member")
-    private List<MemberSbr> membersbrs;
+	@ManyToMany()
+    private List<SBR> sbrs;
 
-	@OneToMany(mappedBy="member")
+	@OneToMany(mappedBy="member", fetch = FetchType.EAGER)
     private List<Knowledge> knowledges;
 	
 	/**
@@ -77,7 +77,6 @@ public class Member implements Serializable {
 	/**
 	 * @return persons ID
 	 */
-    @XmlAttribute
 	public Long getId() {
 		return id;
 	}
@@ -111,31 +110,29 @@ public class Member implements Serializable {
 		this.extension = extension;
 	}
 
-	/**
-	 * @return the geo
-	 */
-	public GeoEnum getGeo() {
-		return geo;
-	}
+    /**
+     * @return the geo the member is based in
+     * @see Geo
+     */
+    public Geo getGeo() {
+        return geo;
+    }
 
-	/**
-	 * @param geo the geo to set
-	 */
-	public void setGeo(GeoEnum geo) {
-		this.geo = geo;
-	}
+    public void setGeo(Geo geo) {
+        this.geo = geo;
+    }
 
-	/**
+    /**
 	 * @return the role
 	 */
-	public RoleEnum getRole() {
+	public String getRole() {
 		return role;
 	}
 
 	/**
 	 * @param role the role to set
 	 */
-	public void setRole(RoleEnum role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 
@@ -154,7 +151,6 @@ public class Member implements Serializable {
 	 * @return List of knowledges, all of which belong to this member. No other knowledges belong to this member.
 	 * @see Knowledge
 	 */
-    @XmlTransient
 	public List<Knowledge> getKnowledges() {
 		return knowledges;
 	}
@@ -162,19 +158,26 @@ public class Member implements Serializable {
 	public void setKnowledges(List<Knowledge> knowledge) {
 		this.knowledges = knowledge;
 	}
-	
-	/**
-	 * @return List of MemberSbr.
-	 * @see MemberSbr
-	 */
-    @XmlElement(name = "sbr")
-    public List<MemberSbr> getMembersbrs() {
-		return membersbrs;
-	}
 
-	public void setMembersbrs(List<MemberSbr> membersbrs) {
-		this.membersbrs = membersbrs;
-	}
+    /**
+     * @return list of sbrs the member is joined in.
+     * @see SBR
+     */
+    public List<SBR> getSbrs() {
+        return sbrs;
+    }
+
+    public void setSbrs(List<SBR> sbrs) {
+        this.sbrs = sbrs;
+    }
+
+    public String getUnifiedId() {
+        return unifiedId;
+    }
+
+    public void setUnifiedId(String unifiedId) {
+        this.unifiedId = unifiedId;
+    }
 
     @Override
 	public String toString() {
@@ -185,11 +188,12 @@ public class Member implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((id == null) ? (nick==null? 0 : nick.hashCode()) : id.hashCode());
 		return result;
 	}
 
 	@Override
+    // compares the ids, or nicks if id is null.
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -201,8 +205,15 @@ public class Member implements Serializable {
 		if (id == null) {
 			if (other.id != null)
 				return false;
+            //both ids are null, lets compare some more
+            if(nick==null) {
+                if(other.nick != null) // if nick is null and other nick is not null
+                    return false;
+            } else if (!nick.equals(other.nick)) //if nicks don't match
+                return false;
 		} else if (!id.equals(other.id))
 			return false;
+
 		return true;
 	}
 
