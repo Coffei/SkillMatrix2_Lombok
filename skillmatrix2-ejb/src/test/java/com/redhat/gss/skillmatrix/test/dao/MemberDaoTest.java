@@ -1,14 +1,13 @@
 package com.redhat.gss.skillmatrix.test.dao;
 
-import com.redhat.gss.skillmatrix.data.dao.MemberDB;
+import com.redhat.gss.skillmatrix.data.dao.MemberDBDAO;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAOInt;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.MemberProducerDB;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
-import com.redhat.gss.skillmatrix.model.Geo;
-import com.redhat.gss.skillmatrix.model.GeoEnum;
-import com.redhat.gss.skillmatrix.model.Member;
+import com.redhat.gss.skillmatrix.model.*;
+import com.redhat.gss.skillmatrix.model.Package;
 import com.redhat.gss.skillmatrix.util.Resources;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -21,8 +20,9 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.transaction.*;
+
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -37,7 +37,7 @@ import static org.junit.Assert.*;
 public class MemberDaoTest {
 
     @Inject
-    private MemberDAOInt memberDao;
+    private MemberDAO memberDao;
 
     @Inject
     private EntityManager em;
@@ -49,7 +49,7 @@ public class MemberDaoTest {
     public static Archive<?> createTestArchive() {
         return ShrinkWrap.create(WebArchive.class, "daotest.war")
                 .addPackage(Member.class.getPackage()) //all model classes
-                .addClasses(MemberDAOInt.class, MemberDB.class, MemberProducer.class, MemberProducerDB.class)
+                .addClasses(MemberDAO.class, MemberDBDAO.class, MemberProducer.class, MemberProducerDB.class)
                 .addClasses(MemberInvalidException.class, OperatorEnum.class, Resources.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 //.addAsWebInfResource("test-ds.xml", "test-ds.xml")
@@ -121,6 +121,8 @@ public class MemberDaoTest {
     @Test
     public void testDelete() throws Exception  {
         cleanup();
+
+        //regular delete
         Member newMember= new Member();
         newMember.setNick("jtrantin");
         newMember.setEmail("jtrantin@redhat.com");
@@ -138,14 +140,74 @@ public class MemberDaoTest {
 
         member = em.find(Member.class, newMember.getId());
         assertNull("found a deleted record", member);
+
+        //advanced delete
+        transaction.begin();
+        em.joinTransaction();
+        SBR wf = new SBR();
+        wf.setName("Web Frameworks");
+        em.persist(wf);
+        transaction.commit();
+
+
+        newMember= new Member();
+        newMember.setNick("jtrantin");
+        newMember.setEmail("jtrantin@redhat.com");
+        newMember.setName("Jonas");
+        newMember.setExtension("62918");
+        newMember.setGeo(new Geo(GeoEnum.EMEA, 120));
+        newMember.setRole("AITSE");
+        newMember.setSbrs(Arrays.asList(wf));
+        memberDao.create(newMember);
+
+        transaction.begin();
+        em.joinTransaction();
+        Package richfaces = new Package();
+        richfaces.setName("Richfaces");
+        richfaces.setSbr(wf);
+        em.persist(richfaces);
+
+
+
+        PackageKnowledge know = new PackageKnowledge();
+        know.setPackage(richfaces);
+        know.setLevel(2);
+        know.setMember(newMember);
+        em.persist(know);
+
+        transaction.commit();
+
+        long know_id = know.getId();
+
+        //try to delete
+        member = em.find(Member.class, newMember.getId());
+
+        memberDao.delete(member);
+
+        transaction.begin();
+        em.joinTransaction();
+        assertNull("deleted member found", em.find(Member.class, member.getId()));
+        assertNull("members knowledge found", em.find(Knowledge.class, know_id));
+        assertTrue("SBR has some members", em.find(SBR.class, wf.getId()).getMembers().isEmpty());
+        transaction.commit();
+
+
     }
 
     private void cleanup() throws Exception {
         transaction.begin();
-
         em.joinTransaction();
-        Query query = em.createQuery("Delete from Member");
-        query.executeUpdate();
+
+
+        em.createNativeQuery("delete from MEMBER_SBR").executeUpdate();
+        em.createQuery("delete from Knowledge").executeUpdate();
+       /* em.createQuery("delete from PackageKnowledge");
+        em.createQuery("delete from LanguageKnowledge");*/
+        em.createQuery("delete from Coach").executeUpdate();
+        em.createQuery("delete from Member").executeUpdate();
+        em.createQuery("delete from Geo").executeUpdate();
+        em.createQuery("delete from Package").executeUpdate();
+        em.createQuery("delete from SBR").executeUpdate();
 
         transaction.commit();
     }

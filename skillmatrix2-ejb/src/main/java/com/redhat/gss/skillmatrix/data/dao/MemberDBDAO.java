@@ -1,7 +1,7 @@
 package com.redhat.gss.skillmatrix.data.dao;
 
 import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAOInt;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.MemberProducerDB;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.model.Member;
@@ -18,7 +18,7 @@ import javax.persistence.EntityManager;
  * To change this template use File | Settings | File Templates.
  */
 @Stateless
-public class MemberDB implements MemberDAOInt {
+public class MemberDBDAO implements MemberDAO {
 
     @Inject
     private EntityManager em;

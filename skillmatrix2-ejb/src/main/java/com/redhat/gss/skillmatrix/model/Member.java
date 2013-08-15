@@ -60,7 +60,7 @@ public class Member implements Serializable {
 	@ManyToMany()
     private List<SBR> sbrs;
 
-	@OneToMany(mappedBy="member", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="member", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Knowledge> knowledges;
 	
 	/**

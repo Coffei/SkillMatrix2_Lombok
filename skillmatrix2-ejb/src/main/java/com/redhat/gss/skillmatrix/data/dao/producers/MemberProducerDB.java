@@ -1,5 +1,6 @@
 package com.redhat.gss.skillmatrix.data.dao.producers;
 
+import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
 import com.redhat.gss.skillmatrix.model.*;
@@ -55,6 +56,8 @@ public class MemberProducerDB implements MemberProducer {
     public MemberProducer filterNick(final String nick) {
         if(nick==null)
             throw new NullPointerException("nick");
+        if(nick.isEmpty())
+            throw new IllegalArgumentException("nick cannot be empty");
 
         filters.add(new Filter() {
             @Override
@@ -70,6 +73,8 @@ public class MemberProducerDB implements MemberProducer {
     public MemberProducer filterNickExact(final String nick) {
         if(nick==null)
             throw new NullPointerException("nick");
+        if(nick.isEmpty())
+            throw new IllegalArgumentException("nick cannot be empty");
 
         filters.add(new Filter() {
             @Override
@@ -85,6 +90,8 @@ public class MemberProducerDB implements MemberProducer {
     public MemberProducer filterName(final String name) {
         if(name==null)
             throw new NullPointerException("name");
+        if(name.isEmpty())
+            throw new IllegalArgumentException("name cannot be empty");
 
         filters.add(new Filter() {
             @Override
@@ -100,6 +107,8 @@ public class MemberProducerDB implements MemberProducer {
     public MemberProducer filterEmail(final String email) {
         if(email==null)
             throw new NullPointerException("email");
+        if(email.isEmpty())
+            throw new IllegalArgumentException("email cannot be empty");
 
         filters.add(new Filter() {
             @Override
@@ -115,6 +124,8 @@ public class MemberProducerDB implements MemberProducer {
     public MemberProducer filterRole(final String role) {
         if(role==null)
             throw new NullPointerException("role");
+        if(role.isEmpty())
+            throw new IllegalArgumentException("role cannot be empty");
 
         filters.add(new Filter() {
             @Override
@@ -150,6 +161,8 @@ public class MemberProducerDB implements MemberProducer {
     public MemberProducer filterExtension(final String extension) {
         if(extension==null)
             throw new NullPointerException("extension");
+        if(extension.isEmpty())
+            throw new IllegalArgumentException("extension cannot be empty");
 
         filters.add(new Filter() {
             @Override
@@ -162,9 +175,11 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterSBRMembership(final SBR sbr) {
+    public MemberProducer filterSBRMembership(final SBR sbr) throws SbrInvalidException {
         if(sbr==null)
             throw new NullPointerException("sbr");
+        if(sbr.getId()==null)
+            throw new SbrInvalidException("sbr has no DB ID", new NullPointerException("sbr.id"), sbr);
 
         filters.add(new Filter() {
             @Override
@@ -180,6 +195,8 @@ public class MemberProducerDB implements MemberProducer {
     public MemberProducer filterLanguage(final String language) {
         if(language==null)
             throw new NullPointerException("language");
+        if(language.isEmpty())
+            throw new IllegalArgumentException("language cannot be empty");
 
         filters.add(new Filter() {
             @Override
@@ -202,6 +219,10 @@ public class MemberProducerDB implements MemberProducer {
     public MemberProducer filterKnowledgeLevelCount(final int level, final int count, final OperatorEnum operatorEnum) {
         if(operatorEnum==null)
             throw new NullPointerException("operatorEnum");
+        if(!(level==0 || level == 1 || level == 2))
+            throw new IllegalArgumentException("illegal level, permitted values are 0, 1, 2");
+        if(count < 0)
+            throw new IllegalArgumentException("count cannot be negative");
 
         filters.add(new Filter() {
             @Override
@@ -219,11 +240,13 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterKnowScoreOfSBR(final int score, final OperatorEnum operatorEnum, final SBR sbr) {
+    public MemberProducer filterKnowScoreOfSBR(final int score, final OperatorEnum operatorEnum, final SBR sbr) throws SbrInvalidException {
         if(operatorEnum==null)
             throw new NullPointerException("operatorEnum");
         if(sbr==null)
             throw new NullPointerException("sbr");
+        if(sbr.getId()==null)
+            throw new SbrInvalidException("sbr has no DB ID", new NullPointerException("sbr.id"), sbr);
 
         filters.add(new Filter() {
             @Override
@@ -280,9 +303,12 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer sortKnowScoreOfSBR(final SBR sbr, final boolean ascending) {
+    //WORKAROUND: as subquery cannot be used in order by clause in JPQL at the moment, we have to fallback to sorting in JAVA
+    public MemberProducer sortKnowScoreOfSBR(final SBR sbr, final boolean ascending) throws SbrInvalidException {
         if(sbr==null)
             throw new NullPointerException("sbr");
+        if (sbr.getId()==null)
+            throw new SbrInvalidException("sbr has no DB ID", new NullPointerException("sbr.id"), sbr);
 
         this.sortKnowScoreOfSBR = sbr;
         this.sortKnowledgesAtLevel = null; // because we use only one order, need to remember which was last
@@ -356,7 +382,11 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
+    //WORKAROUND: as subquery cannot be used in order by clause in JPQL at the moment, we have to fallback to sorting in JAVA
     public MemberProducer sortKnowledgesAtLevel(final int level, final boolean ascending) {
+        if(!(level==0 || level==1 || level==2))
+            throw new IllegalArgumentException("invalid level, permitted values are 0, 1, 2");
+
         this.sortKnowledgesAtLevel = level;
         this.sortKnowScoreOfSBR = null; // because we use only one order, need to remember which was last
         this.orders.clear();
@@ -428,14 +458,16 @@ public class MemberProducerDB implements MemberProducer {
 
     @Override
     public MemberProducer recordsCount(int count) {
-        this.maxRecords = count;
+        if(count > 0)
+            this.maxRecords = count;
 
         return this;
     }
 
     @Override
     public MemberProducer recordsStart(int start) {
-        this.startOffset = start;
+        if(start >= 0)
+            this.startOffset = start;
 
         return this;
     }
@@ -479,9 +511,7 @@ public class MemberProducerDB implements MemberProducer {
         return typedQuery.getResultList();
     }
 
-    //TODO: check- this may be possible to do via joins {@see sortGeo}
-    // need  to check whether joins can or cannot intefere with other stuff
-    // also efficiency isa question (one query can have both join and subquery for the same thing)
+    // Java fallback for unsupported sorters
     private List<Member> getMembersNoDB(CriteriaQuery<Member> criteria) {
         // get the members
         List<Member> members = em.createQuery(criteria).getResultList();
@@ -528,38 +558,6 @@ public class MemberProducerDB implements MemberProducer {
         query.where(predicates.toArray(new Predicate[predicates.size()]));
 
         //ignoring order
-
-        TypedQuery<Long> typedQuery = em.createQuery(query);
-
-        //apply max count and start offset
-        if(maxRecords!=null)
-            typedQuery.setMaxResults(maxRecords);
-
-        if(startOffset!=null)
-            typedQuery.setFirstResult(startOffset);
-
-        //and return the results
-        return typedQuery.getSingleResult();
-
-    }
-
-    @Override
-    public long getTotalCount() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Long> query = cb.createQuery(Long.class);
-        Root<Member> root = query.from(Member.class);
-        root.alias("member");
-
-        query.select(cb.count(root));
-
-        //add filters
-        List<Predicate> predicates = new LinkedList<Predicate>();
-        for(Filter filter : this.filters) {
-            predicates.add(filter.apply(cb, root, query));
-        }
-        query.where(predicates.toArray(new Predicate[predicates.size()]));
-
-        //ignoring order, max results and start offset
 
         TypedQuery<Long> typedQuery = em.createQuery(query);
 

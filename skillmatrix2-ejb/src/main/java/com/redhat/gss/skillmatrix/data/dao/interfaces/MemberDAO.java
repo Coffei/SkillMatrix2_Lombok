@@ -10,7 +10,7 @@ import com.redhat.gss.skillmatrix.model.Member;
  * Date: 8/6/13
  * Time: 2:11 PM
  */
-public interface MemberDAOInt {
+public interface MemberDAO {
 
     /**
      *
@@ -24,7 +24,7 @@ public interface MemberDAOInt {
      * @throws UnsupportedOperationException if this operation is not supported by this DAO implementation.
      * @throws MemberInvalidException when the member is invalid for some reason and cannot be created.
      */
-    void create(Member member) throws UnsupportedOperationException, MemberInvalidException;
+    void create(Member member) throws MemberInvalidException;
 
     /**
      * Updates an existing member.
@@ -32,7 +32,7 @@ public interface MemberDAOInt {
      * @throws UnsupportedOperationException if this operation is not supported by this DAO implementation.
      * @throws MemberInvalidException when the member si invalid and cannot be updated by this DAO.
      */
-    void update(Member member) throws UnsupportedOperationException, MemberInvalidException;
+    void update(Member member) throws MemberInvalidException;
 
     /**
      * Deletes a member.
@@ -40,12 +40,12 @@ public interface MemberDAOInt {
      * @throws UnsupportedOperationException if this operation is not supported by this DAO implementation.
      * @throws MemberInvalidException when the member is invalid for some reason and cannot be deleted.
      */
-    void delete(Member member) throws UnsupportedOperationException, MemberInvalidException;
+    void delete(Member member) throws MemberInvalidException;
 
     /**
      * @return true if the content can be modified, false if not.
      * if true is returned, then methods {@link #create(Member)}, {@link #update(Member)} and {@link #delete(Member)}
-     * can be called and should not throw {@code UnsupportedOperationException}..
+     * can be called and should not throw {@link UnsupportedOperationException}.
      */
     boolean canModify();
 

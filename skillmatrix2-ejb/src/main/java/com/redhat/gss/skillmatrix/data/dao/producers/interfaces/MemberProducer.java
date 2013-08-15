@@ -1,5 +1,6 @@
 package com.redhat.gss.skillmatrix.data.dao.producers.interfaces;
 
+import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
 import com.redhat.gss.skillmatrix.model.GeoEnum;
 import com.redhat.gss.skillmatrix.model.Member;
@@ -77,8 +78,9 @@ public interface MemberProducer {
      * Adds a SBR filter. Only members in the specified SBR are considered.
      * @param sbr sbr to filter
      * @return itself, good for chaining.
+     * @throws SbrInvalidException when the sbr is not valid and cannot be used by this filter
      */
-    MemberProducer filterSBRMembership(SBR sbr);
+    MemberProducer filterSBRMembership(SBR sbr) throws SbrInvalidException;
 
     /**
      * Adds a language filter. Only members with language knowledge containing the fragment are considered.
@@ -109,8 +111,9 @@ public interface MemberProducer {
      * @param operatorEnum specifies whether member must have higher, lower or exactly equal KnowScore
      * @param sbr KnowScore of this SBR is calculated.
      * @return itself, good for chaining.
+     * @throws SbrInvalidException when the sbr is invalid and cannot be used by this filter
      */
-    MemberProducer filterKnowScoreOfSBR(int score, OperatorEnum operatorEnum, SBR sbr);
+    MemberProducer filterKnowScoreOfSBR(int score, OperatorEnum operatorEnum, SBR sbr) throws SbrInvalidException;
 
     //sorters
 
@@ -126,8 +129,9 @@ public interface MemberProducer {
      * @param sbr
      * @param ascending specifies whether the ordering should be ascending or descending
      * @return itself, good for chaining.
+     * @throws SbrInvalidException when the sbr is invalid and cannot be used by this sorter
      */
-    MemberProducer sortKnowScoreOfSBR(SBR sbr, boolean ascending);
+    MemberProducer sortKnowScoreOfSBR(SBR sbr, boolean ascending) throws SbrInvalidException;
 
     /**
      * Adds an ordering by name.
@@ -189,7 +193,7 @@ public interface MemberProducer {
      */
     MemberProducer recordsStart(int start);
 
-    //base methods
+    //core methods
 
     /**
      * Executes the query and returns the result.
@@ -198,16 +202,9 @@ public interface MemberProducer {
     List<Member> getMembers();
 
     /**
-     * Count on members that would be returned by {@link #getMembers()}.
+     * Count of members that satisfy all the filters. This method ignores {@link #recordsCount(int)} and {@link #recordsStart(int)}.
      * @return number of records.
      */
     long getCount();
-
-    /**
-     * Total count of members that meet the condition of the query (ignoring {@link #recordsCount(int)} and
-     * {@link #recordsStart(int)}. Can be handy when implementing paging.
-     * @return total number of records
-     */
-    long getTotalCount();
 
 }

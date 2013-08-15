@@ -1,8 +1,8 @@
 package com.redhat.gss.skillmatrix.test.dao;
 
-import com.redhat.gss.skillmatrix.data.dao.MemberDB;
+import com.redhat.gss.skillmatrix.data.dao.MemberDBDAO;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAOInt;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.MemberProducerDB;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
@@ -21,9 +21,7 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.UserTransaction;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,7 +41,7 @@ public class MemberProducerTest {
     private boolean isSetUp = false;
 
     @Inject
-    private MemberDAOInt memberDao;
+    private MemberDAO memberDao;
 
     @Inject
     private UserTransaction transaction;
@@ -55,7 +53,7 @@ public class MemberProducerTest {
     public static Archive<?> createTestArchive() {
         return ShrinkWrap.create(WebArchive.class, "prodtest.war")
                 .addPackage(Member.class.getPackage()) //all model classes
-                .addClasses(MemberDAOInt.class, MemberDB.class, MemberProducer.class, MemberProducerDB.class)
+                .addClasses(MemberDAO.class, MemberDBDAO.class, MemberProducer.class, MemberProducerDB.class)
                 .addClasses(MemberInvalidException.class, OperatorEnum.class, Resources.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 //.addAsWebInfResource("test-ds.xml", "test-ds.xml")
@@ -589,7 +587,104 @@ public class MemberProducerTest {
 
 
     //SECTION: Utils tests
+    @Test
+    public void testUtilRecordsStart() throws Exception {
+        List<Member> members = memberDao.getProducerFactory().recordsStart(0).getMembers();
+
+        assertNotNull("producer returned null results", members);
+        assertEquals("should return all members", 3, members.size());
+
+        members = memberDao.getProducerFactory().recordsStart(1).getMembers();
+
+        assertNotNull("producer returned null results", members);
+        assertEquals("should return 2 members", 2, members.size());
+
+        members = memberDao.getProducerFactory().recordsStart(2).getMembers();
+
+        assertNotNull("producer returned null results", members);
+        assertEquals("should return 1 members", 1, members.size());
+
+        members = memberDao.getProducerFactory().recordsStart(3).getMembers();
+
+        assertNotNull("producer returned null results", members);
+        assertEquals("should return none members", 0, members.size());
+
+        members = memberDao.getProducerFactory().sortNick(true).recordsStart(1).getMembers();
+
+        assertNotNull("producer returned null results", members);
+        assertEquals("wrong member returned", "akovari", members.get(0).getNick());
+        assertEquals("wrong member returned", "jtrantin", members.get(1).getNick());
+
+
+        members = memberDao.getProducerFactory().sortNick(false).recordsStart(2).getMembers();
+
+        assertNotNull("producer returned null results", members);
+        assertEquals("wrong member returned", "agiertli", members.get(0).getNick());
+    }
+
+    @Test
+    public void testUtilMaxResults() throws Exception {
+        List<Member> members = memberDao.getProducerFactory().recordsCount(3).getMembers();
+        assertNotNull("producer returned null results", members);
+        assertEquals("should return all members", 3, members.size());
+
+        members = memberDao.getProducerFactory().recordsCount(1).getMembers();
+        assertNotNull("producer returned null results", members);
+        assertEquals("should return 1 members", 1, members.size());
+
+        members = memberDao.getProducerFactory().sortNick(true).recordsCount(1).getMembers();
+        assertNotNull("producer returned null results", members);
+        assertEquals("wrong member returned", "agiertli", members.get(0).getNick());
+    }
+
+    @Test
+    public void testUtilGetCount() throws Exception {
+        SBR jbossas = em.find(SBR.class, jbossas_id);
+        SBR wf = em.find(SBR.class, wf_id);
+
+        long count = memberDao.getProducerFactory().getCount();
+        assertEquals("not correct member count", 3, count);
+
+        count = memberDao.getProducerFactory().filterNick("trant").getCount();
+        assertEquals("not correct member count", 1, count);
+
+        count = memberDao.getProducerFactory().filterNick("ako").getCount();
+        assertEquals("not correct member count", 1, count);
+
+        count = memberDao.getProducerFactory().filterKnowledgeLevelCount(2, 3, OperatorEnum.BIGGER).getCount();
+        assertEquals("not correct member count", 0, count);
+
+        count = memberDao.getProducerFactory().filterKnowScoreOfSBR(5, OperatorEnum.EQUAL, wf)
+                .filterKnowScoreOfSBR(4, OperatorEnum.BIGGER, jbossas).getCount();
+        assertEquals("not correct member count", 1, count);
+
+        count = memberDao.getProducerFactory().filterRole("tsE").filterNick("tr").getCount();
+        assertEquals("not correct member count", 1, count);
+
+        count = memberDao.getProducerFactory().recordsCount(1).getCount();
+        assertEquals("not correct member count", 3, count);
+
+        count = memberDao.getProducerFactory().recordsStart(1).getCount();
+        assertEquals("not correct member count", 3, count);
+
+        count = memberDao.getProducerFactory().recordsCount(1).recordsStart(1).getCount();
+        assertEquals("not correct member count", 3, count);
+    }
+
     //SECTION: Complete integration tests
+    @Test
+    public void testIntMembersView() throws  Exception {
+        List<Member> members  = memberDao.getProducerFactory().filterNick("a").filterLanguage("en").filterRole("i").sortGeo(true).getMembers();
+        assertNotNull(members);
+        assertEquals("wrong member returned", "agiertli", members.get(0).getNick());
+        assertEquals("wrong mmber returned", "jtrantin", members.get(1).getNick());
+
+        //TODO: add some other test scenarios
+
+    }
+
+    //TODO: add other tests
+
 
 
     // Setup stuff
