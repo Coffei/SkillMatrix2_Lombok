@@ -1,6 +1,7 @@
 package com.redhat.gss.skillmatrix.data.dao.exceptions;
 
-import com.redhat.gss.skillmatrix.model.Member;
+import com.redhat.gss.skillmatrix.model.*;
+import com.redhat.gss.skillmatrix.model.Package;
 
 /**
 
