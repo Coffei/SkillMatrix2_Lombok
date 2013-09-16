@@ -9,6 +9,7 @@ import com.redhat.gss.skillmatrix.model.SBR;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.transaction.UserTransaction;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,10 +24,13 @@ public class SbrDBDAO implements SbrDAO {
     @Inject
     private EntityManager em;
 
+    @Inject
+    private UserTransaction transaction;
+
 
     @Override
     public SbrProducer getSbrProducer() {
-        return new SbrProducerDB(em);
+        return new SbrProducerDB(em, transaction);
     }
 
     @Override

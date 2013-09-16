@@ -9,6 +9,7 @@ import com.redhat.gss.skillmatrix.model.SBR_;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import javax.transaction.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -26,17 +27,21 @@ public class SbrProducerDB implements SbrProducer {
 
     private List<Filter> filters;
     private List<Ordering> orders;
+    private UserTransaction transaction;
 
     private Integer maxRecords;
     private Integer startOffset;
 
-    public SbrProducerDB(EntityManager em) {
+    public SbrProducerDB(EntityManager em, UserTransaction transaction) {
         if(em==null)
             throw new IllegalArgumentException("entity manager must be provided", new NullPointerException("em"));
+        if(transaction==null)
+            throw new IllegalArgumentException("user transaction must be provided", new NullPointerException("transaction"));
 
         this.em = em;
         this.filters = new LinkedList<Filter>();
         this.orders = new LinkedList<Ordering>();
+        this.transaction = transaction;
     }
 
     @Override
@@ -156,6 +161,14 @@ public class SbrProducerDB implements SbrProducer {
 
     @Override
     public List<SBR> getSbrs() {
+        try {
+            transaction.begin();
+        } catch (NotSupportedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (SystemException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SBR> criteria = cb.createQuery(SBR.class);
         Root<SBR> sbr = criteria.from(SBR.class);
@@ -182,8 +195,22 @@ public class SbrProducerDB implements SbrProducer {
         if(this.startOffset!=null)
             query.setFirstResult(this.startOffset);
 
+        List<SBR> result = fetchCollections(query.getResultList());
+
+        try {
+            transaction.commit();
+        } catch (RollbackException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (HeuristicMixedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (HeuristicRollbackException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (SystemException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
         //return the results
-        return query.getResultList();
+        return result;
     }
 
     @Override
@@ -215,6 +242,22 @@ public class SbrProducerDB implements SbrProducer {
         } else {
             return cb.desc(sortedExpression);
         }
+    }
+
+    private SBR fetchCollections(SBR sbr) {
+        sbr.getCoaches().size();
+        sbr.getMembers().size();
+        sbr.getPackages().size();
+
+        return sbr;
+    }
+
+    private List<SBR> fetchCollections(List<SBR> sbrs) {
+        for(SBR sbr : sbrs) {
+            fetchCollections(sbr);
+        }
+
+        return sbrs;
     }
 
     private static interface Filter {

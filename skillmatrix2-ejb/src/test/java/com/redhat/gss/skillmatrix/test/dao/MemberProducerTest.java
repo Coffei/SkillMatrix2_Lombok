@@ -2,6 +2,7 @@ package com.redhat.gss.skillmatrix.test.dao;
 
 import com.redhat.gss.skillmatrix.data.dao.MemberDBDAO;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
+import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.MemberProducerDB;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
@@ -54,7 +55,7 @@ public class MemberProducerTest {
         return ShrinkWrap.create(WebArchive.class, "prodtest.war")
                 .addPackage(Member.class.getPackage()) //all model classes
                 .addClasses(MemberDAO.class, MemberDBDAO.class, MemberProducer.class, MemberProducerDB.class)
-                .addClasses(MemberInvalidException.class, OperatorEnum.class, Resources.class)
+                .addClasses(MemberInvalidException.class, SbrInvalidException.class, OperatorEnum.class, Resources.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 //.addAsWebInfResource("test-ds.xml", "test-ds.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");

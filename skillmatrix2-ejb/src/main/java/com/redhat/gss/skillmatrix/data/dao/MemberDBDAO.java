@@ -9,6 +9,7 @@ import com.redhat.gss.skillmatrix.model.Member;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.transaction.UserTransaction;
 
 /**
  * Database implementation of member dao.
@@ -23,9 +24,12 @@ public class MemberDBDAO implements MemberDAO {
     @Inject
     private EntityManager em;
 
+    @Inject
+    private UserTransaction transaction;
+
     @Override
     public MemberProducer getProducerFactory() {
-        return new MemberProducerDB(em);
+        return new MemberProducerDB(em, transaction);
     }
 
     @Override

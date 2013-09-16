@@ -9,6 +9,7 @@ import com.redhat.gss.skillmatrix.model.Package;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import javax.transaction.*;
 import java.util.*;
 
 /**
@@ -23,6 +24,7 @@ public class MemberProducerDB implements MemberProducer {
     private List<Filter> filters;
     private List<Ordering> orders;
     private EntityManager em;
+    private UserTransaction transaction;
 
     private Integer maxRecords;
     private Integer startOffset;
@@ -31,13 +33,16 @@ public class MemberProducerDB implements MemberProducer {
     private SBR sortKnowScoreOfSBR;
     private boolean ascending = true;
 
-    public MemberProducerDB(EntityManager em) {
+    public MemberProducerDB(EntityManager em, UserTransaction transaction) {
         if(em==null)
             throw new IllegalArgumentException("entity manager must be provided", new NullPointerException("em"));
+        if(transaction==null)
+            throw new IllegalArgumentException("user transaction must be provided", new NullPointerException("transaction"));
 
         this.filters = new LinkedList<Filter>();
         this.orders = new LinkedList<Ordering>();
         this.em = em;
+        this.transaction = transaction;
     }
 
     @Override
@@ -428,7 +433,7 @@ public class MemberProducerDB implements MemberProducer {
             @Override
             public Order apply(CriteriaBuilder cb, Root<Member> root, CriteriaQuery query) {
 
-                Join<Member, Geo> geojoin =  root.join(Member_.geo);
+                Join<Member, Geo> geojoin =  root.join(Member_.geo, JoinType.LEFT);
                 return createOrder(ascending, cb, geojoin.get(Geo_.geocode));
             }
         });
@@ -474,6 +479,15 @@ public class MemberProducerDB implements MemberProducer {
 
     @Override
     public List<Member> getMembers() {
+        try {
+            transaction.begin();
+        } catch (NotSupportedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (SystemException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        em.joinTransaction();
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Member> query = cb.createQuery(Member.class);
         Root<Member> root = query.from(Member.class);
@@ -508,11 +522,33 @@ public class MemberProducerDB implements MemberProducer {
             typedQuery.setFirstResult(startOffset);
 
         //and return the results
-        return typedQuery.getResultList();
+        List<Member> result = fetchCollections(typedQuery.getResultList());
+
+        try {
+            transaction.commit();
+        } catch (RollbackException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (HeuristicMixedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (HeuristicRollbackException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (SystemException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return result;
     }
 
     // Java fallback for unsupported sorters
     private List<Member> getMembersNoDB(CriteriaQuery<Member> criteria) {
+        try {
+            transaction.begin();
+        } catch (NotSupportedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (SystemException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        em.joinTransaction();
+
         // get the members
         List<Member> members = em.createQuery(criteria).getResultList();
 
@@ -538,7 +574,21 @@ public class MemberProducerDB implements MemberProducer {
             maxresults = this.maxRecords.intValue();
         }
 
-        return members.subList(offset, maxresults);
+        List<Member> result = fetchCollections(members.subList(offset, maxresults));
+
+        try {
+            transaction.commit();
+        } catch (RollbackException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (HeuristicMixedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (HeuristicRollbackException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (SystemException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        return result;
 
     }
 
@@ -639,6 +689,19 @@ public class MemberProducerDB implements MemberProducer {
         });
 
         return tosort;
+    }
+
+    private Member fetchCollections(Member member) {
+        member.getSbrs().size();
+        return member;
+    }
+
+    private List<Member> fetchCollections(List<Member> members) {
+        for(Member member : members) {
+            fetchCollections(member);
+        }
+
+        return members;
     }
 
 
