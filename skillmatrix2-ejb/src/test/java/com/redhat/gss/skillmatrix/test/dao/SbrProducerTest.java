@@ -63,9 +63,9 @@ public class SbrProducerTest {
     //SECTION: Filter tests
     @Test
     public void testFilterId() throws Exception {
-        List<SBR> wfs = sbrDAO.getSbrProducer().filterId(wf_id).getSbrs();
-        List<SBR> jbossases = sbrDAO.getSbrProducer().filterId(jbossas_id).getSbrs();
-        List<SBR> clusterings = sbrDAO.getSbrProducer().filterId(clustering_id).getSbrs();
+        List<SBR> wfs = sbrDAO.getProducerFactory().filterId(wf_id).getSbrs();
+        List<SBR> jbossases = sbrDAO.getProducerFactory().filterId(jbossas_id).getSbrs();
+        List<SBR> clusterings = sbrDAO.getProducerFactory().filterId(clustering_id).getSbrs();
 
         assertNotNull("null result returned", wfs);
         assertNotNull("null result returned", jbossases);
@@ -92,7 +92,7 @@ public class SbrProducerTest {
         if(id < Long.MAX_VALUE / 10)
             id *= 7;
 
-        List<SBR> nones = sbrDAO.getSbrProducer().filterId(id).getSbrs();
+        List<SBR> nones = sbrDAO.getProducerFactory().filterId(id).getSbrs();
 
         assertNotNull("null result returned", nones);
         assertEquals("some sbrs found on non-existent id: " + id, 0, nones.size());
@@ -100,7 +100,7 @@ public class SbrProducerTest {
 
     @Test()
     public void testFilterName() throws Exception {
-        List<SBR> sbrs = sbrDAO.getSbrProducer().filterName("A").getSbrs();
+        List<SBR> sbrs = sbrDAO.getProducerFactory().filterName("A").getSbrs();
 
         Pattern namePattern = Pattern.compile("^Web Frameworks$|^JBoss AS$");
         assertNotNull("null result returned", sbrs);
@@ -109,13 +109,13 @@ public class SbrProducerTest {
         assertTrue("incorrect SBR", namePattern.matcher(sbrs.get(1).getName()).matches());
 
 
-        sbrs = sbrDAO.getSbrProducer().filterName("lust").getSbrs();
+        sbrs = sbrDAO.getProducerFactory().filterName("lust").getSbrs();
 
         assertNotNull("null result returned", sbrs);
         assertEquals("incorrect number of SBRs returned", 1, sbrs.size());
         assertEquals("incorrect SBR", "JBoss Clustering", sbrs.get(0).getName());
 
-        sbrs = sbrDAO.getSbrProducer().filterName(" ").getSbrs();
+        sbrs = sbrDAO.getProducerFactory().filterName(" ").getSbrs();
 
         namePattern = Pattern.compile("^Web Frameworks$|^JBoss AS$|^JBoss Clustering$");
         assertNotNull("null result returned", sbrs);
@@ -125,7 +125,7 @@ public class SbrProducerTest {
         assertTrue("incorrect SBR", namePattern.matcher(sbrs.get(2).getName()).matches());
 
 
-        sbrs = sbrDAO.getSbrProducer().filterName("unkno").getSbrs();
+        sbrs = sbrDAO.getProducerFactory().filterName("unkno").getSbrs();
 
         assertNotNull("null result returned", sbrs);
         assertEquals("incorrect number of SBRs returned", 0, sbrs.size());
@@ -133,30 +133,30 @@ public class SbrProducerTest {
 
     @Test
     public void testFilterNameExact() throws Exception {
-        List<SBR> sbrs = sbrDAO.getSbrProducer().filterNameExact("Web Frameworks").getSbrs();
+        List<SBR> sbrs = sbrDAO.getProducerFactory().filterNameExact("Web Frameworks").getSbrs();
 
         assertNotNull("null result returned", sbrs);
         assertEquals("incorrect number of SBRs returned", 1, sbrs.size());
         assertEquals("incorrect SBR", "Web Frameworks", sbrs.get(0).getName());
 
-        sbrs = sbrDAO.getSbrProducer().filterNameExact("JBoss").getSbrs();
+        sbrs = sbrDAO.getProducerFactory().filterNameExact("JBoss").getSbrs();
 
         assertNotNull("null result returned", sbrs);
         assertEquals("incorrect number of SBRs returned", 0, sbrs.size());
 
-        sbrs = sbrDAO.getSbrProducer().filterNameExact("JBoss Clustering").getSbrs();
+        sbrs = sbrDAO.getProducerFactory().filterNameExact("JBoss Clustering").getSbrs();
 
         assertNotNull("null result returned", sbrs);
         assertEquals("incorrect number of SBRs returned", 1, sbrs.size());
         assertEquals("incorrect SBR", "JBoss Clustering", sbrs.get(0).getName());
 
-        sbrs = sbrDAO.getSbrProducer().filterNameExact("BRMS").getSbrs();
+        sbrs = sbrDAO.getProducerFactory().filterNameExact("BRMS").getSbrs();
 
         assertNotNull("null result returned", sbrs);
         assertEquals("incorrect number of SBRs returned", 1, sbrs.size());
         assertEquals("incorrect SBR", "BRMS", sbrs.get(0).getName());
 
-        sbrs = sbrDAO.getSbrProducer().filterNameExact("Jboss AS").getSbrs(); //search is case sensitive
+        sbrs = sbrDAO.getProducerFactory().filterNameExact("Jboss AS").getSbrs(); //search is case sensitive
 
         assertNotNull("null result returned", sbrs);
         assertEquals("incorrect number of SBRs returned", 0, sbrs.size());
@@ -168,13 +168,13 @@ public class SbrProducerTest {
         Member akovari = em.find(Member.class, akovari_id);
         Member agiertli = em.find(Member.class, agiertli_id);
 
-        List<SBR> sbrs = sbrDAO.getSbrProducer().filterMember(jtrantin).getSbrs();
+        List<SBR> sbrs = sbrDAO.getProducerFactory().filterMember(jtrantin).getSbrs();
 
         assertNotNull("returned null result", sbrs);
         assertEquals("wrong number of sbrs", 1, sbrs.size());
         assertEquals("wrong sbr", "Web Frameworks", sbrs.get(0).getName());
 
-        sbrs = sbrDAO.getSbrProducer().filterMember(akovari).getSbrs();
+        sbrs = sbrDAO.getProducerFactory().filterMember(akovari).getSbrs();
 
         Pattern namePattern = Pattern.compile("^JBoss AS$|^JBoss Clustering$|^BRMS$");
         assertNotNull("returned null result", sbrs);
@@ -183,7 +183,7 @@ public class SbrProducerTest {
         assertTrue("wrong SBR", namePattern.matcher(sbrs.get(1).getName()).matches());
         assertTrue("wrong SBR", namePattern.matcher(sbrs.get(2).getName()).matches());
 
-        sbrs = sbrDAO.getSbrProducer().filterMember(agiertli).getSbrs();
+        sbrs = sbrDAO.getProducerFactory().filterMember(agiertli).getSbrs();
 
         namePattern = Pattern.compile("^JBoss AS$|^BRMS$");
         assertNotNull("returned null result", sbrs);
@@ -196,7 +196,7 @@ public class SbrProducerTest {
 
     @Test
     public void testSortName() throws Exception {
-        List<SBR> sbrs = sbrDAO.getSbrProducer().sortName(true).getSbrs();
+        List<SBR> sbrs = sbrDAO.getProducerFactory().sortName(true).getSbrs();
 
         assertNotNull("returned null result", sbrs);
         assertEquals("wrong number of sbrs returned", 4, sbrs.size());
@@ -208,7 +208,7 @@ public class SbrProducerTest {
 
     @Test
     public void testSortMembersCount() throws Exception  {
-        List<SBR> sbrs = sbrDAO.getSbrProducer().sortMembersCount(false).getSbrs();
+        List<SBR> sbrs = sbrDAO.getProducerFactory().sortMembersCount(false).getSbrs();
         assertNotNull("returned null result", sbrs);
         assertEquals("wrong number of sbrs returned", 4, sbrs.size());
 
@@ -225,7 +225,7 @@ public class SbrProducerTest {
 
     @Test
     public void testRecordsStart() throws Exception {
-        List<SBR> sbrs = sbrDAO.getSbrProducer().sortName(true).recordsStart(2).getSbrs();
+        List<SBR> sbrs = sbrDAO.getProducerFactory().sortName(true).recordsStart(2).getSbrs();
 
         assertNotNull("returned null result", sbrs);
         assertEquals("wrong number of sbrs returned", 2, sbrs.size());
@@ -233,7 +233,7 @@ public class SbrProducerTest {
         assertEquals("wrong sbr", "Web Frameworks", sbrs.get(1).getName());
 
 
-        sbrs = sbrDAO.getSbrProducer().sortName(false).recordsStart(0).getSbrs();
+        sbrs = sbrDAO.getProducerFactory().sortName(false).recordsStart(0).getSbrs();
 
         assertNotNull("returned null result", sbrs);
         assertEquals("wrong number of sbrs returned", 4, sbrs.size());
@@ -242,34 +242,34 @@ public class SbrProducerTest {
         assertEquals("wrong sbr ", "JBoss Clustering", sbrs.get(1).getName());
         assertEquals("wrong sbr", "Web Frameworks", sbrs.get(0).getName());
 
-        sbrs = sbrDAO.getSbrProducer().sortName(false).recordsStart(3).getSbrs();
+        sbrs = sbrDAO.getProducerFactory().sortName(false).recordsStart(3).getSbrs();
         assertNotNull("returned null result", sbrs);
         assertEquals("wrong number of sbrs returned", 1, sbrs.size());
         assertEquals("wrong sbr ", "BRMS", sbrs.get(0).getName());
 
-        sbrs = sbrDAO.getSbrProducer().sortName(true).recordsStart(5).getSbrs();
+        sbrs = sbrDAO.getProducerFactory().sortName(true).recordsStart(5).getSbrs();
         assertNotNull("returned null result", sbrs);
         assertEquals("wrong number of sbrs returned", 0, sbrs.size());
 
-        sbrs = sbrDAO.getSbrProducer().sortName(true).recordsStart(-1).getSbrs(); // should be ignored
+        sbrs = sbrDAO.getProducerFactory().sortName(true).recordsStart(-1).getSbrs(); // should be ignored
         assertNotNull("returned null result", sbrs);
         assertEquals("wrong number of sbrs returned", 4, sbrs.size());
     }
 
     @Test
     public void testRecordsCount() throws Exception {
-        List<SBR> sbrs = sbrDAO.getSbrProducer().sortName(true).recordsCount(2).getSbrs();
+        List<SBR> sbrs = sbrDAO.getProducerFactory().sortName(true).recordsCount(2).getSbrs();
         assertNotNull("returned null result", sbrs);
         assertEquals("wrong number of sbrs returned", 2, sbrs.size());
         assertEquals("wrong sbr", "BRMS", sbrs.get(0).getName());
         assertEquals("wrong sbr", "JBoss AS", sbrs.get(1).getName());
 
-        sbrs = sbrDAO.getSbrProducer().sortName(true).recordsCount(1).recordsStart(2).getSbrs();
+        sbrs = sbrDAO.getProducerFactory().sortName(true).recordsCount(1).recordsStart(2).getSbrs();
         assertNotNull("returned null result", sbrs);
         assertEquals("wrong number of sbrs returned", 1, sbrs.size());
         assertEquals("wrong sbr", "JBoss Clustering", sbrs.get(0).getName());
 
-        sbrs = sbrDAO.getSbrProducer().sortName(true).recordsCount(0).getSbrs(); // should be ignored
+        sbrs = sbrDAO.getProducerFactory().sortName(true).recordsCount(0).getSbrs(); // should be ignored
         assertNotNull("returned null result", sbrs);
         assertEquals("wrong number of sbrs returned", 4, sbrs.size());
     }
@@ -278,20 +278,20 @@ public class SbrProducerTest {
     public void testGetCount() throws Exception {
         Member agiertli = em.find(Member.class, agiertli_id);
 
-        long count = sbrDAO.getSbrProducer().filterNameExact("BRMS").getCount();
+        long count = sbrDAO.getProducerFactory().filterNameExact("BRMS").getCount();
 
         assertEquals("wrong count returned", 1, count);
 
-        count = sbrDAO.getSbrProducer().sortName(true).getCount();
+        count = sbrDAO.getProducerFactory().sortName(true).getCount();
         assertEquals("wrong count returned", 4, count);
 
-        count = sbrDAO.getSbrProducer().filterName(" ").getCount();
+        count = sbrDAO.getProducerFactory().filterName(" ").getCount();
         assertEquals("wrong count returned", 3, count);
 
-        count =sbrDAO.getSbrProducer().filterMember(agiertli).getCount();
+        count =sbrDAO.getProducerFactory().filterMember(agiertli).getCount();
         assertEquals("wrong count returned", 2, count);
 
-        count = sbrDAO.getSbrProducer().filterNameExact("JBoss").getCount();
+        count = sbrDAO.getProducerFactory().filterNameExact("JBoss").getCount();
         assertEquals("wrong count returned", 0, count);
     }
 

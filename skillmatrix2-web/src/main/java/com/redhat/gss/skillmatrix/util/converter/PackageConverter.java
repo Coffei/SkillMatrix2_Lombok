@@ -1,7 +1,6 @@
 package com.redhat.gss.skillmatrix.util.converter;
 
 import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
-import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.model.Package;
 
 import javax.faces.component.UIComponent;
@@ -29,7 +28,7 @@ public class PackageConverter implements Converter {
         if(sid!=null && !sid.trim().isEmpty()) {
             try {
                 long id = Long.valueOf(sid.trim());
-                List<Package> pkgs = pkgDao.getPackageProducer().filterId(id).getPackages();
+                List<Package> pkgs = pkgDao.getProducerFactory().filterId(id).getPackages();
                 if(!pkgs.isEmpty()) {
                     return pkgs.get(0);
                 }

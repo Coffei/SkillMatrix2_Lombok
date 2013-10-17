@@ -2,17 +2,13 @@ package com.redhat.gss.skillmatrix.controller.form;
 
 import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
-import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.model.Package;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.FacesComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
@@ -44,7 +40,7 @@ public class TagForm  implements Serializable {
         if(sid!=null && !sid.trim().isEmpty()) {
             try {
                 long id = Long.valueOf(sid);
-                List<Package> pkgs = pkgDao.getPackageProducer().filterId(id).getPackages();
+                List<Package> pkgs = pkgDao.getProducerFactory().filterId(id).getPackages();
 
                 if(!pkgs.isEmpty()) { // just take the first one
                     this.pkg = pkgs.get(0); // edit existing package mode

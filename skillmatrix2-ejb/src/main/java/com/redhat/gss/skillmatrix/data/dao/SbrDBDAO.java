@@ -34,7 +34,7 @@ public class SbrDBDAO implements SbrDAO {
 
 
     @Override
-    public SbrProducer getSbrProducer() {
+    public SbrProducer getProducerFactory() {
         return new SbrProducerDB(em, transaction);
     }
 

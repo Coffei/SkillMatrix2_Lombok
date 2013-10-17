@@ -47,7 +47,7 @@ public class DaoHelper {
     @Produces
     @Named("allSBRs")
     public List<SBR> getAllSbrs() {
-        return sbrDAO.getSbrProducer().sortName(true).getSbrs();
+        return sbrDAO.getProducerFactory().sortName(true).getSbrs();
     }
 
 
@@ -61,6 +61,6 @@ public class DaoHelper {
     @Produces
     @Named("allPackages")
     public List<Package> getAllPackages() {
-        return packageDAO.getPackageProducer().sortName(true).getPackages();
+        return packageDAO.getProducerFactory().sortName(true).getPackages();
     }
 }

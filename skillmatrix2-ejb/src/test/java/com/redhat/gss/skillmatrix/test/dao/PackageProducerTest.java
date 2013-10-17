@@ -1,16 +1,12 @@
 package com.redhat.gss.skillmatrix.test.dao;
 
 import com.redhat.gss.skillmatrix.data.dao.PackageDBDAO;
-import com.redhat.gss.skillmatrix.data.dao.SbrDBDAO;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.PackageProducerDB;
-import com.redhat.gss.skillmatrix.data.dao.producers.SbrProducerDB;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.SbrProducer;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
 import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.model.Package;
@@ -70,13 +66,13 @@ public class PackageProducerTest {
 
     @Test
     public void testFilterId() throws Exception {
-        List<Package> pkgs = pkgDao.getPackageProducer().filterId(rf_id).getPackages();
+        List<Package> pkgs = pkgDao.getProducerFactory().filterId(rf_id).getPackages();
 
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 1, pkgs.size());
         assertEquals("wrong package returned", "RichFaces", pkgs.get(0).getName());
 
-        pkgs = pkgDao.getPackageProducer().filterId(jbpm_id).getPackages();
+        pkgs = pkgDao.getProducerFactory().filterId(jbpm_id).getPackages();
 
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 1, pkgs.size());
@@ -85,7 +81,7 @@ public class PackageProducerTest {
 
     @Test
     public void testFilterName() throws Exception {
-        List<Package> pkgs = pkgDao.getPackageProducer().filterName("IN").getPackages();
+        List<Package> pkgs = pkgDao.getProducerFactory().filterName("IN").getPackages();
 
         Pattern namePattern = Pattern.compile("^Infinispan$|^Logging$|^Spring$");
         assertNotNull("null result returned", pkgs);
@@ -93,23 +89,23 @@ public class PackageProducerTest {
         for(Package pkg : pkgs)
             assertTrue("package name doesn't match",namePattern.matcher(pkg.getName()).matches());
 
-        pkgs = pkgDao.getPackageProducer().filterName("bP").getPackages();
+        pkgs = pkgDao.getProducerFactory().filterName("bP").getPackages();
 
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 1, pkgs.size());
         assertEquals("package name doesn't match", "jBPM", pkgs.get(0).getName());
 
-        pkgs = pkgDao.getPackageProducer().filterName(" ").getPackages();
+        pkgs = pkgDao.getProducerFactory().filterName(" ").getPackages();
 
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 0, pkgs.size());
 
-        pkgs = pkgDao.getPackageProducer().filterName(" rich").getPackages();
+        pkgs = pkgDao.getProducerFactory().filterName(" rich").getPackages();
 
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 0, pkgs.size());
 
-        pkgs = pkgDao.getPackageProducer().filterName("x").getPackages();
+        pkgs = pkgDao.getProducerFactory().filterName("x").getPackages();
 
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 0, pkgs.size());
@@ -118,24 +114,24 @@ public class PackageProducerTest {
 
     @Test
     public void testFilterNameExact() throws Exception {
-        List<Package> pkgs = pkgDao.getPackageProducer().filterNameExact("Seam").getPackages();
+        List<Package> pkgs = pkgDao.getProducerFactory().filterNameExact("Seam").getPackages();
 
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 1, pkgs.size());
         assertEquals("package name doesn't match", "Seam", pkgs.get(0).getName());
 
-        pkgs = pkgDao.getPackageProducer().filterNameExact("richfaces").getPackages();
+        pkgs = pkgDao.getProducerFactory().filterNameExact("richfaces").getPackages();
 
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 0, pkgs.size());
 
-        pkgs = pkgDao.getPackageProducer().filterNameExact("Infinispan").getPackages();
+        pkgs = pkgDao.getProducerFactory().filterNameExact("Infinispan").getPackages();
 
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 1, pkgs.size());
         assertEquals("package name doesn't match", "Infinispan", pkgs.get(0).getName());
 
-        pkgs = pkgDao.getPackageProducer().filterNameExact("EJB ").getPackages();
+        pkgs = pkgDao.getProducerFactory().filterNameExact("EJB ").getPackages();
 
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 0, pkgs.size());
@@ -147,7 +143,7 @@ public class PackageProducerTest {
         SBR jbossas = em.find(SBR.class, jbossas_id);
         SBR clust = em.find(SBR.class, clustering_id);
 
-        List<Package> pkgs = pkgDao.getPackageProducer().filterSBR(wf).getPackages();
+        List<Package> pkgs = pkgDao.getProducerFactory().filterSBR(wf).getPackages();
 
         Pattern namePattern = Pattern.compile("^RichFaces$|^Seam$|^Spring$");
         assertNotNull("null result returned", pkgs);
@@ -155,7 +151,7 @@ public class PackageProducerTest {
         for(Package pkg : pkgs)
             assertTrue("package name doesn't match", namePattern.matcher(pkg.getName()).matches());
 
-        pkgs = pkgDao.getPackageProducer().filterSBR(jbossas).getPackages();
+        pkgs = pkgDao.getProducerFactory().filterSBR(jbossas).getPackages();
 
         namePattern = Pattern.compile("^EJB$|^Logging$");
         assertNotNull("null result returned", pkgs);
@@ -163,7 +159,7 @@ public class PackageProducerTest {
         for(Package pkg : pkgs)
             assertTrue("package name doesn't match", namePattern.matcher(pkg.getName()).matches());
 
-        pkgs = pkgDao.getPackageProducer().filterSBR(clust).getPackages();
+        pkgs = pkgDao.getProducerFactory().filterSBR(clust).getPackages();
 
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 1, pkgs.size());
@@ -173,12 +169,12 @@ public class PackageProducerTest {
 
     @Test
     public void testFilterPeopleAtKnowledgeLevel() throws Exception {
-        List<Package> pkgs = pkgDao.getPackageProducer().filterPeopleAtKnowledgeLevel(2, OperatorEnum.EQUAL, 2).getPackages();
+        List<Package> pkgs = pkgDao.getProducerFactory().filterPeopleAtKnowledgeLevel(2, OperatorEnum.EQUAL, 2).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 1, pkgs.size());
         assertEquals("package name doesn't match", "Logging", pkgs.get(0).getName());
 
-        pkgs = pkgDao.getPackageProducer().filterPeopleAtKnowledgeLevel(1, OperatorEnum.BIGGER, 0).getPackages();
+        pkgs = pkgDao.getProducerFactory().filterPeopleAtKnowledgeLevel(1, OperatorEnum.BIGGER, 0).getPackages();
         Pattern namePattern = Pattern.compile("^EJB$|^Seam$|^Spring$");
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 3, pkgs.size());
@@ -186,7 +182,7 @@ public class PackageProducerTest {
             assertTrue("package name doesn't match", namePattern.matcher(pkg.getName()).matches());
 
 
-        pkgs = pkgDao.getPackageProducer().filterPeopleAtKnowledgeLevel(0, OperatorEnum.SMALLER, 1).getPackages();
+        pkgs = pkgDao.getProducerFactory().filterPeopleAtKnowledgeLevel(0, OperatorEnum.SMALLER, 1).getPackages();
         namePattern = Pattern.compile("^RichFaces$|^jBPM$|^Infinispan$|^Spring$");
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 4, pkgs.size());
@@ -194,29 +190,29 @@ public class PackageProducerTest {
             assertTrue("package name doesn't match", namePattern.matcher(pkg.getName()).matches());
 
 
-        pkgs = pkgDao.getPackageProducer().filterPeopleAtKnowledgeLevel(2, OperatorEnum.BIGGER, 2).getPackages();
+        pkgs = pkgDao.getProducerFactory().filterPeopleAtKnowledgeLevel(2, OperatorEnum.BIGGER, 2).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 0, pkgs.size());
 
-        pkgs = pkgDao.getPackageProducer().filterPeopleAtKnowledgeLevel(1, OperatorEnum.BIGGER, 1).getPackages();
+        pkgs = pkgDao.getProducerFactory().filterPeopleAtKnowledgeLevel(1, OperatorEnum.BIGGER, 1).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 0, pkgs.size());
 
-        pkgs = pkgDao.getPackageProducer().filterPeopleAtKnowledgeLevel(0, OperatorEnum.EQUAL, 2).getPackages();
+        pkgs = pkgDao.getProducerFactory().filterPeopleAtKnowledgeLevel(0, OperatorEnum.EQUAL, 2).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 0, pkgs.size());
     }
 
     @Test
     public void testFilterSbrName() throws Exception {
-        List<Package> pkgs = pkgDao.getPackageProducer().filterSbrName("fra").getPackages();
+        List<Package> pkgs = pkgDao.getProducerFactory().filterSbrName("fra").getPackages();
         Pattern namePattern = Pattern.compile("^RichFaces$|^Seam$|^Spring$");
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 3, pkgs.size());
         for(Package pkg : pkgs)
             assertTrue("package name doesn't match", namePattern.matcher(pkg.getName()).matches());
 
-        pkgs = pkgDao.getPackageProducer().filterSbrName("jbOSs").getPackages();
+        pkgs = pkgDao.getProducerFactory().filterSbrName("jbOSs").getPackages();
         namePattern = Pattern.compile("^EJB$|^Logging$|^Infinispan$");
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 3, pkgs.size());
@@ -224,7 +220,7 @@ public class PackageProducerTest {
             assertTrue("package name doesn't match", namePattern.matcher(pkg.getName()).matches());
 
 
-        pkgs = pkgDao.getPackageProducer().filterSbrName("someunknown").getPackages();
+        pkgs = pkgDao.getProducerFactory().filterSbrName("someunknown").getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 0, pkgs.size());
 
@@ -234,7 +230,7 @@ public class PackageProducerTest {
 
     @Test
     public void testSortName() throws Exception {
-        List<Package> pkgs = pkgDao.getPackageProducer().sortName(true).getPackages();
+        List<Package> pkgs = pkgDao.getProducerFactory().sortName(true).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 7, pkgs.size());
         assertEquals("wrong package order","EJB" ,pkgs.get(0).getName());
@@ -242,7 +238,7 @@ public class PackageProducerTest {
         assertEquals("wrong package order","Seam" ,pkgs.get(5).getName());
         assertEquals("wrong package order","jBPM" ,pkgs.get(2).getName());
 
-        pkgs = pkgDao.getPackageProducer().sortName(false).getPackages();
+        pkgs = pkgDao.getProducerFactory().sortName(false).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 7, pkgs.size());
         assertEquals("wrong package order","Logging" ,pkgs.get(3).getName());
@@ -251,7 +247,7 @@ public class PackageProducerTest {
 
     @Test
     public void testSbrName() throws Exception {
-        List<Package> pkgs = pkgDao.getPackageProducer().sortSbrName(true).getPackages();
+        List<Package> pkgs = pkgDao.getProducerFactory().sortSbrName(true).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 7, pkgs.size());
 
@@ -273,17 +269,17 @@ public class PackageProducerTest {
 
     @Test
     public void testUtilRecordsStart() throws Exception {
-        List<Package> pkgs = pkgDao.getPackageProducer().recordsStart(5).getPackages();
+        List<Package> pkgs = pkgDao.getProducerFactory().recordsStart(5).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 2, pkgs.size());
 
-        pkgs = pkgDao.getPackageProducer().sortName(true).recordsStart(2).getPackages();
+        pkgs = pkgDao.getProducerFactory().sortName(true).recordsStart(2).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 5, pkgs.size());
         assertEquals("wrong package", "Logging", pkgs.get(1).getName());
         assertEquals("wrong package", "Seam", pkgs.get(3).getName());
 
-        pkgs = pkgDao.getPackageProducer().sortName(false).recordsStart(4).getPackages();
+        pkgs = pkgDao.getProducerFactory().sortName(false).recordsStart(4).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 3, pkgs.size());
         assertEquals("wrong package", "EJB", pkgs.get(2).getName());
@@ -292,22 +288,22 @@ public class PackageProducerTest {
 
     @Test
     public void testUtilRecordsCount() throws Exception {
-        List<Package> pkgs = pkgDao.getPackageProducer().recordsCount(2).getPackages();
+        List<Package> pkgs = pkgDao.getProducerFactory().recordsCount(2).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 2, pkgs.size());
 
-        pkgs = pkgDao.getPackageProducer().sortName(true).recordsCount(2).getPackages();
+        pkgs = pkgDao.getProducerFactory().sortName(true).recordsCount(2).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 2, pkgs.size());
         assertEquals("wrong package", "EJB", pkgs.get(0).getName());
         assertEquals("wrong package", "Infinispan", pkgs.get(1).getName());
 
-        pkgs = pkgDao.getPackageProducer().sortName(false).recordsCount(1).getPackages();
+        pkgs = pkgDao.getProducerFactory().sortName(false).recordsCount(1).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 1, pkgs.size());
         assertEquals("wrong package", "Spring", pkgs.get(0).getName());
 
-        pkgs = pkgDao.getPackageProducer().sortName(false).recordsCount(-1).getPackages();
+        pkgs = pkgDao.getProducerFactory().sortName(false).recordsCount(-1).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 7, pkgs.size());
     }
@@ -316,23 +312,23 @@ public class PackageProducerTest {
     public void testUtilGetCount() throws Exception {
         SBR wf = em.find(SBR.class, wf_id);
 
-        long count = pkgDao.getPackageProducer().getCount();
+        long count = pkgDao.getProducerFactory().getCount();
         assertEquals("wrong number of records", 7, count);
 
 
-        count = pkgDao.getPackageProducer().filterPeopleAtKnowledgeLevel(0, OperatorEnum.SMALLER, 1).getCount();
+        count = pkgDao.getProducerFactory().filterPeopleAtKnowledgeLevel(0, OperatorEnum.SMALLER, 1).getCount();
         assertEquals("wrong number of records", 4, count);
 
-        count = pkgDao.getPackageProducer().filterSBR(wf).getCount();
+        count = pkgDao.getProducerFactory().filterSBR(wf).getCount();
         assertEquals("wrong number of records", 3, count);
 
-        count = pkgDao.getPackageProducer().filterNameExact("richfaces").getCount();
+        count = pkgDao.getProducerFactory().filterNameExact("richfaces").getCount();
         assertEquals("wrong number of records", 0, count);
 
-        count = pkgDao.getPackageProducer().sortName(false).recordsCount(1).getCount();
+        count = pkgDao.getProducerFactory().sortName(false).recordsCount(1).getCount();
         assertEquals("wrong number of records", 7, count);
 
-        count = pkgDao.getPackageProducer().sortName(true).recordsStart(2).getCount();
+        count = pkgDao.getProducerFactory().sortName(true).recordsStart(2).getCount();
         assertEquals("wrong number of records", 7, count);
 
 

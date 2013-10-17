@@ -25,7 +25,7 @@ public class PackageDBDAO implements PackageDAO {
     private EntityManager em;
 
     @Override
-    public PackageProducer getPackageProducer() {
+    public PackageProducer getProducerFactory() {
         return new PackageProducerDB(em);
     }
 

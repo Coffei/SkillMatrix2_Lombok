@@ -16,7 +16,7 @@ public interface SbrDAO {
      * Returns SbrProducer impl, that is compatible with this DAO.
      * @return
      */
-    SbrProducer getSbrProducer();
+    SbrProducer getProducerFactory();
 
     /**
      * Creates and persists an SBR into the datastore. This operation might not be supported.

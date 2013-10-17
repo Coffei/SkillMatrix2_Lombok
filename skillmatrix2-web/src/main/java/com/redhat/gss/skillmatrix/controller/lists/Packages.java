@@ -31,7 +31,7 @@ public class Packages  implements Serializable {
         modelHelper = new PackageModelHelper(MAX_RECORDS_ON_PAGE) {
             @Override
             protected PackageProducer getProducer() {
-                return pkgDao.getPackageProducer();
+                return pkgDao.getProducerFactory();
             }
         };
     }

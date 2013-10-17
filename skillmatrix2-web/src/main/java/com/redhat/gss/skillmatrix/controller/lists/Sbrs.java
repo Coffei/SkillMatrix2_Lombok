@@ -32,7 +32,7 @@ public class Sbrs implements Serializable {
         this.modelHelper = new SbrModelHelper(MAX_RECORDS_ON_PAGE) {
             @Override
             public SbrProducer getProducerFactory() {
-                return sbrDAO.getSbrProducer();
+                return sbrDAO.getProducerFactory();
             }
         };
     }

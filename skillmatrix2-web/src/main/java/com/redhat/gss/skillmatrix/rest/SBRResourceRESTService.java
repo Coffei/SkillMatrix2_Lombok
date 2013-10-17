@@ -34,7 +34,7 @@ public class SBRResourceRESTService {
     @GET
     @Produces({"text/xml", "application/json"})
     public List<SbrApi> listAllSBRs() {
-        return builder.buildSbrs(sbrDAO.getSbrProducer().getSbrs());
+        return builder.buildSbrs(sbrDAO.getProducerFactory().getSbrs());
     }
 
     //@BadgerFish
@@ -42,7 +42,7 @@ public class SBRResourceRESTService {
     @Path("/{id:[0-9][0-9]*}")
     @Produces({"text/xml", "application/json"})
     public SbrApi listSBRById(@PathParam("id") long id) {
-        List<SBR> sbrs = sbrDAO.getSbrProducer().filterId(id).getSbrs();
+        List<SBR> sbrs = sbrDAO.getProducerFactory().filterId(id).getSbrs();
         //TODO: what if not found!
         return builder.buildSbr(sbrs.get(0));
     }

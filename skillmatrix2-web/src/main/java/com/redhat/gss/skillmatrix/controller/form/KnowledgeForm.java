@@ -74,7 +74,7 @@ public class KnowledgeForm implements Serializable {
         this.pkgModelHelper = new PackageModelHelper(MAX_RECORDS_PER_PAGE) { // we create new package model helper
             @Override
             protected PackageProducer getProducer() {
-                return pkgDAO.getPackageProducer();
+                return pkgDAO.getProducerFactory();
             }
         };
     }

@@ -6,7 +6,6 @@ import com.redhat.gss.skillmatrix.model.SBR;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
@@ -29,7 +28,7 @@ public class SbrConverter implements Converter {
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) {
         try {
             long id = Long.parseLong(s);
-            List<SBR> sbrs = sbrDao.getSbrProducer().filterId(id).getSbrs();
+            List<SBR> sbrs = sbrDao.getProducerFactory().filterId(id).getSbrs();
             if(!sbrs.isEmpty())
                 return sbrs.get(0);
 

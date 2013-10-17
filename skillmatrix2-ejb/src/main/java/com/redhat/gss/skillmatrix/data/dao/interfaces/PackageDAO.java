@@ -16,7 +16,7 @@ public interface PackageDAO {
      * Returns {@link PackageProducer} impl, that is compatible with this DAO.
      * @return
      */
-    PackageProducer getPackageProducer();
+    PackageProducer getProducerFactory();
 
     /**
      * Creates and persists a Package into the datastore. This operation might not be supported.

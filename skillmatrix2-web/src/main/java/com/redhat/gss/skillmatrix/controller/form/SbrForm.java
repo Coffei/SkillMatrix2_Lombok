@@ -1,7 +1,5 @@
 package com.redhat.gss.skillmatrix.controller.form;
 
-import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
-import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
@@ -50,7 +48,7 @@ public class SbrForm implements Serializable {
         if(sid!=null && !sid.trim().isEmpty()) {
             try {
                 long id = Long.valueOf(sid);
-                List<SBR> sbrs = sbrDAO.getSbrProducer().filterId(id).getSbrs();
+                List<SBR> sbrs = sbrDAO.getProducerFactory().filterId(id).getSbrs();
 
                 if(!sbrs.isEmpty()) { // just take the first one
                     this.sbr = sbrs.get(0); // edit existing package mode
