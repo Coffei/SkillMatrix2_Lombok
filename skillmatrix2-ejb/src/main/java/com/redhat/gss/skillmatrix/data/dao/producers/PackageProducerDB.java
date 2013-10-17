@@ -125,6 +125,32 @@ public class PackageProducerDB implements PackageProducer {
     }
 
     @Override
+    public PackageProducer filterSbrName(final String nameFragment) {
+        if(nameFragment==null)
+            throw new NullPointerException("nameFragment");
+        if(nameFragment.trim().isEmpty())  // criteria is empty, just do nothing
+            return this;
+
+        this.filters.add(new Filter() {
+            @Override
+            public Predicate apply(CriteriaBuilder cb, Root<Package> root, CriteriaQuery query) {
+                //first get all the matching sbrs and their packages
+                CriteriaQuery<SBR> sbrQuery = cb.createQuery(SBR.class);
+                Root<SBR> sbrRoot = sbrQuery.from(SBR.class);
+                sbrQuery.select(sbrRoot).where(cb.like(cb.lower(sbrRoot.get(SBR_.name)), "%" + nameFragment.toLowerCase(Locale.ENGLISH) + "%"));
+
+                List<SBR> sbrs = em.createQuery(sbrQuery).getResultList();
+
+                //add criteria
+
+                return root.get(Package_.sbr).in(sbrs);
+            }
+        });
+
+        return this;
+    }
+
+    @Override
     public PackageProducer sortName(final boolean ascending) {
         this.orderings.add(new Ordering() {
             @Override

@@ -207,6 +207,29 @@ public class PackageProducerTest {
         assertEquals("wrong number of packages returned", 0, pkgs.size());
     }
 
+    @Test
+    public void testFilterSbrName() throws Exception {
+        List<Package> pkgs = pkgDao.getPackageProducer().filterSbrName("fra").getPackages();
+        Pattern namePattern = Pattern.compile("^RichFaces$|^Seam$|^Spring$");
+        assertNotNull("null result returned", pkgs);
+        assertEquals("wrong number of packages returned", 3, pkgs.size());
+        for(Package pkg : pkgs)
+            assertTrue("package name doesn't match", namePattern.matcher(pkg.getName()).matches());
+
+        pkgs = pkgDao.getPackageProducer().filterSbrName("jbOSs").getPackages();
+        namePattern = Pattern.compile("^EJB$|^Logging$|^Infinispan$");
+        assertNotNull("null result returned", pkgs);
+        assertEquals("wrong number of packages returned", 3, pkgs.size());
+        for(Package pkg : pkgs)
+            assertTrue("package name doesn't match", namePattern.matcher(pkg.getName()).matches());
+
+
+        pkgs = pkgDao.getPackageProducer().filterSbrName("someunknown").getPackages();
+        assertNotNull("null result returned", pkgs);
+        assertEquals("wrong number of packages returned", 0, pkgs.size());
+
+    }
+
     //SECTION: order tests
 
     @Test

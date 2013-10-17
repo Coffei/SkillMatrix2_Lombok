@@ -60,6 +60,14 @@ public interface PackageProducer {
     PackageProducer filterPeopleAtKnowledgeLevel(int level, OperatorEnum operator, int count);
 
     /**
+     * Adds a filter of sbr name fragment. Only packages within an SBR whose name contains the fragment are considered.<br/>
+     * Example queries. <i>Give me packages in SBR containing "cluster".</i>
+     * @param nameFragment fragment of SBR name
+     * @return itself, good for chaining
+     */
+    PackageProducer filterSbrName(String nameFragment);
+
+    /**
      * Adds an ordering by package name.
      * @param ascending
      * @return itself, good for chaining

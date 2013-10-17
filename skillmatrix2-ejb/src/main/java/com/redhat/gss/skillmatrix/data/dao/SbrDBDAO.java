@@ -4,12 +4,17 @@ import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.SbrProducerDB;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.SbrProducer;
-import com.redhat.gss.skillmatrix.model.SBR;
+import com.redhat.gss.skillmatrix.model.*;
+import com.redhat.gss.skillmatrix.model.Package;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.transaction.UserTransaction;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,6 +44,23 @@ public class SbrDBDAO implements SbrDAO {
             throw new NullPointerException("sbr");
 
         em.persist(sbr);
+
+        //add new members
+        for(Member member : sbr.getMembers()) {
+            if(!member.getSbrs().contains(sbr)) {
+                member.getSbrs().add(sbr);
+                em.merge(member);
+            }
+        }
+
+        //add new packages
+        for(Package pkg : sbr.getPackages()) {
+            if(!sbr.equals(pkg.getSbr())) {
+                pkg.setSbr(sbr);;
+                em.merge(pkg);
+            }
+        }
+
     }
 
     @Override
@@ -49,6 +71,58 @@ public class SbrDBDAO implements SbrDAO {
             throw new SbrInvalidException("sbr has no DB ID", new NullPointerException("sbr.id"), sbr);
 
         em.merge(sbr);
+
+        //remove old members, TODO: watchout! depends on internal representation, but seems better than erasing one by one using JPA.
+        Query deleteOldMembers = em.createNativeQuery("delete from member_sbr where sbrs_id = :sbrid AND members_id NOT IN (:membersid)");
+        deleteOldMembers.setParameter("sbrid", sbr.getId());
+        deleteOldMembers.setParameter("membersid", mapIDsMembers(sbr.getMembers()));
+        deleteOldMembers.executeUpdate();
+
+        //delete old packages
+        Query deleteOldPkgs = em.createNativeQuery("UPDATE package SET sbr_id=null WHERE sbr_id = :sbrid AND id not in (:pkgsid)");
+        deleteOldPkgs.setParameter("sbrid", sbr.getId());
+        deleteOldPkgs.setParameter("pkgsid", mapIDsPackages(sbr.getPackages()));
+        deleteOldPkgs.executeUpdate();
+
+
+        //add new members
+        for(Member member : sbr.getMembers()) {
+            if(!member.getSbrs().contains(sbr)) {
+                member.getSbrs().add(sbr);
+                em.merge(member);
+            }
+        }
+
+        //add new packages
+        for(Package pkg : sbr.getPackages()) {
+            if(!sbr.equals(pkg.getSbr())) {
+                pkg.setSbr(sbr);;
+                em.merge(pkg);
+            }
+        }
+
+    }
+
+    private List<Long> mapIDsMembers(List<Member> members) {
+        if(members==null)
+            return Collections.emptyList();
+
+        List<Long> ids = new ArrayList<Long>(members.size());
+        for(Member member : members) {
+            ids.add(member.getId());
+        }
+        return ids;
+    }
+
+    private List<Long> mapIDsPackages(List<Package> pkgs) {
+        if(pkgs==null)
+            return Collections.emptyList();
+
+        List<Long> ids = new ArrayList<Long>(pkgs.size());
+        for(Package pkg : pkgs) {
+            ids.add(pkg.getId());
+        }
+        return ids;
     }
 
     @Override
@@ -66,6 +140,6 @@ public class SbrDBDAO implements SbrDAO {
 
     @Override
     public boolean canModify() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return true;
     }
 }
