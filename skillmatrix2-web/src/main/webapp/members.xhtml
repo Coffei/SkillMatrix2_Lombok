@@ -5,19 +5,133 @@
   Date: 8/19/13
   Time: 2:07 PM
 -->
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/WEB-INF/templates/default.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <ui:define name="title">Members</ui:define>
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:define name="content">
+        <div class="page-header">
+            <h1>Members</h1>
+        </div>
+        <h:form>
 
-<h:head>
-    <title>Simple JSF Facelets page</title>
-</h:head>
+            <h:messages globalOnly="true" styleClass="no-dot" infoClass="alert alert-success" errorClass="alert alert-danger"/>
 
-<h:body>
-    Place your content here
-</h:body>
+            <h:panelGroup rendered="#{members.modelHelper.model.rowCount eq 0}">
+                <p class="lead">There are no members.</p>
+            </h:panelGroup>
 
-</html>
+            <rich:dataTable styleClass="table table-striped" id="members" value="#{members.modelHelper.model}" var="member" rows="#{members.maxRecordsPerPage}" >
+
+                <f:facet name="header">
+                    <rich:columnGroup>
+                        <rich:column >
+                            <a4j:commandLink value="Nick" action="#{members.modelHelper.sortByNick}" render="@header @body @footer" styleClass="headerlink"/>
+                            <a4j:outputPanel rendered="#{members.modelHelper.nick ne 'unsorted'}">
+                                <b class="caret"/>
+                            </a4j:outputPanel>
+                        </rich:column>
+                        <rich:column >
+                            <a4j:commandLink value="Name" action="#{members.modelHelper.sortByName}" render="@header @body @footer" styleClass="headerlink"/>
+                            <a4j:outputPanel rendered="#{members.modelHelper.name ne 'unsorted'}">
+                                <b class="caret"/>
+                            </a4j:outputPanel>
+                        </rich:column>
+                        <rich:column >
+                            <a4j:commandLink value="Email" action="#{members.modelHelper.sortByEmail}" render="@header @body @footer" styleClass="headerlink"/>
+                            <a4j:outputPanel rendered="#{members.modelHelper.email ne 'unsorted'}">
+                                <b class="caret"/>
+                            </a4j:outputPanel>
+                        </rich:column>
+                        <rich:column >
+                            <a4j:commandLink value="Extension" action="#{members.modelHelper.sortByExtension}" render="@header @body @footer" styleClass="headerlink"/>
+                            <a4j:outputPanel rendered="#{members.modelHelper.extension ne 'unsorted'}">
+                                <b class="caret"/>
+                            </a4j:outputPanel>
+                        </rich:column>
+                        <rich:column >
+                            <a4j:commandLink value="Geo" action="#{members.modelHelper.sortByGeo}" render="@header @body @footer" styleClass="headerlink"/>
+                            <a4j:outputPanel rendered="#{members.modelHelper.geo ne 'unsorted'}">
+                                <b class="caret"/>
+                            </a4j:outputPanel>
+                        </rich:column>
+                        <rich:column >SBR groups</rich:column>
+                        <rich:column>
+                            <a4j:commandLink value="Role" action="#{members.modelHelper.sortByRole}" render="@header @body @footer" styleClass="headerlink"/>
+                            <a4j:outputPanel rendered="#{members.modelHelper.role ne 'unsorted'}">
+                                <b class="caret"/>
+                            </a4j:outputPanel>
+                        </rich:column>
+
+                        <rich:column/>
+                    </rich:columnGroup>
+                </f:facet>
+
+                <rich:column>
+                    <h:outputText value="#{member.nick}"/>
+                </rich:column>
+
+                <rich:column>
+                    <h:outputText value="#{member.name}"/>
+
+                </rich:column>
+
+                <rich:column>
+
+                    <h:outputText value="#{member.email}"/>
+                </rich:column>
+
+                <rich:column>
+
+                    <h:outputText value="#{member.extension}"/>
+                </rich:column>
+
+                <rich:column>
+
+                    <h:outputText value="#{members.geo(member)}"/>
+                </rich:column>
+
+                <rich:column>
+                    <h:outputText value="#{members.sbrs(member)}"/>
+                </rich:column>
+
+                <rich:column>
+                    <h:outputText value="#{member.role}"/>
+                </rich:column>
+                <rich:column>
+                    <div class="btn-group pull-right">
+                        <h:outputLink value="memberform.jsf" styleClass="btn btn-default" rendered="#{dao.canMemberModify()}">
+                            <f:param name="id" value="#{member.id}"/>
+                            <i class="icon-edit"/>
+                        </h:outputLink>
+                        <h:outputLink value="#" styleClass="btn btn-info">
+                            <i class="icon-info-sign"/>
+                        </h:outputLink>
+                        <h:commandLink action="#{deleter.deleteMember(member)}" styleClass="btn btn-danger"
+                                       rendered="#{dao.canMemberModify()}" onclick="return confirm('Are you sure you want to do this?')">
+                            <i class="icon-remove"/>
+                        </h:commandLink>
+                    </div>
+                </rich:column>
+
+                <f:facet name="footer">
+                    <ul class="pagination">
+                        <a4j:repeat value="#{members.modelHelper.pagination.listPages(5)}" var="page">
+                            <li class="#{members.modelHelper.pagination.currentPage eq page ? 'active' : ''}">
+                                <a4j:commandLink value="#{page}" action="#{members.modelHelper.pagination.goToPage(page)}"
+                                                 render="@body @footer" execute="@this" />
+                            </li>
+                        </a4j:repeat>
+                    </ul>
+                </f:facet>
+            </rich:dataTable>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

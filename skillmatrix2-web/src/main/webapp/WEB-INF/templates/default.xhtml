@@ -1,57 +1,74 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:rich="http://richfaces.org/rich">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich">
 <h:head>
-	<title>SkillMatrix: <ui:insert name="title">Title</ui:insert></title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<h:outputStylesheet library="css" name="screen.css" />
-	<script type="text/javascript" src="main.js"></script>
-	<ui:insert name="scripts"></ui:insert>
+    <title>SkillMatrix: <ui:insert name="title">Title</ui:insert></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <h:outputStylesheet library="css" name="bootstrap.css"/>
+    <h:outputStylesheet library="css" name="bootstrap-theme.css"/>
+    <h:outputStylesheet library="css" name="screen.css" />
+    <h:outputStylesheet library="css" name="font-awesome.css"/>
+    <h:outputScript library="js" name="jquery-2.0.3.js"/>
+    <h:outputScript library="js" name="bootstrap.js"/>
+    <h:outputScript library="js" name="main.js"/>
+    <ui:insert name="scripts"></ui:insert>
 
 </h:head>
 <h:body>
-	<div id="container">
-		<div id="content">
-			<ui:insert name="content">
-                    [Template content will be inserted here]
-         </ui:insert>
-		</div>
+    <div class="container">
+        <div class="navbar navbar-default">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="#" class="navbar-brand">SkillMatrix2</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown">Member <b class="caret"/></a>
+                        <ul class="dropdown-menu">
+                            <li><h:link outcome="members.jsf" value="All members"/></li>
+                            <li><h:link outcome="memberform.jsf" value="Add a new member"/></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown">SBR <b class="caret"/></a>
+                        <ul class="dropdown-menu">
+                            <li><h:link outcome="sbrs.jsf" value="All SBRs"/></li>
+                            <li><h:link outcome="sbrform.jsf" value="Add new SBR"/></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown">Tag <b class="caret"/></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <h:link outcome="tags.jsf" value="All tags"/>
+                            </li>
+                            <li><h:link outcome="tagform.jsf" value="Add new tag"/></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Skill-Matrix</a></li>
+                </ul>
+            </div>
+        </div>
 
-		<rich:panelMenu styleClass="menu" expandSingle="false" itemLeftIcon="disc" mode="client">
-			<rich:panelMenuGroup label="Members" expanded="true"  >
-				<rich:panelMenuItem label="All members"
-					onclick="window.location = 'members.jsf'" />
-					
-				<rich:panelMenuItem label="Create new member"
-					onclick="window.location = 'memberform.jsf'" />
-				<rich:panelMenuItem label="Search members"
-					onclick="window.location = 'searchmember.jsf'" />
-			</rich:panelMenuGroup>
-			<rich:panelMenuGroup label="SBR" expanded="true">
-				<rich:panelMenuItem label="All SBRs"
-					onclick="window.location = 'sbrs.jsf'" />
-				<rich:panelMenuItem label="Create new SBR"
-					onclick="window.location = 'sbrform.jsf'" />
-			</rich:panelMenuGroup>
-			<rich:panelMenuGroup label="Tags" expanded="true">
-				<rich:panelMenuItem label="All tags"
-					onclick="window.location = 'pkgs.jsf'" />
-				<rich:panelMenuItem label="Create tag"
-					onclick="window.location = 'pkgform.jsf'" />
-			</rich:panelMenuGroup>
-			<rich:panelMenuGroup label="Other" expanded="true">
-				<rich:panelMenuItem label="Import"
-					onclick="window.location = 'import.jsf'" />
-				<rich:panelMenuItem label="Skill-Matrix"
-					onclick="window.location = 'matrix.jsf'" />
-			</rich:panelMenuGroup>
 
-		</rich:panelMenu>
-		
-		<div id="footer"></div>
-	</div>
+        <ui:insert name="content">
+            [Template content will be inserted here]
+        </ui:insert>
+
+
+
+
+        <div id="footer"></div>
+    </div>
 </h:body>
 </html>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/WEB-INF/templates/default.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <ui:define name="title">#{memberForm.member.id eq null ? 'Add a new member' : 'Edit a member'}</ui:define>
+    <ui:define name="content">
+        <h:panelGroup rendered="#{memberForm.member eq null}">
+            <div class="alert alert-warning">
+                <h3>Members are not modifiable <small>Members synced from external source and cannot be modified.</small></h3>
+            </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{memberForm.member ne null}">
+            <div class="page-header">
+                <h2><h:outputText value="#{memberForm.member.id eq null ? 'Add a new member' : 'Edit a member'}"/></h2>
+            </div>
+
+            <h:messages globalOnly="true" styleClass="no-dot" infoClass="alert alert-success" errorClass="alert alert-danger"/>
+
+            <h:form styleClass="form-horizontal">
+                <div class="form-group">
+                    <h:outputLabel for="nick" value="Nick" styleClass="col-lg-2 control-label"/>
+                    <div class="col-lg-3">
+                        <h:inputText value="#{memberForm.member.nick}" id="nick" styleClass="form-control"/>
+                    </div>
+                    <h:message for="nick" styleClass="alert alert-danger" />
+                </div>
+                <div class="form-group">
+                    <h:outputLabel for="name" value="Name" styleClass=" col-lg-2 control-label"/>
+                    <div class="col-lg-5">
+                        <h:inputText value="#{memberForm.member.name}" id="name" styleClass="form-control"/>
+                    </div>
+                    <h:message for="name" styleClass="alert alert-danger" />
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="email" value="Email" styleClass="col-lg-2 control-label"/>
+                    <div class="col-lg-5">
+                        <h:inputText value="#{memberForm.member.email}" id="email" styleClass="form-control"/>
+                    </div>
+                    <h:message for="email" styleClass="alert alert-danger" />
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="role" value="Role" styleClass="col-lg-2 control-label"/>
+                    <div class="col-lg-3">
+                        <h:inputText value="#{memberForm.member.role}" id="role" styleClass="form-control"/>
+                    </div>
+                    <h:message for="role" styleClass="alert alert-danger" />
+                </div>
+                <div class="form-group">
+                    <h:outputLabel for="extension" value="Extension" styleClass="col-lg-2 control-label"/>
+                    <div class="col-lg-3">
+                        <h:inputText value="#{memberForm.member.extension}" styleClass="form-control" id="extension"/>
+                    </div>
+                    <h:message for="extension" styleClass="alert alert-danger" />
+                </div>
+                <div class="form-group">
+                    <h:outputLabel for="offset" value="GEO" styleClass="col-lg-2 control-label"/>
+                    <div class="col-lg-3">
+                        <h:selectOneMenu value="#{memberForm.member.geo.geocode}" styleClass="form-control" >
+                            <f:selectItems value="#{memberForm.allGeocodes}" var="geocode"
+                                           itemLabel="#{geocode.toString()}" itemValue="#{geocode}"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-lg-3">
+                        <h:selectOneMenu value="#{memberForm.member.geo.offset}" id="offset" styleClass="form-control">
+                            <f:selectItems value="#{memberForm.allTimezones}" var="zone"
+                                           itemLabel="#{zone.name}" itemValue="#{zone.offset}"/>
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h:outputLabel for="sbrs" value="SBRs" styleClass="control-label col-lg-2"/>
+                    <div class="col-lg-5">
+                        <rich:pickList id="sbrs" value="#{memberForm.member.sbrs}" converter="#{sbrConverter}"
+                                       switchByDblClick="true" sourceCaption="All SBRs" targetCaption="Selected SBRs"
+                                       addAllText="All " addText="" removeAllText="All " removeText="">
+
+                            <f:selectItems value="#{allSBRs}" var="sbr" itemLabel="#{sbr.name}" itemValue="#{sbr}"/>
+                        </rich:pickList>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-offset-2">
+                        <h:commandButton value="Submit" action="#{memberForm.submit}" styleClass="btn btn-primary"/>
+                        <h:commandButton value="Submit and edit knowledges" action="#{memberForm.submitKnowledges}"
+                                         styleClass="btn btn-success" style="margin-left: 5px;" />
+                    </div>
+                </div>
+
+            </h:form>
+
+
+        </h:panelGroup>
+
+
+    </ui:define>
+</ui:composition>

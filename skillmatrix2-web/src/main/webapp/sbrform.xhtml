@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/WEB-INF/templates/default.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <ui:define name="title">#{sbrForm.sbr.id eq null ? 'Add a new SBR' : 'Edit SBR'}</ui:define>
+    <ui:define name="content">
+        <h:panelGroup rendered="#{sbrForm.sbr eq null}">
+            <div class="alert alert-warning">
+                <h3>SBRs are not modifiable <small>SBRs are synced from an external source and cannot be modified</small></h3>
+            </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{sbrForm.sbr ne null}">
+            <div class="page-header">
+                <h2>
+                    <h:outputText value="#{sbrForm.sbr.id eq null ? 'Add a new SBR' : 'Edit SBR'}"/>
+                </h2>
+            </div>
+
+            <h:messages globalOnly="true" styleClass="no-dot" infoClass="alert alert-success" errorClass="alert alert-danger"/>
+
+            <h:form styleClass="form-horizontal">
+                <div class="form-group">
+                    <h:outputLabel for="name" value="Name" styleClass="col-lg-2 control-label"/>
+                    <div class="col-lg-5">
+                        <h:inputText value="#{sbrForm.sbr.name}" id="name" styleClass="form-control"/>
+                    </div>
+                    <h:message for="name" styleClass="alert alert-danger" />
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="packages" value="Packages" styleClass="col-lg-2 control-label"/>
+                    <div class="col-lg-5">
+                        <rich:pickList id="packages" value="#{sbrForm.sbr.packages}" converter="#{packageConverter}"
+                                       switchByDblClick="true" sourceCaption="All packages" targetCaption="Selected packages"
+                                       addAllText="All " addText="" removeAllText="All " removeText="" listHeight="300">
+                            <f:selectItems value="#{allPackages}" var="pkg" itemLabel="#{pkg.name}" itemValue="#{pkg}" />
+                        </rich:pickList>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="members" value="Members" styleClass="col-lg-2 control-label"/>
+                    <div class="col-lg-5">
+                        <rich:pickList id="members" value="#{sbrForm.sbr.members}" converter="#{memberConverter}"
+                                       switchByDblClick="true" sourceCaption="All members" targetCaption="Selected members"
+                                       addAllText="All " addText="" removeAllText="All " removeText="" listHeight="300">
+                            <f:selectItems value="#{allMembers}" var="member"  itemLabel="#{member.name}" itemValue="#{member}"/>
+                        </rich:pickList>
+                    </div>
+                </div>
+
+                <div class="col-lg-offset-2">
+                    <h:commandButton value="Submit" action="#{sbrForm.submit}" styleClass="btn btn-primary" />
+                </div>
+
+            </h:form>
+        </h:panelGroup>
+    </ui:define>
+
+</ui:composition>

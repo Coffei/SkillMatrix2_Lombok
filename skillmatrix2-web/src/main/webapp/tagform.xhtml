@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/WEB-INF/templates/default.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <ui:define name="title">#{tagForm.pkg.id eq null ? 'Add a new tag' : 'Edit a tag'}</ui:define>
+    <ui:define name="content">
+        <h:panelGroup rendered="#{tagForm.pkg eq null}">
+            <div class="alert alert-warning">
+                <h3>Tags are not modifiable <small>Tags are synced from an external source and cannot be modified</small></h3>
+            </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{tagForm.pkg ne null}">
+            <div class="page-header">
+                <h2>
+                    <h:outputText value="#{tagForm.pkg.id eq null ? 'Add a new tag' : 'Edit a tag'}"/>
+                </h2>
+            </div>
+
+            <h:messages globalOnly="true" styleClass="no-dot" infoClass="alert alert-success" errorClass="alert alert-danger"/>
+
+            <h:form styleClass="form-horizontal">
+                <div class="form-group">
+                    <h:outputLabel for="name" value="Name" styleClass="col-lg-2 control-label"/>
+                    <div class="col-lg-5">
+                        <h:inputText value="#{tagForm.pkg.name}" id="name" styleClass="form-control"/>
+                    </div>
+                    <h:message for="name" styleClass="alert alert-danger" />
+                </div>
+                <div class="form-group">
+                    <h:outputLabel for="sbr" value="SBR group" styleClass="col-lg-2 control-label"/>
+                    <div class="col-lg-5">
+                        <h:selectOneMenu value="#{tagForm.pkg.sbr}" styleClass="form-control" converter="#{sbrConverter}">
+                            <f:selectItems id="sbr" value="#{allSBRs}" var="sbr"
+                                           itemLabel="#{sbr.name}" itemValue="#{sbr}"/>
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-lg-5">
+                        <h:commandButton styleClass="btn btn-primary" value="Submit" action="#{tagForm.submit}"/>
+                    </div>
+                </div>
+            </h:form>
+        </h:panelGroup>
+    </ui:define>
+
+</ui:composition>
