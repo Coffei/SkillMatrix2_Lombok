@@ -100,8 +100,10 @@ public abstract class MemberModelHelper {
         if(nameFilter==null)
             return;
         nameFilter = nameFilter.trim();
-        if(nameFilter.isEmpty())
+        if(nameFilter.isEmpty()) {
+            filtersOrders.remove("nameFilter");
             return;
+        }
 
         Filter filter = new Filter<MemberProducer>() {
             @Override
@@ -134,8 +136,10 @@ public abstract class MemberModelHelper {
         if(nickFilter==null)
             return;
         nickFilter = nickFilter.trim();
-        if(nickFilter.isEmpty())
+        if(nickFilter.isEmpty()){
+            filtersOrders.remove("nickFilter");
             return;
+        }
 
         Filter filter = new Filter<MemberProducer>() {
             @Override
@@ -168,8 +172,10 @@ public abstract class MemberModelHelper {
         if(emailFilter==null)
             return;
         emailFilter = emailFilter.trim();
-        if(emailFilter.isEmpty())
+        if(emailFilter.isEmpty()){
+            filtersOrders.remove("emailFilter");
             return;
+        }
 
         Filter filter = new Filter<MemberProducer>() {
             @Override
@@ -186,8 +192,10 @@ public abstract class MemberModelHelper {
         if(langFilter==null)
             return;
         langFilter = langFilter.trim();
-        if(langFilter.isEmpty())
+        if(langFilter.isEmpty()){
+            filtersOrders.remove("langFilter");
             return;
+        }
 
         Filter filter = new Filter<MemberProducer>() {
             @Override
@@ -218,8 +226,10 @@ public abstract class MemberModelHelper {
         if(roleFilter==null)
             return;
         roleFilter = roleFilter.trim();
-        if(roleFilter.isEmpty())
+        if(roleFilter.isEmpty()){
+            filtersOrders.remove("roleFilter");
             return;
+        }
 
         Filter filter = new Filter<MemberProducer>() {
             @Override
@@ -241,8 +251,10 @@ public abstract class MemberModelHelper {
     }
 
     public void setGeoFilter(GeoEnum geoFilter) {
-        if(geoFilter==null)
+        if(geoFilter==null){
+            filtersOrders.remove("geoFilter");
             return;
+        }
 
         Filter filter = new Filter<MemberProducer>() {
             @Override
@@ -267,8 +279,10 @@ public abstract class MemberModelHelper {
         if(extFilter==null)
             return;
         extFilter = extFilter.trim();
-        if(extFilter.isEmpty())
+        if(extFilter.isEmpty()){
+            filtersOrders.remove("extFilter");
             return;
+        }
 
         Filter filter = new Filter<MemberProducer>() {
             @Override

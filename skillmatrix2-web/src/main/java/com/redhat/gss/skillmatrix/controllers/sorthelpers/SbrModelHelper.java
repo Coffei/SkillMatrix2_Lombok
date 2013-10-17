@@ -144,8 +144,10 @@ public abstract class SbrModelHelper implements Serializable {
         if(nameFilter==null)
             return;
         nameFilter = nameFilter.trim();
-        if(nameFilter.isEmpty())
+        if(nameFilter.isEmpty()){
+            filtersOrders.remove("nameFilter");
             return;
+        }
 
         Filter filter = new Filter<SbrProducer>() {
 

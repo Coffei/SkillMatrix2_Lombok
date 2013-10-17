@@ -107,8 +107,10 @@ public abstract class PackageModelHelper implements Serializable {
         if (nameFilter == null)
             return;
         nameFilter = nameFilter.trim();
-        if(nameFilter.isEmpty())
+        if(nameFilter.isEmpty()) {
+            filtersOrders.remove("nameFilter");
             return;
+        }
 
         Filter filter = new Filter<PackageProducer>() {
             @Override
@@ -138,14 +140,15 @@ public abstract class PackageModelHelper implements Serializable {
         if (sbrFilter == null)
             return;
         sbrFilter = sbrFilter.trim();
-        if(sbrFilter.isEmpty())
+        if(sbrFilter.isEmpty()) {
+            filtersOrders.remove("sbrFilter");
             return;
+        }
 
         Filter filter = new Filter<PackageProducer>() {
             @Override
             public PackageProducer apply(PackageProducer producer) {
-                //TODO FIX: nooop so far, but should be implemented
-                return producer;
+                return producer.filterSbrName(this.value);
             }
         };
         filter.setValue(sbrFilter);
@@ -179,12 +182,12 @@ public abstract class PackageModelHelper implements Serializable {
             setNameOrder(SortOrder.ascending);
         }
 
-       this.filtersOrders.put("order", new Filter<PackageProducer>() {
-           @Override
-           public PackageProducer apply(PackageProducer producer) {
-               return producer.sortName(nameOrder == SortOrder.ascending);
-           }
-       });
+        this.filtersOrders.put("order", new Filter<PackageProducer>() {
+            @Override
+            public PackageProducer apply(PackageProducer producer) {
+                return producer.sortName(nameOrder == SortOrder.ascending);
+            }
+        });
     }
 
     /**

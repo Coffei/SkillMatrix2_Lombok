@@ -1,7 +1,8 @@
 package com.redhat.gss.skillmatrix.rest;
 
-import com.redhat.gss.skillmatrix.data.SbrManager;
 import com.redhat.gss.skillmatrix.data.api.SbrApiBuilder;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
+import com.redhat.gss.skillmatrix.model.SBR;
 import com.redhat.gss.skillmatrix.model.api.SbrApi;
 
 import javax.enterprise.context.RequestScoped;
@@ -24,7 +25,7 @@ import java.util.List;
 public class SBRResourceRESTService {
 
     @Inject
-    private SbrManager manager;
+    private SbrDAO sbrDAO;
 
     @Inject
     private SbrApiBuilder builder;
@@ -33,7 +34,7 @@ public class SBRResourceRESTService {
     @GET
     @Produces({"text/xml", "application/json"})
     public List<SbrApi> listAllSBRs() {
-        return builder.buildSbrs(manager.getAllSbrsSortedByName());
+        return builder.buildSbrs(sbrDAO.getSbrProducer().getSbrs());
     }
 
     //@BadgerFish
@@ -41,7 +42,9 @@ public class SBRResourceRESTService {
     @Path("/{id:[0-9][0-9]*}")
     @Produces({"text/xml", "application/json"})
     public SbrApi listSBRById(@PathParam("id") long id) {
-        return builder.buildSbr(manager.getSbrById(id));
+        List<SBR> sbrs = sbrDAO.getSbrProducer().filterId(id).getSbrs();
+        //TODO: what if not found!
+        return builder.buildSbr(sbrs.get(0));
     }
 
 

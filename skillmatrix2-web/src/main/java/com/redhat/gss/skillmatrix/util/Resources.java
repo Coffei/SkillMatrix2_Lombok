@@ -15,9 +15,5 @@ import java.io.Serializable;
 
 public class Resources implements Serializable {
 
-    @Produces
-    @RequestScoped
-    public FacesContext getFacesContext() {
-        return FacesContext.getCurrentInstance();
-    }
+
 }
