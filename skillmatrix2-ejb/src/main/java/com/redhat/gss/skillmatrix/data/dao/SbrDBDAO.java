@@ -84,6 +84,12 @@ public class SbrDBDAO implements SbrDAO {
         deleteOldPkgs.setParameter("pkgsid", mapIDsPackages(sbr.getPackages()));
         deleteOldPkgs.executeUpdate();
 
+        //delete unassigned coaches
+        Query query = em.createNativeQuery("DELETE FROM coach WHERE sbr_id = :sbr AND id NOT IN (:coaches)");
+        query.setParameter("sbr", sbr.getId());
+        query.setParameter("coaches", mapIDsCoaches(sbr.getCoaches()));
+        query.executeUpdate();
+
 
         //add new members
         for(Member member : sbr.getMembers()) {
@@ -141,5 +147,16 @@ public class SbrDBDAO implements SbrDAO {
     @Override
     public boolean canModify() {
         return true;
+    }
+
+    private List<Long> mapIDsCoaches(List<Coach> coaches) {
+        List<Long> ids = new ArrayList<Long>(coaches.size());
+        for (Coach coach : coaches) {
+            if (coach != null && coach.getId() != null) {
+                ids.add(coach.getId());
+            }
+        }
+
+        return ids;
     }
 }
