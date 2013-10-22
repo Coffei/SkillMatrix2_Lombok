@@ -13,8 +13,6 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class PaginationHelper {
-
-    //TODO: implement this and use instead of rich:dataScroller
     //TODO: document
 
     private int recordsPerPage;

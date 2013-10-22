@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/WEB-INF/templates/default.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+
+    <ui:define name="title">Tag: #{tagDetail.pkg.name}</ui:define>
+    <ui:define name="content">
+
+        <h:panelGroup rendered="#{tagDetail.pkg eq null}">
+            <div class="alert alert-warning">
+                <h3>Tag not found! <small>This link is no longer valid.</small></h3>
+            </div>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{tagDetail.pkg ne null}">
+
+            <h:form>
+                <div class="jumbotron">
+                    <div class="container">
+                        <h1>
+                            <h:outputText value="#{tagDetail.pkg.name}"/>
+                        </h1>
+                        <table class="table attributes">
+                            <tr>
+                                <td>SBR</td>
+                                <td>
+                                    <h:outputLink value="sbr.jsf" styleClass="headerlink" rendered="#{tagDetail.pkg.sbr ne null}">
+                                        <f:param name="id" value="#{tagDetail.pkg.sbr.id}"/>
+                                        <h:outputText value="#{tagDetail.pkg.sbr.name}"/>
+                                    </h:outputLink>
+
+                                    <h:outputText value="no sbr" styleClass="text-muted" rendered="#{tagDetail.pkg.sbr eq null}"/></td>
+                            </tr>
+                            <tr>
+                                <td>Experts</td>
+                                <td><h:outputText value="#{tagDetail.experts}" styleClass="badge"/></td>
+                            </tr>
+                            <tr>
+                                <td>Intermediates</td>
+                                <td><h:outputText value="#{tagDetail.intermediates}" styleClass="badge"/></td>
+                            </tr>
+                            <tr>
+                                <td>Beginners</td>
+                                <td><h:outputText value="#{tagDetail.beginners}" styleClass="badge"/></td>
+                            </tr>
+                        </table>
+                        <div class="btn-group">
+                            <h:outputLink value="tagform.jsf" styleClass="btn btn-default" rendered="#{dao.canPkgModify()}">
+                                <f:param name="id" value="#{tagDetail.pkg.id}"/>
+                                <i class="icon-edit-sign"/>
+                            </h:outputLink>
+                            <h:commandLink action="#{deleter.deletePackage(tagDetail.pkg)}" styleClass="btn btn-danger" onclick="return confirm('Are you sure you want to do this?');">
+                                <i class="icon-remove-sign"/>
+                            </h:commandLink>
+                        </div>
+                    </div>
+                </div>
+
+            </h:form>
+        </h:panelGroup>
+    </ui:define>
+
+</ui:composition>

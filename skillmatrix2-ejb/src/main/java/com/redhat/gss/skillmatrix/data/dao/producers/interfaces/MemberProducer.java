@@ -1,10 +1,10 @@
 package com.redhat.gss.skillmatrix.data.dao.producers.interfaces;
 
+import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
-import com.redhat.gss.skillmatrix.model.GeoEnum;
-import com.redhat.gss.skillmatrix.model.Member;
-import com.redhat.gss.skillmatrix.model.SBR;
+import com.redhat.gss.skillmatrix.model.*;
+import com.redhat.gss.skillmatrix.model.Package;
 
 import java.util.List;
 
@@ -88,6 +88,15 @@ public interface MemberProducer {
      * @return itself, good for chaining.
      */
     MemberProducer filterLanguage(String language);
+
+    /**
+     * Adds a package-knowledge filter. Only members with the specified level of knowledge of the specified package are
+     * considered.
+     * @param pkg package whose knowledge is taken into consideration
+     * @param level level of knowledge that is required
+     * @return itself, good for chaining.
+     */
+    MemberProducer filterKnowledgeOfPackage(Package pkg, int level) throws PackageInvalidException;
 
 
     //crazier filters

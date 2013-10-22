@@ -108,14 +108,14 @@
                     <div class="btn-group pull-right">
                         <h:outputLink value="memberform.jsf" styleClass="btn btn-default" rendered="#{dao.canMemberModify()}">
                             <f:param name="id" value="#{member.id}"/>
-                            <i class="icon-edit"/>
+                            <i class="icon-edit-sign"/>
                         </h:outputLink>
                         <h:outputLink value="#" styleClass="btn btn-info">
                             <i class="icon-info-sign"/>
                         </h:outputLink>
                         <h:commandLink action="#{deleter.deleteMember(member)}" styleClass="btn btn-danger"
                                        rendered="#{dao.canMemberModify()}" onclick="return confirm('Are you sure you want to do this?')">
-                            <i class="icon-remove"/>
+                            <i class="icon-remove-sign"/>
                         </h:commandLink>
                     </div>
                 </rich:column>

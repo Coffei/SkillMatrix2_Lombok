@@ -2,6 +2,7 @@ package com.redhat.gss.skillmatrix.test.dao;
 
 import com.redhat.gss.skillmatrix.data.dao.MemberDBDAO;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
+import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.MemberProducerDB;
@@ -25,6 +26,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 
@@ -55,7 +57,7 @@ public class MemberProducerTest {
         return ShrinkWrap.create(WebArchive.class, "prodtest.war")
                 .addPackage(Member.class.getPackage()) //all model classes
                 .addClasses(MemberDAO.class, MemberDBDAO.class, MemberProducer.class, MemberProducerDB.class)
-                .addClasses(MemberInvalidException.class, SbrInvalidException.class, OperatorEnum.class, Resources.class)
+                .addClasses(MemberInvalidException.class, SbrInvalidException.class, PackageInvalidException.class, OperatorEnum.class, Resources.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 //.addAsWebInfResource("test-ds.xml", "test-ds.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
@@ -426,6 +428,38 @@ public class MemberProducerTest {
 
     }
 
+    @Test
+    public void testFilterKnowledgeOfPackage() throws Exception {
+        Package rich = em.find(Package.class, rich_id);
+        Package ejb = em.find(Package.class, ejb_id);
+        Package seam = em.find(Package.class, seam_id);
+
+        List<Member> members = memberDao.getProducerFactory().filterKnowledgeOfPackage(rich, 0).getMembers();
+        Pattern pattern = Pattern.compile("akovari|agiertli");
+        assertNotNull("null result returned", members);
+        assertEquals("wrong number of records returned", 2, members.size());
+        for (Member member : members) {
+            assertTrue("wrong member returned", pattern.matcher(member.getNick()).matches());
+        }
+
+        members = memberDao.getProducerFactory().filterKnowledgeOfPackage(ejb, 1).getMembers();
+        assertNotNull("null result returned", members);
+        assertEquals("wrong number of records returned", 1, members.size());
+        assertEquals("wrong member returned", "jtrantin", members.get(0).getNick());
+
+
+        members = memberDao.getProducerFactory().filterKnowledgeOfPackage(seam, 2).getMembers();
+        assertNotNull("null result returned", members);
+        assertEquals("wrong number of records returned", 1, members.size());
+        assertEquals("wrong member returned", "agiertli", members.get(0).getNick());
+    }
+
+    @Test(expected = PackageInvalidException.class)
+    public void testFilterKnowledgeOfPackageInvalid() throws Exception {
+        List<Member> members = memberDao.getProducerFactory().filterKnowledgeOfPackage(new Package(), 0).getMembers();
+    }
+
+
     //SECTION: Order tests
 
     @Test
@@ -717,8 +751,9 @@ public class MemberProducerTest {
     }
 
 
-    private long wf_id;
-    private long jbossas_id;
+    private long wf_id,jbossas_id;
+    private long rich_id, seam_id, ejb_id, log_id;
+
 
     private void prepareData() throws Exception {
         transaction.begin();
@@ -737,21 +772,25 @@ public class MemberProducerTest {
         richfaces.setName("RichFaces");
         richfaces.setSbr(wf);
         em.persist(richfaces);
+        rich_id = richfaces.getId();
 
         Package seam = new Package();
         seam.setName("Seam");
         seam.setSbr(wf);
         em.persist(seam);
+        seam_id = seam.getId();
 
         Package ejb = new Package();
         ejb.setName("EJB");
         ejb.setSbr(jbossas);
         em.persist(ejb);
+        ejb_id = ejb.getId();
 
         Package logging = new Package();
         logging.setName("Logging");
         logging.setSbr(jbossas);
         em.persist(logging);
+        log_id = logging.getId();
 
         //members
         Member me= new Member();

@@ -1,5 +1,6 @@
 package com.redhat.gss.skillmatrix.data.dao.producers;
 
+import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
@@ -7,6 +8,7 @@ import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.model.Package;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.*;
@@ -214,6 +216,30 @@ public class MemberProducerDB implements MemberProducer {
 
                 //keep the member if such a language knowledge exists.
                 return cb.exists(subquery);
+            }
+        });
+
+        return this;
+    }
+
+    @Override
+    public MemberProducer filterKnowledgeOfPackage(final Package pkg, final int level) throws PackageInvalidException {
+        if(pkg==null)
+            throw new PackageInvalidException("null package", new NullPointerException("pkg"));
+        if(pkg.getId()==null)
+            throw new PackageInvalidException("invalid package", new NullPointerException("pkg.id"));
+
+        filters.add(new Filter() {
+            @Override
+            public Predicate apply(CriteriaBuilder cb, Root<Member> root, CriteriaQuery query) {
+                //get members' ids that are in accordance with this predicate
+                Query idquery = em.createNativeQuery("SELECT member_id FROM PACKAGEKNOWLEDGE WHERE PKG_ID = :pkg AND level = :level");
+                idquery.setParameter("pkg", pkg.getId());
+                idquery.setParameter("level", level);
+
+                List ids = idquery.getResultList();
+
+                return root.get(Member_.id).in(ids);
             }
         });
 

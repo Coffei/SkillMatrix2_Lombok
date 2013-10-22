@@ -10,6 +10,7 @@ import com.redhat.gss.skillmatrix.model.Package;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  * Created with IntelliJ IDEA.
@@ -57,6 +58,10 @@ public class PackageDBDAO implements PackageDAO {
         if(!em.contains(pkg))
             pkg = em.merge(pkg);
 
+        //delete all package knowledges
+        Query query = em.createNativeQuery("DELETE FROM PACKAGEKNOWLEDGE WHERE pkg_id=:pkg");
+        query.setParameter("pkg", pkg.getId());
+        query.executeUpdate();
         em.remove(pkg);
     }
 

@@ -73,7 +73,7 @@
                     <div class="btn-group pull-right">
                         <h:outputLink value="sbrform.jsf" styleClass="btn btn-default" rendered="#{dao.canSbrModify()}">
                             <f:param name="id" value="#{sbr.id}"/>
-                            <i class="icon-edit"/>
+                            <i class="icon-edit-sign"/>
                         </h:outputLink>
                         <h:outputLink value="#" styleClass="btn btn-info">
                             <f:param name="id" value="#{sbr.id}"/>
@@ -81,7 +81,7 @@
                         </h:outputLink>
                         <h:commandLink action="#{deleter.deleteSbr(sbr)}" styleClass="btn btn-danger" rendered="#{dao.canSbrModify()}"
                                        onclick="return confirm('Are you sure you want to do this?')">
-                            <i class="icon-remove"/>
+                            <i class="icon-remove-sign"/>
                         </h:commandLink>
                     </div>
                 </rich:column>
