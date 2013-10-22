@@ -8,5 +8,5 @@ target
 MANIFEST.MF
 .idea
 *.iml
-/*.directory
+.directory
 .factorypath

@@ -21,10 +21,13 @@ public class Coach {
     @NotNull
     private Member member;
 
-    @ManyToOne
+    @ManyToOne()
     private SBR sbr;
 
     private String sbr_role;
+
+    @Enumerated(EnumType.STRING)
+    private GeoEnum geocode;
 
     /**
      * @return the member that is the coach
@@ -63,6 +66,14 @@ public class Coach {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public GeoEnum getGeocode() {
+        return geocode;
+    }
+
+    public void setGeocode(GeoEnum geocode) {
+        this.geocode = geocode;
     }
 
     @Override
