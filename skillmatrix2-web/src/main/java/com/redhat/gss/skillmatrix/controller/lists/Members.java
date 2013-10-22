@@ -47,51 +47,7 @@ public class Members implements Serializable {
         return modelHelper;
     }
 
-    /**
-     * Returns a readable GEO string of {@code member}.
-     * @param member
-     * @return
-     */
-    public String geo(Member member) {
-        if(member.getGeo()==null)
-            return "";
 
-        StringBuilder builder = new StringBuilder(member.getGeo().getGeocode().toString());
-        builder.append(" / ");
-
-        int offset = member.getGeo().getOffset();
-        if(offset < 0) {
-            builder.append("-");
-            offset *= -1;
-        }
-
-        Period period = new Duration(offset * 60 * 1000).toPeriod();
-        builder.append(String.format("%02d:%02d", period.getHours(), period.getMinutes()));
-
-        return builder.toString();
-    }
-
-    /**
-     * Returns a readable SBRs string of {@code member}.
-     * @param member
-     * @return
-     */
-    public String sbrs(Member member) {
-        if(member==null)
-            return "";
-
-        StringBuilder builder = new StringBuilder();
-        for(SBR sbr : member.getSbrs()) {
-            builder.append(sbr.getName());
-            builder.append(", ");
-        }
-
-        if(builder.length() > 0) {
-            builder.delete(builder.length() - 2, builder.length());
-        }
-
-        return builder.toString();
-    }
 
     public int getMaxRecordsPerPage() {
         return MAX_RECORDS_PER_PAGE;

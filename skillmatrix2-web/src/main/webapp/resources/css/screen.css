@@ -144,6 +144,6 @@ div.rf-pick-lst-dcrtn {
 
 /* Workarounds */
 
-.rf-dt-hdr-c {
+.rf-dt-hdr-c, .rf-dt-shdr-c {
     text-align: left !important;
 }

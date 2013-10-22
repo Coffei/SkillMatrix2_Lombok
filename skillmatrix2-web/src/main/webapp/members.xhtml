@@ -27,7 +27,7 @@
                 <p class="lead">There are no members.</p>
             </h:panelGroup>
 
-            <rich:dataTable styleClass="table table-striped" id="members" value="#{members.modelHelper.model}" var="member" rows="#{members.maxRecordsPerPage}" >
+            <rich:dataTable styleClass="table table-striped table-hover" id="members" value="#{members.modelHelper.model}" var="member" rows="#{members.maxRecordsPerPage}" >
 
                 <f:facet name="header">
                     <rich:columnGroup>
@@ -94,11 +94,11 @@
 
                 <rich:column>
 
-                    <h:outputText value="#{members.geo(member)}"/>
+                    <h:outputText value="#{memberUtils.geo(member)}"/>
                 </rich:column>
 
                 <rich:column>
-                    <h:outputText value="#{members.sbrs(member)}"/>
+                    <h:outputText value="#{memberUtils.sbrs(member)}"/>
                 </rich:column>
 
                 <rich:column>

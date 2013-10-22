@@ -27,7 +27,7 @@
                 <p class="lead">There are no SBRs.</p>
             </h:panelGroup>
 
-            <rich:dataTable value="#{packages.modelHelper.model}" var="pkg" styleClass="table table-striped" id="pkgs"
+            <rich:dataTable value="#{packages.modelHelper.model}" var="pkg" styleClass="table table-striped table-hover" id="pkgs"
                             rows="#{packages.maxRecordsOnPage}">
                 <f:facet name="header">
                     <rich:columnGroup>
