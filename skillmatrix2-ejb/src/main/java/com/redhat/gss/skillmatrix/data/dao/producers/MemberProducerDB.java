@@ -233,6 +233,7 @@ public class MemberProducerDB implements MemberProducer {
             @Override
             public Predicate apply(CriteriaBuilder cb, Root<Member> root, CriteriaQuery query) {
                 //get members' ids that are in accordance with this predicate
+                //TODO: convert to typed query
                 Query idquery = em.createNativeQuery("SELECT member_id FROM PACKAGEKNOWLEDGE WHERE PKG_ID = :pkg AND level = :level");
                 idquery.setParameter("pkg", pkg.getId());
                 idquery.setParameter("level", level);

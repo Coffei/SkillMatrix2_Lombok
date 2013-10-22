@@ -13,6 +13,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -52,6 +54,8 @@ public class SbrForm implements Serializable {
 
                 if(!sbrs.isEmpty()) { // just take the first one
                     this.sbr = sbrs.get(0); // edit existing package mode
+                    if(this.sbr.getCoaches()==null)
+                        this.sbr.setCoaches(new ArrayList<Coach>(3));
                     return;
                 }
             } catch (NumberFormatException ex) {} //Exs should not be used for flow control
@@ -59,6 +63,7 @@ public class SbrForm implements Serializable {
 
         // when something fails, create new Package - add new package mode
         this.sbr = new SBR();
+        this.sbr.setCoaches(new ArrayList<Coach>(3));
     }
 
     public String submit() {
@@ -89,6 +94,22 @@ public class SbrForm implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
         //TODO: redirect to some other page
         return "";
+    }
+
+    public void addNewCoach() {
+        Coach coach = new Coach();
+        coach.setSbr(this.sbr);
+        coach.setSbr_role("Primary");
+        this.sbr.getCoaches().add(coach);
+    }
+
+    public void removeCoach(int i) {
+        System.out.println("removing " + i);
+        this.sbr.getCoaches().remove(i);
+    }
+
+    public GeoEnum[] getAllGeocodes() {
+        return GeoEnum.values();
     }
 
 

@@ -34,7 +34,7 @@ public class SBR implements Serializable {
 	@GeneratedValue
 	private Long id;
 
-	@OneToMany(mappedBy = "sbr")
+	@OneToMany(mappedBy = "sbr", cascade = CascadeType.ALL)
     private List<Coach> coaches;
 
 	@NotNull

@@ -45,18 +45,62 @@
                 </div>
 
                 <div class="form-group">
+                    <h:outputLabel for="coaches" value="Coaches" styleClass="col-lg-2 control-label"/>
+                    <div class="col-lg-7">
+
+                        <a4j:commandLink action="#{sbrForm.addNewCoach}"
+                                         styleClass="btn btn-success"
+                                         execute="coaches" render="coaches">
+                            <i class="icon-plus-sign"/>
+                        </a4j:commandLink>
+                        <rich:dataTable id="coaches" value="#{sbrForm.sbr.coaches}" iterationStatusVar="i"
+                                        var="coach" styleClass="table table-bordered" style="border-top: 1px solid #dddddd">
+                            <rich:column>
+                                <f:facet name="header">Member</f:facet>
+                                <h:selectOneMenu value="#{coach.member}" converter="#{memberConverter}" styleClass="form-control">
+                                    <f:selectItems value="#{sbrForm.sbr.members}" var="member"
+                                                   itemValue="#{member}" itemLabel="#{member.name}"/>
+                                </h:selectOneMenu>
+                            </rich:column>
+                            <rich:column>
+                                <f:facet name="header">Geo</f:facet>
+                                <h:selectOneMenu value="#{coach.geocode}"  styleClass="form-control">
+                                    <f:selectItems value="#{sbrForm.allGeocodes}" var="geocode" itemLabel="#{geocode.toString()}"
+                                                   itemValue="#{geocode}"/>
+                                </h:selectOneMenu>
+                            </rich:column>
+                            <rich:column>
+                                <f:facet name="header">Role</f:facet>
+                                <h:inputText value="#{coach.sbr_role}" styleClass="form-control"/>
+                            </rich:column>
+                            <rich:column>
+                                <f:facet name="header"/>
+                                <a4j:commandLink action="#{sbrForm.removeCoach(i.index)}" styleClass="btn btn-danger"
+                                                 execute="coaches" render="coaches">
+                                    <i class="icon-remove-sign"/>
+                                </a4j:commandLink>
+                            </rich:column>
+                        </rich:dataTable>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <h:outputLabel for="members" value="Members" styleClass="col-lg-2 control-label"/>
                     <div class="col-lg-5">
                         <rich:pickList id="members" value="#{sbrForm.sbr.members}" converter="#{memberConverter}"
                                        switchByDblClick="true" sourceCaption="All members" targetCaption="Selected members"
-                                       addAllText="All " addText="" removeAllText="All " removeText="" listHeight="300">
+                                       addAllText="All " addText="" removeAllText="All " removeText="" listHeight="300" >
                             <f:selectItems value="#{allMembers}" var="member"  itemLabel="#{member.name}" itemValue="#{member}"/>
+                            <a4j:ajax event="change" execute="@this" render="coaches"/>
                         </rich:pickList>
                     </div>
                 </div>
 
+
+
                 <div class="col-lg-offset-2">
-                    <h:commandButton value="Submit" action="#{sbrForm.submit}" styleClass="btn btn-primary" />
+                    <h:commandButton value="Submit" action="#{sbrForm.submit}" styleClass="btn btn-primary" style="margin-bottom: 20px;"/>
                 </div>
 
             </h:form>
