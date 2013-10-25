@@ -1,7 +1,9 @@
 package com.redhat.gss.skillmatrix.data.dao.producers.interfaces;
 
+import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
+import com.redhat.gss.skillmatrix.model.Member;
 import com.redhat.gss.skillmatrix.model.Package;
 import com.redhat.gss.skillmatrix.model.SBR;
 
@@ -58,6 +60,16 @@ public interface PackageProducer {
      * @return itself, good for chaining
      */
     PackageProducer filterPeopleAtKnowledgeLevel(int level, OperatorEnum operator, int count);
+
+    /**
+     * Adds a filter of knowledge by specific person. Only packages that are known to the specified person at specified level
+     * are considered.
+     * @param person person that has to know the package
+     * @param level level of knowledge required
+     * @throws MemberInvalidException when member is not valid and cannot be used for this filter.
+     * @return itself, good for chaining
+     */
+    PackageProducer filterKnowledgeByPerson(Member person, int level) throws MemberInvalidException;
 
     /**
      * Adds a filter of sbr name fragment. Only packages within an SBR whose name contains the fragment are considered.<br/>

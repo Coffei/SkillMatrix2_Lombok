@@ -216,7 +216,7 @@ public class MemberProducerTest {
         assertEquals("1 member expected", 1, results.size());
         assertEquals("wrong nick", "agiertli", results.get(0).getNick());
 
-        results = memberDao.getProducerFactory().filterGeo(GeoEnum.NASA).getMembers();
+        results = memberDao.getProducerFactory().filterGeo(GeoEnum.NA).getMembers();
 
         assertNotNull("results null", results);
         assertEquals("1 member expected", 1, results.size());
@@ -811,7 +811,7 @@ public class MemberProducerTest {
         akovari.setEmail("akovari@redhat.com");
         akovari.setName("Adam Kovari");
         akovari.setExtension("62915");
-        akovari.setGeo(new Geo(GeoEnum.NASA, 120));
+        akovari.setGeo(new Geo(GeoEnum.NA, 120));
         akovari.setRole("STSE");
         akovari.setSbrs(Arrays.asList(jbossas));
 

@@ -46,18 +46,23 @@ public class SbrDBDAO implements SbrDAO {
         em.persist(sbr);
 
         //add new members
-        for(Member member : sbr.getMembers()) {
-            if(!member.getSbrs().contains(sbr)) {
-                member.getSbrs().add(sbr);
-                em.merge(member);
+        if (sbr.getMembers() != null) {
+            for(Member member : sbr.getMembers()) {
+                if(!member.getSbrs().contains(sbr)) {
+                    member.getSbrs().add(sbr);
+                    em.merge(member);
+                }
+
             }
         }
 
         //add new packages
-        for(Package pkg : sbr.getPackages()) {
-            if(!sbr.equals(pkg.getSbr())) {
-                pkg.setSbr(sbr);;
-                em.merge(pkg);
+        if(sbr.getPackages()!=null) {
+            for(Package pkg : sbr.getPackages()) {
+                if(!sbr.equals(pkg.getSbr())) {
+                    pkg.setSbr(sbr);
+                    em.merge(pkg);
+                }
             }
         }
 
@@ -92,18 +97,22 @@ public class SbrDBDAO implements SbrDAO {
 
 
         //add new members
-        for(Member member : sbr.getMembers()) {
-            if(!member.getSbrs().contains(sbr)) {
-                member.getSbrs().add(sbr);
-                em.merge(member);
+        if(sbr.getMembers()!=null) {
+            for(Member member : sbr.getMembers()) {
+                if(!member.getSbrs().contains(sbr)) {
+                    member.getSbrs().add(sbr);
+                    em.merge(member);
+                }
             }
         }
 
         //add new packages
-        for(Package pkg : sbr.getPackages()) {
-            if(!sbr.equals(pkg.getSbr())) {
-                pkg.setSbr(sbr);;
-                em.merge(pkg);
+        if(sbr.getPackages()!=null) {
+            for(Package pkg : sbr.getPackages()) {
+                if(!sbr.equals(pkg.getSbr())) {
+                    pkg.setSbr(sbr);;
+                    em.merge(pkg);
+                }
             }
         }
 
@@ -150,6 +159,9 @@ public class SbrDBDAO implements SbrDAO {
     }
 
     private List<Long> mapIDsCoaches(List<Coach> coaches) {
+        if (coaches==null)
+            return Collections.emptyList();
+
         List<Long> ids = new ArrayList<Long>(coaches.size());
         for (Coach coach : coaches) {
             if (coach != null && coach.getId() != null) {

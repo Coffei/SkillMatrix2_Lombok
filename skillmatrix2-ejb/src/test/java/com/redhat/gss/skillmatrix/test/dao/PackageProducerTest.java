@@ -226,6 +226,34 @@ public class PackageProducerTest {
 
     }
 
+    @Test
+    public void testFilterKnowledgeByPerson() throws Exception {
+        Member jtrantin = em.find(Member.class, jtrantin_id);
+        Member agi = em.find(Member.class, agiertli_id);
+        Member ako = em.find(Member.class, akovari_id);
+
+        List<Package> pkgs = pkgDao.getProducerFactory().filterKnowledgeByPerson(jtrantin, 1).getPackages();
+        assertNotNull("null result returned", pkgs);
+        assertEquals("wrong number of pkgs returned", 2, pkgs.size());
+        Pattern pattern = Pattern.compile("^Seam$|^EJB$");
+        for (Package pkg : pkgs) {
+            assertTrue("wrong pkg returned", pattern.matcher(pkg.getName()).matches());
+        }
+
+        pkgs = pkgDao.getProducerFactory().filterKnowledgeByPerson(agi, 0).getPackages();
+        assertNotNull("null result returned", pkgs);
+        assertEquals("wrong number of pkgs returned", 1, pkgs.size());
+        assertEquals("wrong pkg returned", "EJB", pkgs.get(0).getName());
+
+        pkgs = pkgDao.getProducerFactory().filterKnowledgeByPerson(ako, 2).getPackages();
+        assertNotNull("null result returned", pkgs);
+        assertEquals("wrong number of pkgs returned", 3, pkgs.size());
+        pattern = Pattern.compile("^Logging$|^EJB$|^Infinispan$|^jBPM$");
+        for (Package pkg : pkgs) {
+            assertTrue("wrong pkg returned", pattern.matcher(pkg.getName()).matches());
+        }
+    }
+
     //SECTION: order tests
 
     @Test
@@ -246,18 +274,18 @@ public class PackageProducerTest {
     }
 
     @Test
-    public void testSbrName() throws Exception {
+    public void testSortSbrName() throws Exception {
         List<Package> pkgs = pkgDao.getProducerFactory().sortSbrName(true).getPackages();
         assertNotNull("null result returned", pkgs);
         assertEquals("wrong number of packages returned", 7, pkgs.size());
 
 
         assertEquals("wrong package order","jBPM" ,pkgs.get(0).getName());
-        assertEquals("wrong package order","Infinispan" ,pkgs.get(1).getName());
+        assertEquals("wrong package order","Infinispan" ,pkgs.get(3).getName());
 
         Pattern namePattern = Pattern.compile("^EJB$|^Logging$");
+        assertTrue("wrong package order", namePattern.matcher(pkgs.get(1).getName()).matches());
         assertTrue("wrong package order", namePattern.matcher(pkgs.get(2).getName()).matches());
-        assertTrue("wrong package order", namePattern.matcher(pkgs.get(3).getName()).matches());
 
         namePattern = Pattern.compile("^RichFaces$|^Seam$|^Spring$");
         assertTrue("wrong package order", namePattern.matcher(pkgs.get(4).getName()).matches());
@@ -468,7 +496,7 @@ public class PackageProducerTest {
         akovari.setEmail("akovari@redhat.com");
         akovari.setName("Adam Kovari");
         akovari.setExtension("62915");
-        akovari.setGeo(new Geo(GeoEnum.NASA, 120));
+        akovari.setGeo(new Geo(GeoEnum.NA, 120));
         akovari.setRole("STSE");
         akovari.setSbrs(Arrays.asList(jbossas, clustering, brms));
         em.persist(akovari);

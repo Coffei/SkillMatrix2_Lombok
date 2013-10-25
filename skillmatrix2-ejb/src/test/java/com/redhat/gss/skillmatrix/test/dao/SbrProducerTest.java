@@ -418,7 +418,7 @@ public class SbrProducerTest {
         akovari.setEmail("akovari@redhat.com");
         akovari.setName("Adam Kovari");
         akovari.setExtension("62915");
-        akovari.setGeo(new Geo(GeoEnum.NASA, 120));
+        akovari.setGeo(new Geo(GeoEnum.NA, 120));
         akovari.setRole("STSE");
         akovari.setSbrs(Arrays.asList(jbossas, clustering, brms));
         em.persist(akovari);

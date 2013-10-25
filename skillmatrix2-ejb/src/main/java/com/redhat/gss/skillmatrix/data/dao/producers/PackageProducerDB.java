@@ -1,5 +1,6 @@
 package com.redhat.gss.skillmatrix.data.dao.producers;
 
+import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
@@ -118,6 +119,31 @@ public class PackageProducerDB implements PackageProducer {
 
                 return operator.createPredicate(cb, subquery, cb.literal((long)count));
 
+            }
+        });
+
+        return this;
+    }
+
+    @Override
+    public PackageProducer filterKnowledgeByPerson(final Member member, final int level) throws MemberInvalidException{
+        if(member==null)
+            throw new MemberInvalidException("null member", new NullPointerException("member"));
+        if(member.getId() == null)
+            throw new MemberInvalidException("member has no DB ID", new NullPointerException("member.id"));
+
+        filters.add(new Filter() {
+            @Override
+            public Predicate apply(CriteriaBuilder cb, Root<Package> root, CriteriaQuery query) {
+                //get all the relevant pkgs
+                CriteriaQuery<Package> pkgCriteria = cb.createQuery(Package.class);
+                Root<PackageKnowledge> knowRoot = pkgCriteria.from(PackageKnowledge.class);
+                pkgCriteria.select(knowRoot.get(PackageKnowledge_.pkg)).where(cb.equal(knowRoot.get(PackageKnowledge_.member),
+                        member), cb.equal(knowRoot.get(PackageKnowledge_.level), level));
+                List<Package> pkgs = em.createQuery(pkgCriteria).getResultList();
+
+                //create predicate
+                return root.in(pkgs);
             }
         });
 
