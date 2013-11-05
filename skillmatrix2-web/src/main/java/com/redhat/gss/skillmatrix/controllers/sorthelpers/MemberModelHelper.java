@@ -259,7 +259,7 @@ public abstract class MemberModelHelper {
         Filter filter = new Filter<MemberProducer>() {
             @Override
             public MemberProducer apply(MemberProducer producer) {
-                return producer.filterGeo(GeoEnum.parseEnum(this.value));
+                return producer.filterGeo(GeoEnum.valueOf(this.value));
             }
         };
         filter.setValue(geoFilter.toString());
@@ -272,7 +272,7 @@ public abstract class MemberModelHelper {
         if(roleFilter == null)
             return null;
 
-        return GeoEnum.parseEnum(roleFilter.getValue());
+        return GeoEnum.valueOf(roleFilter.getValue());
     }
 
     public void setExtensionFilter(String extFilter) {

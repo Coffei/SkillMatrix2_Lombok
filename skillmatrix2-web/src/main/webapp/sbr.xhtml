@@ -6,8 +6,7 @@
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:rich="http://richfaces.org/rich"
                 xmlns:a4j="http://richfaces.org/a4j">
-
-    <ui:define name="title">SBR: #{sbrDetail.sbr}</ui:define>
+    <ui:define name="title">SBR: #{sbrDetail.sbr.name}</ui:define>
     <ui:define name="content">
         <h:panelGroup rendered="#{sbrDetail.sbr eq null}">
             <div class="alert alert-warning">
@@ -31,6 +30,17 @@
                                 <td><h:outputText value="#{sbrDetail.sbr.packages.size()}" styleClass="badge"/></td>
                             </tr>
                         </table>
+
+                        <h:panelGroup rendered="#{dao.canSbrModify()}" styleClass="btn-group">
+                            <h:outputLink value="sbrform.jsf" styleClass="btn btn-default">
+                                <f:param name="id" value="#{sbrDetail.sbr.id}"/>
+                                <i class="icon-edit-sign"/>
+                            </h:outputLink>
+                            <h:commandLink action="#{deleter.deleteSbr(sbrDetail.sbr)}" styleClass="btn btn-danger" onclick="return confirm('Are you sure?');">
+                                <i class="icon-remove-sign"/>
+                            </h:commandLink>
+
+                        </h:panelGroup>
                     </div>
                 </div>
                 <div class="page-header">
@@ -109,7 +119,11 @@
                                 rendered="#{not empty sbrDetail.sbr.packages}" styleClass="table table-striped">
                     <rich:column>
                         <f:facet name="header">Name</f:facet>
-                        <h:outputText value="#{pkg.name}"/>
+                        <h:outputLink value="tag.jsf" styleClass="headerlink">
+                            <f:param name="id" value="#{pkg.id}"/>
+                            <h:outputText value="#{pkg.name}"/>
+                        </h:outputLink>
+
                     </rich:column>
 
                     <f:facet name="footer">

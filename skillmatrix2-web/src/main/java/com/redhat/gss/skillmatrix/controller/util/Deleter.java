@@ -59,7 +59,7 @@ public class Deleter {
         }
 
         //nav rule
-        return "member?faces-redirect=true";
+        return "members?faces-redirect=true";
     }
 
     public String deletePackage(Package pkg) {

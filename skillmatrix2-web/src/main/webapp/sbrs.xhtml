@@ -25,6 +25,8 @@
                 <p class="lead">There are no SBRs.</p>
             </h:panelGroup>
 
+            <h:messages globalOnly="true" styleClass="no-dot" infoClass="alert alert-success" errorClass="alert alert-danger"/>
+
             <rich:dataTable value="#{sbrs.modelHelper.model}" var="sbr" styleClass="table table-striped table-hover" id="sbrs"
                             rows="#{sbrs.maxRecordsOnPage}">
                 <f:facet name="header">
