@@ -110,7 +110,8 @@
                             <f:param name="id" value="#{member.id}"/>
                             <i class="icon-edit-sign"/>
                         </h:outputLink>
-                        <h:outputLink value="#" styleClass="btn btn-info">
+                        <h:outputLink value="member.jsf" styleClass="btn btn-info">
+                            <f:param name="id" value="#{member.id}"/>
                             <i class="icon-info-sign"/>
                         </h:outputLink>
                         <h:commandLink action="#{deleter.deleteMember(member)}" styleClass="btn btn-danger"
