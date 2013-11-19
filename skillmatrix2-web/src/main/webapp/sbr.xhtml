@@ -101,6 +101,12 @@
                     </rich:column>
 
                     <rich:column>
+                        <f:facet name="header">Languages</f:facet>
+                        <h:outputText value="#{memberUtils.langs(member)}" rendered="#{not empty memberUtils.langs(member)}"/>
+                        <h:outputText value="no languages" styleClass="text-muted" rendered="#{empty memberUtils.langs(member)}"/>
+                    </rich:column>
+
+                    <rich:column>
                         <f:facet name="header">Geo</f:facet>
                         <h:outputText value="#{memberUtils.geo(member)}"/>
                     </rich:column>

@@ -44,6 +44,14 @@
                                               styleClass="#{empty memberDetail.member.role ? 'text-muted' : ''}"/></td>
                         </tr>
                         <tr>
+                            <td>Languages</td>
+                            <td>
+                                <h:outputText value="#{memberUtils.langs(memberDetail.member)}" rendered="#{not empty memberUtils.langs(memberDetail.member)}"/>
+                                <h:outputText value="no languages assigned" rendered="#{empty memberUtils.langs(memberDetail.member)}" styleClass="text-muted"/>
+
+                            </td>
+                        </tr>
+                        <tr>
                             <td rowspan="#{memberDetail.member.sbrs.size()}">SBRs</td>
                             <td>
                                 <h:outputText value="no sbrs" styleClass="text-muted" rendered="#{empty memberDetail.member.sbrs}"/>

@@ -1,5 +1,7 @@
 package com.redhat.gss.skillmatrix.controller.util;
 
+import com.redhat.gss.skillmatrix.model.Knowledge;
+import com.redhat.gss.skillmatrix.model.LanguageKnowledge;
 import com.redhat.gss.skillmatrix.model.Member;
 import com.redhat.gss.skillmatrix.model.SBR;
 import org.joda.time.Duration;
@@ -7,6 +9,9 @@ import org.joda.time.Period;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -64,4 +69,43 @@ public class MemberUtils {
 
         return builder.toString();
     }
+
+    private Member lastMember;
+    private String lastLangs;
+    public String langs(Member member) {
+        if(lastMember!=null && lastMember.equals(member))//simple caching mechanism
+            return lastLangs;
+
+        List<String> langs = getLangsList(member);
+        if(langs.isEmpty()) {
+            lastMember = member;
+            lastLangs = null;
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(langs.get(0));
+        for(String lang : langs.subList(1, langs.size())) {
+            builder.append(", ");
+            builder.append(lang);
+        }
+
+        lastMember = member;
+        lastLangs = builder.toString();
+        return builder.toString();
+    }
+
+    private List<String> getLangsList(Member member) {
+        if(member==null || member.getKnowledges()==null || member.getKnowledges().isEmpty())
+            return Collections.emptyList();
+
+        List<String> langs = new ArrayList<String>();
+        for(Knowledge know : member.getKnowledges()) {
+            if(know instanceof LanguageKnowledge)
+                langs.add(((LanguageKnowledge)know).getLanguage());
+        }
+
+        Collections.sort(langs);
+        return langs;
+    }
+
 }

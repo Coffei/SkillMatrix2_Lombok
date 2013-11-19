@@ -34,10 +34,10 @@
                 </div>
 
                 <div class="form-group">
-                    <h:outputLabel for="packages" value="Packages" styleClass="col-lg-2 control-label"/>
+                    <h:outputLabel for="packages" value="Tags" styleClass="col-lg-2 control-label"/>
                     <div class="col-lg-5">
                         <rich:pickList id="packages" value="#{sbrForm.sbr.packages}" converter="#{packageConverter}"
-                                       switchByDblClick="true" sourceCaption="All packages" targetCaption="Selected packages"
+                                       switchByDblClick="true" sourceCaption="All tags" targetCaption="Selected tags"
                                        addAllText="All " addText="" removeAllText="All " removeText="" listHeight="300">
                             <f:selectItems value="#{allPackages}" var="pkg" itemLabel="#{pkg.name}" itemValue="#{pkg}" />
                         </rich:pickList>

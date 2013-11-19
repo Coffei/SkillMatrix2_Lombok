@@ -55,6 +55,10 @@
                                 <b class="caret"/>
                             </a4j:outputPanel>
                         </rich:column>
+                        <rich:column>
+                            <h:outputText value="Languages"/>
+                        </rich:column>
+
                         <rich:column >
                             <a4j:commandLink value="Geo" action="#{members.modelHelper.sortByGeo}" render="@header @body @footer" styleClass="headerlink"/>
                             <a4j:outputPanel rendered="#{members.modelHelper.geo ne 'unsorted'}">
@@ -90,6 +94,11 @@
                 <rich:column>
 
                     <h:outputText value="#{member.extension}"/>
+                </rich:column>
+
+                <rich:column>
+                    <h:outputText value="#{memberUtils.langs(member)}" rendered="#{not empty memberUtils.langs(member)}"/>
+                    <h:outputText value="no languages" styleClass="text-muted" rendered="#{empty memberUtils.langs(member)}"/>
                 </rich:column>
 
                 <rich:column>

@@ -2,9 +2,7 @@ package com.redhat.gss.skillmatrix.controller.form;
 
 import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
-import com.redhat.gss.skillmatrix.model.Geo;
-import com.redhat.gss.skillmatrix.model.GeoEnum;
-import com.redhat.gss.skillmatrix.model.Member;
+import com.redhat.gss.skillmatrix.model.*;
 import org.joda.time.Duration;
 import org.joda.time.Period;
 
@@ -15,10 +13,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,6 +27,8 @@ import java.util.Map;
 public class MemberForm implements Serializable {
 
     private Member member;
+
+    private List<LanguageKnowledge> langs;
 
     @Inject
     private MemberDAO memberDAO;
@@ -48,9 +45,10 @@ public class MemberForm implements Serializable {
                 List<Member> members = memberDAO.getProducerFactory().filterId(id).getMembers();
                 if(!members.isEmpty()) {
                     this.member = members.get(0); // get the first (usually the only one)
-                    if(this.member.getGeo()==null) // set geo if there is none
-                        this.member.setGeo(new Geo());
-                    return;                       // and exit
+
+                    postInitProcess();
+                    return;
+                    // and exit
                 }
 
             } catch(NumberFormatException e) {} //noop, just let it run
@@ -58,11 +56,46 @@ public class MemberForm implements Serializable {
         }
 
         this.member = new Member();
-        this.member.setGeo(new Geo());
+
+        postInitProcess();
+    }
+
+    private void postInitProcess() {
+        if(this.member.getGeo()==null) {
+            this.member.setGeo(new Geo());;
+        }
+        langs = new ArrayList<LanguageKnowledge>();
+        langs.addAll(filterValidLangs(this.member.getKnowledges()));
+        addLanguage();
+    }
+
+    public void addLanguage() {
+        LanguageKnowledge lang = new LanguageKnowledge();
+        lang.setMember(this.member);
+        langs.add(lang);
+    }
+
+    private List<LanguageKnowledge> filterValidLangs(List<? extends Knowledge> knows) {
+        if(knows==null || knows.isEmpty())
+            return new ArrayList<LanguageKnowledge>(0); //better not use Collections.emptyList() due to EL bug https://bugzilla.redhat.com/show_bug.cgi?id=1029387
+        List<LanguageKnowledge> validLangs = new ArrayList<LanguageKnowledge>(this.langs.size());
+
+        for (Knowledge know : knows) {
+            if (know instanceof LanguageKnowledge) {
+                LanguageKnowledge lang = (LanguageKnowledge)know;
+
+                if (lang.getLanguage() != null && !lang.getLanguage().trim().isEmpty() && lang.getLanguage().trim().length() <= 5) {
+                    lang.setLanguage(lang.getLanguage().trim().toUpperCase(Locale.ENGLISH)); // trim and upper the language
+                    validLangs.add(lang);
+                }
+            }
+        }
+
+        return validLangs;
     }
 
     public String submit() {
-      FacesMessage msg = new FacesMessage();
+        FacesMessage msg = new FacesMessage();
         preprocessMember(this.member);
         try {
             if(this.member.getId()==null) { // we are creating new member
@@ -122,6 +155,19 @@ public class MemberForm implements Serializable {
         if(member==null) //ignore null members
             return;
         member.setRole(member.getRole().toUpperCase(Locale.ENGLISH));
+        addAllLangs(member, filterValidLangs(this.langs));
+    }
+
+    private void addAllLangs(Member member, List<LanguageKnowledge> langs) {
+        if(member.getKnowledges()==null)
+            member.setKnowledges(new ArrayList<Knowledge>());
+        for (Iterator<Knowledge> it = member.getKnowledges().iterator(); it.hasNext(); ) {
+            Knowledge know = it.next();
+            if(know instanceof LanguageKnowledge) //remove all Langs
+                it.remove();
+        }
+
+        member.getKnowledges().addAll(langs); //add all langs
     }
 
     public Member getMember() {
@@ -130,6 +176,14 @@ public class MemberForm implements Serializable {
 
     public void setMember(Member member) {
         this.member = member;
+    }
+
+    public List<LanguageKnowledge> getLangs() {
+        return langs;
+    }
+
+    public void setLangs(List<LanguageKnowledge> langs) {
+        this.langs = langs;
     }
 
     public static class TimeZone {
@@ -152,4 +206,5 @@ public class MemberForm implements Serializable {
             this.name = name;
         }
     }
+
 }

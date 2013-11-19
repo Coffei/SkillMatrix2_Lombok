@@ -4,11 +4,14 @@ import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.MemberProducerDB;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
+import com.redhat.gss.skillmatrix.model.Knowledge;
+import com.redhat.gss.skillmatrix.model.LanguageKnowledge;
 import com.redhat.gss.skillmatrix.model.Member;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.transaction.UserTransaction;
 
 /**
@@ -48,6 +51,12 @@ public class MemberDBDAO implements MemberDAO {
             throw new MemberInvalidException("member has to have an ID in order to be updated", member);
 
         member = em.merge(member);
+
+        //clean language knowledge
+        Query query = em.createNativeQuery("DELETE FROM languageknowledge WHERE member_id = :member AND ID NOT IN (:knows)");
+        query.setParameter("member", member.getId());
+        query.setParameter("knows", member.getKnowledges());
+        query.executeUpdate();
     }
 
     @Override

@@ -76,6 +76,21 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <h:outputLabel for="langs" value="Languages" styleClass="col-lg-2 control-label"/>
+                    <div class="col-lg-6">
+                        <a4j:outputPanel id="langs">
+                            <a4j:repeat  value="#{memberForm.langs}" var="lang">
+                                <h:inputText value="#{lang.language}" styleClass="form-control" style="width: 9%; margin-left: 5px; margin-right:5px; margin-bottom: 5px; display: inline-block;"/>
+                            </a4j:repeat>
+                        </a4j:outputPanel>
+                        <a4j:commandLink action="#{memberForm.addLanguage}" styleClass="btn btn-default"
+                                         execute="langs" render="langs">
+                            <i class="icon-plus-sign"/>
+                        </a4j:commandLink>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <h:outputLabel for="sbrs" value="SBRs" styleClass="control-label col-lg-2"/>
                     <div class="col-lg-5">
                         <rich:pickList id="sbrs" value="#{memberForm.member.sbrs}" converter="#{sbrConverter}"
