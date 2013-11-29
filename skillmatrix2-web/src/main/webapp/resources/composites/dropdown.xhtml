@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite" xmlns:rich="http://richfaces.org/rich">
+
+<composite:interface>
+    <composite:attribute name="iconStyle" type="java.lang.String"/>
+    <composite:attribute name="label"/>
+    <composite:attribute name="linkStyle"/>
+</composite:interface>
+<composite:implementation>
+    <h:panelGroup rendered="#{cc.attrs.rendered}">
+        <div id="dropdown" class="btn-group dropdown">
+            <a href="#" class="#{cc.attrs.linkStyle}" data-toggle="dropdown">
+                <h:outputText value="#{cc.attrs.label}"/>
+                <i class="#{cc.attrs.iconStyle}"/>
+            </a>
+            <ul  class="dropdown-menu" role="menu">
+                <li>
+                    <composite:insertChildren/>
+                </li>
+            </ul>
+        </div>
+    </h:panelGroup>
+</composite:implementation>
+
+
+</html>

@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite" xmlns:rich="http://richfaces.org/rich"
+        xmlns:my="http://java.sun.com/jsf/composite/composites"
+        xmlns:a4j="http://richfaces.org/a4j">
+
+<composite:interface>
+   <composite:attribute name="value" required="true"/>
+</composite:interface>
+<composite:implementation>
+    <h:panelGroup rendered="#{cc.attrs.rendered}">
+    <my:dropdown iconStyle="icon-search" linkStyle="headerlink">
+        <h:inputText value="#{cc.attrs.value}" styleClass="form-control" style="width: auto; margin: 5px 5px;">
+            <a4j:ajax event="keyup" render="@body @footer" execute="@this" >
+
+            </a4j:ajax>
+        </h:inputText>
+    </my:dropdown>
+    </h:panelGroup>
+</composite:implementation>
+
+
+</html>
