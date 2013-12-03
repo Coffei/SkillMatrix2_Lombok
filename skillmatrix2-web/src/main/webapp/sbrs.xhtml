@@ -12,7 +12,8 @@
                 template="/WEB-INF/templates/default.xhtml"
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:rich="http://richfaces.org/rich"
-                xmlns:a4j="http://richfaces.org/a4j">
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:my="http://java.sun.com/jsf/composite/composites">
     <ui:define name="title">SBRs</ui:define>
 
     <ui:define name="content">
@@ -37,6 +38,7 @@
                             <h:panelGroup rendered="#{sbrs.modelHelper.nameOrder ne 'unsorted'}">
                                 <b class="caret"/>
                             </h:panelGroup>
+                            <my:filter value="#{sbrs.modelHelper.nameFilter}"/>
                         </rich:column>
 
                         <rich:column>
@@ -55,7 +57,9 @@
                             </h:panelGroup>
                         </rich:column>
 
-                        <rich:column></rich:column>
+                        <rich:column>
+                            <!--placeholder-->
+                        </rich:column>
                     </rich:columnGroup>
                 </f:facet>
 
