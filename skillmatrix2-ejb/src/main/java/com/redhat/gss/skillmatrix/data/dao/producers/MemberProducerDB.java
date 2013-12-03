@@ -223,7 +223,7 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterKnowledgeOfPackage(final Package pkg, final int level) throws PackageInvalidException {
+    public MemberProducer filterKnowledgeOfPackage(final Package pkg, final int level, final OperatorEnum operatorEnum) throws PackageInvalidException {
         if(pkg==null)
             throw new PackageInvalidException("null package", new NullPointerException("pkg"));
         if(pkg.getId()==null)
@@ -234,7 +234,8 @@ public class MemberProducerDB implements MemberProducer {
             public Predicate apply(CriteriaBuilder cb, Root<Member> root, CriteriaQuery query) {
                 //get members' ids that are in accordance with this predicate
                 //TODO: convert to typed query
-                Query idquery = em.createNativeQuery("SELECT member_id FROM PACKAGEKNOWLEDGE WHERE PKG_ID = :pkg AND level = :level");
+                String operator = operatorEnum.createSQLTextPredicate();
+                Query idquery = em.createNativeQuery("SELECT member_id FROM PACKAGEKNOWLEDGE WHERE PKG_ID = :pkg AND level " + operator + " :level");
                 idquery.setParameter("pkg", pkg.getId());
                 idquery.setParameter("level", level);
 

@@ -4,6 +4,7 @@ import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
+import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
 import com.redhat.gss.skillmatrix.model.Package;
 
 import javax.annotation.PostConstruct;
@@ -60,7 +61,7 @@ public class PackageDetail {
         if(experts==null) {
             //init experts
             try {
-                experts = (int)memberDao.getProducerFactory().filterKnowledgeOfPackage(this.pkg, 2).getCount();
+                experts = (int)memberDao.getProducerFactory().filterKnowledgeOfPackage(this.pkg, 2, OperatorEnum.EQUAL).getCount();
             } catch (PackageInvalidException e) {
                 log.warning("error when getting experts count");
                 log.warning(e.toString());
@@ -75,7 +76,7 @@ public class PackageDetail {
         if(intermediates==null) {
             //init experts
             try {
-                intermediates = (int)memberDao.getProducerFactory().filterKnowledgeOfPackage(this.pkg, 1).getCount();
+                intermediates = (int)memberDao.getProducerFactory().filterKnowledgeOfPackage(this.pkg, 1, OperatorEnum.EQUAL).getCount();
             } catch (PackageInvalidException e) {
                 log.warning("error when getting intermediates count");
                 log.warning(e.toString());
@@ -90,7 +91,7 @@ public class PackageDetail {
         if(beginners==null) {
             //init experts
             try {
-                beginners = (int)memberDao.getProducerFactory().filterKnowledgeOfPackage(this.pkg, 0).getCount();
+                beginners = (int)memberDao.getProducerFactory().filterKnowledgeOfPackage(this.pkg, 0, OperatorEnum.EQUAL).getCount();
             } catch (PackageInvalidException e) {
                 log.warning("error when getting beginners count");
                 log.warning(e.toString());

@@ -59,7 +59,7 @@ public class MemberProducerTest {
                 .addClasses(MemberDAO.class, MemberDBDAO.class, MemberProducer.class, MemberProducerDB.class)
                 .addClasses(MemberInvalidException.class, SbrInvalidException.class, PackageInvalidException.class, OperatorEnum.class, Resources.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-                //.addAsWebInfResource("test-ds.xml", "test-ds.xml")
+                .addAsWebInfResource("test-ds.xml", "test-ds.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
@@ -434,7 +434,7 @@ public class MemberProducerTest {
         Package ejb = em.find(Package.class, ejb_id);
         Package seam = em.find(Package.class, seam_id);
 
-        List<Member> members = memberDao.getProducerFactory().filterKnowledgeOfPackage(rich, 0).getMembers();
+        List<Member> members = memberDao.getProducerFactory().filterKnowledgeOfPackage(rich, 0, OperatorEnum.EQUAL).getMembers();
         Pattern pattern = Pattern.compile("akovari|agiertli");
         assertNotNull("null result returned", members);
         assertEquals("wrong number of records returned", 2, members.size());
@@ -442,21 +442,27 @@ public class MemberProducerTest {
             assertTrue("wrong member returned", pattern.matcher(member.getNick()).matches());
         }
 
-        members = memberDao.getProducerFactory().filterKnowledgeOfPackage(ejb, 1).getMembers();
+        members = memberDao.getProducerFactory().filterKnowledgeOfPackage(ejb, 1, OperatorEnum.BIGGER).getMembers();
+        pattern = Pattern.compile("akovari|jtrantin");
         assertNotNull("null result returned", members);
-        assertEquals("wrong number of records returned", 1, members.size());
-        assertEquals("wrong member returned", "jtrantin", members.get(0).getNick());
+        assertEquals("wrong number of records returned", 2, members.size());
+        for (Member member : members) {
+            assertTrue("wrong member returned", pattern.matcher(member.getNick()).matches());
+        }
 
 
-        members = memberDao.getProducerFactory().filterKnowledgeOfPackage(seam, 2).getMembers();
+        members = memberDao.getProducerFactory().filterKnowledgeOfPackage(seam, 2, OperatorEnum.SMALLER).getMembers();
+        pattern = Pattern.compile("akovari|agiertli|jtrantin");
         assertNotNull("null result returned", members);
-        assertEquals("wrong number of records returned", 1, members.size());
-        assertEquals("wrong member returned", "agiertli", members.get(0).getNick());
+        assertEquals("wrong number of records returned", 3, members.size());
+        for (Member member : members) {
+            assertTrue("wrong member returned", pattern.matcher(member.getNick()).matches());
+        }
     }
 
     @Test(expected = PackageInvalidException.class)
     public void testFilterKnowledgeOfPackageInvalid() throws Exception {
-        List<Member> members = memberDao.getProducerFactory().filterKnowledgeOfPackage(new Package(), 0).getMembers();
+        List<Member> members = memberDao.getProducerFactory().filterKnowledgeOfPackage(new Package(), 0, OperatorEnum.EQUAL).getMembers();
     }
 
 

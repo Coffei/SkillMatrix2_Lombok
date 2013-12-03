@@ -5,7 +5,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 
 /**
- * Created with IntelliJ IDEA.
+ * Class representing operator of order.
  * User: jtrantin
  * Date: 8/6/13
  * Time: 2:37 PM
@@ -28,6 +28,22 @@ public enum OperatorEnum {
                 assert false;
 
         }
+        return null;
+    }
+
+    public String createSQLTextPredicate() {
+        switch(this){
+            case SMALLER:
+                return "<=";
+            case EQUAL:
+                return "=";
+            case BIGGER:
+                return ">=";
+            default:
+                //should not happen
+                assert false;
+        }
+
         return null;
     }
 }

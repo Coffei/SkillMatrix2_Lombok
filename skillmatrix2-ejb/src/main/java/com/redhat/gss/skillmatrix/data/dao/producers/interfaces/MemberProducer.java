@@ -96,7 +96,7 @@ public interface MemberProducer {
      * @param level level of knowledge that is required
      * @return itself, good for chaining.
      */
-    MemberProducer filterKnowledgeOfPackage(Package pkg, int level) throws PackageInvalidException;
+    MemberProducer filterKnowledgeOfPackage(Package pkg, int level, OperatorEnum operatorEnum) throws PackageInvalidException;
 
 
     //crazier filters
