@@ -2,6 +2,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:my="http://java.sun.com/jsf/composite/composites"
                 template="/WEB-INF/templates/default.xhtml"
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:rich="http://richfaces.org/rich"
@@ -93,19 +94,20 @@
             </div>
 
             <div class="page-header">
-                <h:panelGroup rendered="#{memberDetail.expertModel.model.rowCount gt 0}">
+                <h:panelGroup rendered="#{memberDetail.expertsAvailable}">
                     <h2>Expert knowledge</h2>
                 </h:panelGroup>
-                <h:panelGroup rendered="#{memberDetail.expertModel.model.rowCount le 0}">
+                <h:panelGroup rendered="#{not memberDetail.expertsAvailable}">
                     <h3 class="text-muted">No expert knowledge</h3>
                 </h:panelGroup>
             </div>
             <rich:dataTable value="#{memberDetail.expertModel.model}" var="pkg" styleClass="table table-striped table-hover"
-                    rendered="#{memberDetail.expertModel.model.rowCount gt 0}">
+                    rendered="#{memberDetail.expertsAvailable}">
                 <rich:column>
                     <f:facet name="header">
                         <a4j:commandLink value="Name" action="#{memberDetail.expertModel.sortByName}" styleClass="headerlink"
                                 render="@body @footer"/>
+                        <my:filter value="#{memberDetail.expertModel.nameFilter}" />
                     </f:facet>
                     <h:outputLink value="tag.jsf" styleClass="headerlink">
                         <f:param name="id" value="#{pkg.id}"/>
@@ -117,6 +119,7 @@
                     <f:facet name="header">
                         <a4j:commandLink value="SBR" action="#{memberDetail.expertModel.sortBySbr}" styleClass="headerlink"
                                          render="@body @footer"/>
+                        <my:filter value="#{memberDetail.expertModel.sbrFilter}" />
                     </f:facet>
                     <h:outputLink value="sbr.jsf" styleClass="headerlink">
                         <f:param name="id" value="#{pkg.sbr.id}"/>
@@ -138,19 +141,20 @@
 
 
                 <div class="page-header">
-                    <h:panelGroup rendered="#{memberDetail.intermediateModel.model.rowCount gt 0}">
+                    <h:panelGroup rendered="#{memberDetail.intermediatesAvailable}">
                         <h2>Intermediate knowledge</h2>
                     </h:panelGroup>
-                    <h:panelGroup rendered="#{memberDetail.intermediateModel.model.rowCount le 0}">
+                    <h:panelGroup rendered="#{not memberDetail.intermediatesAvailable}">
                         <h3 class="text-muted">No intermediate knowledge</h3>
                     </h:panelGroup>
                 </div>
                 <rich:dataTable id="experts" value="#{memberDetail.intermediateModel.model}" var="pkg" styleClass="table table-striped table-hover"
-                                rendered="#{memberDetail.intermediateModel.model.rowCount gt 0}">
+                                rendered="#{memberDetail.intermediatesAvailable}">
                     <rich:column>
                         <f:facet name="header">
                             <a4j:commandLink value="Name" action="#{memberDetail.intermediateModel.sortByName}" styleClass="headerlink"
                                              render="@body @footer"/>
+                            <my:filter value="#{memberDetail.intermediateModel.nameFilter}" />
                         </f:facet>
                         <h:outputLink value="tag.jsf" styleClass="headerlink">
                             <f:param name="id" value="#{pkg.id}"/>
@@ -162,6 +166,7 @@
                         <f:facet name="header">
                             <a4j:commandLink value="SBR" action="#{memberDetail.intermediateModel.sortBySbr}" styleClass="headerlink"
                                              render="@body @footer"/>
+                            <my:filter value="#{memberDetail.intermediateModel.sbrFilter}" />
                         </f:facet>
                         <h:outputLink value="sbr.jsf" styleClass="headerlink">
                             <f:param name="id" value="#{pkg.sbr.id}"/>
@@ -182,19 +187,20 @@
                 </rich:dataTable>
 
             <div class="page-header">
-                <h:panelGroup rendered="#{memberDetail.beginnerModel.model.rowCount gt 0}">
+                <h:panelGroup rendered="#{memberDetail.beginnersAvailable}">
                     <h2>Beginner knowledge</h2>
                 </h:panelGroup>
-                <h:panelGroup rendered="#{memberDetail.beginnerModel.model.rowCount le 0}">
+                <h:panelGroup rendered="#{not memberDetail.beginnersAvailable}">
                     <h3 class="text-muted">No beginner knowledge</h3>
                 </h:panelGroup>
             </div>
             <rich:dataTable value="#{memberDetail.beginnerModel.model}" var="pkg" styleClass="table table-striped table-hover"
-                            rendered="#{memberDetail.beginnerModel.model.rowCount gt 0}">
+                            rendered="#{memberDetail.beginnersAvailable}">
                 <rich:column>
                     <f:facet name="header">
                         <a4j:commandLink value="Name" action="#{memberDetail.beginnerModel.sortByName}" styleClass="headerlink"
                                          render="@body @footer"/>
+                        <my:filter value="#{memberDetail.beginnerModel.nameFilter}" />
                     </f:facet>
                     <h:outputLink value="tag.jsf" styleClass="headerlink">
                         <f:param name="id" value="#{pkg.id}"/>
@@ -206,6 +212,7 @@
                     <f:facet name="header">
                         <a4j:commandLink value="SBR" action="#{memberDetail.beginnerModel.sortBySbr}" styleClass="headerlink"
                                          render="@body @footer"/>
+                        <my:filter value="#{memberDetail.beginnerModel.sbrFilter}" />
                     </f:facet>
                     <h:outputLink value="sbr.jsf" styleClass="headerlink">
                         <f:param name="id" value="#{pkg.sbr.id}"/>

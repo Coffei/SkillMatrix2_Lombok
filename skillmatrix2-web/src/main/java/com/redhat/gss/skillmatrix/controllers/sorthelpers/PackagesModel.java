@@ -67,8 +67,7 @@ public abstract class PackagesModel extends ExtendedDataModel<Package> {
 
     @Override
     public int getRowCount() {
-        if(producer==null)
-            this.producer = getProducer();
+        this.producer = getProducer();
 
         return (int)producer.getCount();
     }

@@ -46,6 +46,10 @@ public class MemberDetail {
     private PackageModelHelper intermediateModel;
     private PackageModelHelper beginnerModel;
 
+    private boolean expertsAvailable;
+    private boolean intermediatesAvailable;
+    private boolean beginnersAvailable;
+
 
     @PostConstruct
     private void init() {
@@ -100,6 +104,11 @@ public class MemberDetail {
                         }
                     };
 
+                    //init this stuff here so it is not influenced by filters that can be added later
+                    expertsAvailable = expertModel.getModel().getRowCount() > 0;
+                    intermediatesAvailable = intermediateModel.getModel().getRowCount() > 0;
+                    beginnersAvailable = beginnerModel.getModel().getRowCount() > 0;
+
                     // init other stuff here
 
                 }
@@ -144,5 +153,17 @@ public class MemberDetail {
 
     public void setBeginnerModel(PackageModelHelper beginnerModel) {
         this.beginnerModel = beginnerModel;
+    }
+
+    public boolean isExpertsAvailable() {
+        return expertsAvailable;
+    }
+
+    public boolean isIntermediatesAvailable() {
+        return intermediatesAvailable;
+    }
+
+    public boolean isBeginnersAvailable() {
+        return beginnersAvailable;
     }
 }

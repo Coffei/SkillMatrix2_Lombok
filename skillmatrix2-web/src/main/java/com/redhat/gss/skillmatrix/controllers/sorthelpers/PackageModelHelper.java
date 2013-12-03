@@ -104,10 +104,7 @@ public abstract class PackageModelHelper implements Serializable {
      * @param nameFilter
      */
     public void setNameFilter(String nameFilter) {
-        if (nameFilter == null)
-            return;
-        nameFilter = nameFilter.trim();
-        if(nameFilter.isEmpty()) {
+        if(nameFilter==null || nameFilter.trim().isEmpty()) {
             filtersOrders.remove("nameFilter");
             return;
         }
@@ -118,7 +115,7 @@ public abstract class PackageModelHelper implements Serializable {
                 return producer.filterName(this.value);
             }
         };
-        filter.setValue(nameFilter);
+        filter.setValue(nameFilter.trim());
 
         filtersOrders.put("nameFilter", filter);
     }
@@ -137,10 +134,7 @@ public abstract class PackageModelHelper implements Serializable {
      * @param sbrFilter
      */
     public void setSbrFilter(String sbrFilter) {
-        if (sbrFilter == null)
-            return;
-        sbrFilter = sbrFilter.trim();
-        if(sbrFilter.isEmpty()) {
+        if(sbrFilter==null || sbrFilter.trim().isEmpty()) {
             filtersOrders.remove("sbrFilter");
             return;
         }
@@ -151,7 +145,7 @@ public abstract class PackageModelHelper implements Serializable {
                 return producer.filterSbrName(this.value);
             }
         };
-        filter.setValue(sbrFilter);
+        filter.setValue(sbrFilter.trim());
 
         filtersOrders.put("sbrFilter", filter);
     }

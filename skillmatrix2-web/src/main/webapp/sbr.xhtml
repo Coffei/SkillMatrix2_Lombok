@@ -2,6 +2,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:my="http://java.sun.com/jsf/composite/composites"
                 template="/WEB-INF/templates/default.xhtml"
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:rich="http://richfaces.org/rich"
@@ -44,9 +45,10 @@
                     </div>
                 </div>
                 <div class="page-header">
-                    <h2>Coaches</h2>
+                    <h:panelGroup rendered="#{not empty sbrDetail.sbr.coaches}"><h2>Coaches</h2></h:panelGroup>
+                    <h:panelGroup rendered="#{empty sbrDetail.sbr.coaches}"><h3 class="text-muted">No coaches present</h3></h:panelGroup>
+
                 </div>
-                <h:outputText value="No coaches present" rendered="#{empty sbrDetail.sbr.coaches}"/>
                 <rich:dataTable value="#{sbrDetail.sbr.coaches}" var="coach" styleClass="table table-striped" rendered="#{not empty sbrDetail.sbr.coaches}">
                     <rich:column>
                         <f:facet name="header">Member</f:facet>
@@ -69,9 +71,10 @@
                 </rich:dataTable>
 
                 <div class="page-header">
-                    <h2>Members</h2>
+                    <h:panelGroup rendered="#{not empty sbrDetail.sbr.members}"><h2>Members</h2></h:panelGroup>
+                    <h:panelGroup rendered="#{empty sbrDetail.sbr.members}"><h3 class="text-muted">No members present</h3></h:panelGroup>
+
                 </div>
-                <h:outputText value="No members present" rendered="#{empty sbrDetail.sbr.members}"/>
                 <rich:dataTable value="#{sbrDetail.sbr.members}" var="member" styleClass="table table-striped"
                                 rendered="#{not empty sbrDetail.sbr.members}">
                     <rich:column>
@@ -117,14 +120,18 @@
                     </rich:column>
                 </rich:dataTable>
 
+
                 <div class="page-header">
-                    <h2>Tags</h2>
+                    <h:panelGroup rendered="#{not empty sbrDetail.sbr.packages}"><h2>Tags</h2></h:panelGroup>
+                    <h:panelGroup rendered="#{empty sbrDetail.sbr.packages}"><h3 class="text-muted">No tags present</h3></h:panelGroup>
                 </div>
-                <h:outputText value="No packages present" rendered="#{empty sbrDetail.sbr.packages}"/>
                 <rich:dataTable value="#{sbrDetail.packageModel.model}" var="pkg"
                                 rendered="#{not empty sbrDetail.sbr.packages}" styleClass="table table-striped">
                     <rich:column>
-                        <f:facet name="header">Name</f:facet>
+                        <f:facet name="header">
+                            <a4j:commandLink value="Name" styleClass="headerlink" action="#{sbrDetail.packageModel.sortByName()}" render="@body @footer"/>
+                            <my:filter value="#{sbrDetail.packageModel.nameFilter}"/>
+                        </f:facet>
                         <h:outputLink value="tag.jsf" styleClass="headerlink">
                             <f:param name="id" value="#{pkg.id}"/>
                             <h:outputText value="#{pkg.name}"/>

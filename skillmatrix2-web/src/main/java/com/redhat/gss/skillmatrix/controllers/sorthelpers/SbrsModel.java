@@ -67,8 +67,7 @@ public abstract class SbrsModel extends ExtendedDataModel<SBR> {
 
     @Override
     public int getRowCount() {
-        if(producer==null)
-            this.producer = getProducer();
+        this.producer = getProducer();
 
         return (int)producer.getCount();
     }
