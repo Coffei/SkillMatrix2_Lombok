@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite" xmlns:rich="http://richfaces.org/rich"
+      xmlns:my="http://java.sun.com/jsf/composite/composites"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+<composite:interface>
+    <composite:attribute name="value" required="true" type="org.richfaces.component.SortOrder"/>
+</composite:interface>
+<composite:implementation>
+    <h:panelGroup rendered="#{cc.attrs.value eq 'ascending'}">
+        <i class="icon-caret-down"/>
+    </h:panelGroup>
+    <h:panelGroup rendered="#{cc.attrs.value eq 'descending'}">
+        <i class="icon-caret-up"/>
+    </h:panelGroup>
+</composite:implementation>
+
+
+</html>

@@ -129,7 +129,8 @@
                                 rendered="#{not empty sbrDetail.sbr.packages}" styleClass="table table-striped">
                     <rich:column>
                         <f:facet name="header">
-                            <a4j:commandLink value="Name" styleClass="headerlink" action="#{sbrDetail.packageModel.sortByName()}" render="@body @footer"/>
+                            <a4j:commandLink value="Name" styleClass="headerlink" action="#{sbrDetail.packageModel.sortByName()}" render="@header @body @footer"/>
+                            <my:caret value="#{sbrDetail.packageModel.nameOrder}"/>
                             <my:filter value="#{sbrDetail.packageModel.nameFilter}"/>
                         </f:facet>
                         <h:outputLink value="tag.jsf" styleClass="headerlink">

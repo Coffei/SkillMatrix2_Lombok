@@ -106,7 +106,8 @@
                 <rich:column>
                     <f:facet name="header">
                         <a4j:commandLink value="Name" action="#{memberDetail.expertModel.sortByName}" styleClass="headerlink"
-                                render="@body @footer"/>
+                                render="@header @body @footer"/>
+                        <my:caret value="#{memberDetail.expertModel.nameOrder}"/>
                         <my:filter value="#{memberDetail.expertModel.nameFilter}" />
                     </f:facet>
                     <h:outputLink value="tag.jsf" styleClass="headerlink">
@@ -118,7 +119,8 @@
                 <rich:column>
                     <f:facet name="header">
                         <a4j:commandLink value="SBR" action="#{memberDetail.expertModel.sortBySbr}" styleClass="headerlink"
-                                         render="@body @footer"/>
+                                         render="@header @body @footer"/>
+                        <my:caret value="#{memberDetail.expertModel.sbrOrder}"/>
                         <my:filter value="#{memberDetail.expertModel.sbrFilter}" />
                     </f:facet>
                     <h:outputLink value="sbr.jsf" styleClass="headerlink">
@@ -153,7 +155,8 @@
                     <rich:column>
                         <f:facet name="header">
                             <a4j:commandLink value="Name" action="#{memberDetail.intermediateModel.sortByName}" styleClass="headerlink"
-                                             render="@body @footer"/>
+                                             render="@header @body @footer"/>
+                            <my:caret value="#{memberDetail.intermediateModel.nameOrder}"/>
                             <my:filter value="#{memberDetail.intermediateModel.nameFilter}" />
                         </f:facet>
                         <h:outputLink value="tag.jsf" styleClass="headerlink">
@@ -165,7 +168,8 @@
                     <rich:column>
                         <f:facet name="header">
                             <a4j:commandLink value="SBR" action="#{memberDetail.intermediateModel.sortBySbr}" styleClass="headerlink"
-                                             render="@body @footer"/>
+                                             render="@header @body @footer"/>
+                            <my:caret value="#{memberDetail.intermediateModel.sbrOrder}"/>
                             <my:filter value="#{memberDetail.intermediateModel.sbrFilter}" />
                         </f:facet>
                         <h:outputLink value="sbr.jsf" styleClass="headerlink">
@@ -199,7 +203,8 @@
                 <rich:column>
                     <f:facet name="header">
                         <a4j:commandLink value="Name" action="#{memberDetail.beginnerModel.sortByName}" styleClass="headerlink"
-                                         render="@body @footer"/>
+                                         render="@header @body @footer"/>
+                        <my:caret value="#{memberDetail.beginnerModel.nameOrder}"/>
                         <my:filter value="#{memberDetail.beginnerModel.nameFilter}" />
                     </f:facet>
                     <h:outputLink value="tag.jsf" styleClass="headerlink">
@@ -211,7 +216,8 @@
                 <rich:column>
                     <f:facet name="header">
                         <a4j:commandLink value="SBR" action="#{memberDetail.beginnerModel.sortBySbr}" styleClass="headerlink"
-                                         render="@body @footer"/>
+                                         render="@header @body @footer"/>
+                        <my:caret value="#{memberDetail.beginnerModel.sbrOrder}"/>
                         <my:filter value="#{memberDetail.beginnerModel.sbrFilter}" />
                     </f:facet>
                     <h:outputLink value="sbr.jsf" styleClass="headerlink">

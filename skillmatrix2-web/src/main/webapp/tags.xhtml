@@ -35,18 +35,14 @@
                         <rich:column>
                             <a4j:commandLink value="Name" styleClass="headerlink" action="#{packages.modelHelper.sortByName}"
                                              render="@header @body @footer"/>
-                            <h:panelGroup rendered="#{packages.modelHelper.nameOrder ne 'unsorted'}">
-                                <b class="caret"/>
-                            </h:panelGroup>
+                            <my:caret value="#{packages.modelHelper.nameOrder}"/>
                             <my:filter value="#{packages.modelHelper.nameFilter}"/>
                         </rich:column>
 
                         <rich:column>
                             <a4j:commandLink value="SBR" styleClass="headerlink" action="#{packages.modelHelper.sortBySbr}"
                                              render="@header @body @footer"/>
-                            <h:panelGroup rendered="#{packages.modelHelper.sbrOrder ne 'unsorted'}">
-                                <b class="caret"/>
-                            </h:panelGroup>
+                            <my:caret value="#{packages.modelHelper.sbrOrder}"/>
                             <my:filter value="#{packages.modelHelper.sbrFilter}"/>
                         </rich:column>
                         <rich:column/>

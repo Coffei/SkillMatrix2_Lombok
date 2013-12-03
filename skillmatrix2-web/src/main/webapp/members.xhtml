@@ -40,31 +40,23 @@
                     <rich:columnGroup>
                         <rich:column >
                             <a4j:commandLink value="Nick" action="#{members.modelHelper.sortByNick}" render="@header @body @footer" styleClass="headerlink"/>
-                            <a4j:outputPanel rendered="#{members.modelHelper.nick ne 'unsorted'}">
-                                <b class="caret"/>
-                            </a4j:outputPanel>
+                            <my:caret value="#{members.modelHelper.nick}"/>
                             <my:filter value="#{members.modelHelper.nickFilter}"/>
 
                         </rich:column>
                         <rich:column >
                             <a4j:commandLink value="Name" action="#{members.modelHelper.sortByName}" render="@header @body @footer" styleClass="headerlink"/>
-                            <a4j:outputPanel rendered="#{members.modelHelper.name ne 'unsorted'}">
-                                <b class="caret"/>
-                            </a4j:outputPanel>
+                            <my:caret value="#{members.modelHelper.name}"/>
                             <my:filter value="#{members.modelHelper.nameFilter}"/>
                         </rich:column>
                         <rich:column >
                             <a4j:commandLink value="Email" action="#{members.modelHelper.sortByEmail}" render="@header @body @footer" styleClass="headerlink"/>
-                            <a4j:outputPanel rendered="#{members.modelHelper.email ne 'unsorted'}">
-                                <b class="caret"/>
-                            </a4j:outputPanel>
+                            <my:caret value="#{members.modelHelper.email}"/>
                             <my:filter value="#{members.modelHelper.emailFilter}"/>
                         </rich:column>
                         <rich:column >
                             <a4j:commandLink value="Extension" action="#{members.modelHelper.sortByExtension}" render="@header @body @footer" styleClass="headerlink"/>
-                            <a4j:outputPanel rendered="#{members.modelHelper.extension ne 'unsorted'}">
-                                <b class="caret"/>
-                            </a4j:outputPanel>
+                            <my:caret value="#{members.modelHelper.extension}"/>
                             <my:filter value="#{members.modelHelper.extensionFilter}"/>
                         </rich:column>
                         <rich:column>
@@ -74,9 +66,7 @@
 
                         <rich:column >
                             <a4j:commandLink value="Geo" action="#{members.modelHelper.sortByGeo}" render="@header @body @footer" styleClass="headerlink"/>
-                            <a4j:outputPanel rendered="#{members.modelHelper.geo ne 'unsorted'}">
-                                <b class="caret"/>
-                            </a4j:outputPanel>
+                            <my:caret value="#{members.modelHelper.geo}"/>
                             <my:filter value="#{members.modelHelper.geoFilter}"/>
                         </rich:column>
                         <rich:column >
@@ -84,9 +74,7 @@
                         </rich:column>
                         <rich:column>
                             <a4j:commandLink value="Role" action="#{members.modelHelper.sortByRole}" render="@header @body @footer" styleClass="headerlink"/>
-                            <a4j:outputPanel rendered="#{members.modelHelper.role ne 'unsorted'}">
-                                <b class="caret"/>
-                            </a4j:outputPanel>
+                            <my:caret value="#{members.modelHelper.role}"/>
                             <my:filter value="#{members.modelHelper.roleFilter}"/>
                         </rich:column>
 
