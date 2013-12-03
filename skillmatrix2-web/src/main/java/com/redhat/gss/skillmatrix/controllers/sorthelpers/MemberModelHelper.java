@@ -250,8 +250,8 @@ public abstract class MemberModelHelper {
         return roleFilter.getValue();
     }
 
-    public void setGeoFilter(GeoEnum geoFilter) {
-        if(geoFilter==null){
+    public void setGeoFilter(String filterGeostr) {
+        if(filterGeostr==null || GeoEnum.parseGeo(filterGeostr)==null){
             filtersOrders.remove("geoFilter");
             return;
         }
@@ -259,20 +259,20 @@ public abstract class MemberModelHelper {
         Filter filter = new Filter<MemberProducer>() {
             @Override
             public MemberProducer apply(MemberProducer producer) {
-                return producer.filterGeo(GeoEnum.valueOf(this.value));
+                return producer.filterGeo(GeoEnum.parseGeo(this.value));
             }
         };
-        filter.setValue(geoFilter.toString());
+        filter.setValue(filterGeostr);
 
         filtersOrders.put("geoFilter", filter);
     }
 
-    public GeoEnum getGeoFilter() {
+    public String getGeoFilter() {
         Filter roleFilter = filtersOrders.get("roleFilter");
         if(roleFilter == null)
             return null;
 
-        return GeoEnum.valueOf(roleFilter.getValue());
+        return roleFilter.getValue();
     }
 
     public void setExtensionFilter(String extFilter) {
