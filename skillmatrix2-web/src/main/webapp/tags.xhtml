@@ -12,7 +12,8 @@
                 template="/WEB-INF/templates/default.xhtml"
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:rich="http://richfaces.org/rich"
-                xmlns:a4j="http://richfaces.org/a4j">
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:my="http://java.sun.com/jsf/composite/composites">
     <ui:define name="title">Tags</ui:define>
 
     <ui:define name="content">
@@ -37,6 +38,7 @@
                             <h:panelGroup rendered="#{packages.modelHelper.nameOrder ne 'unsorted'}">
                                 <b class="caret"/>
                             </h:panelGroup>
+                            <my:filter value="#{packages.modelHelper.nameFilter}"/>
                         </rich:column>
 
                         <rich:column>
@@ -45,6 +47,7 @@
                             <h:panelGroup rendered="#{packages.modelHelper.sbrOrder ne 'unsorted'}">
                                 <b class="caret"/>
                             </h:panelGroup>
+                            <my:filter value="#{packages.modelHelper.sbrFilter}"/>
                         </rich:column>
                         <rich:column/>
                     </rich:columnGroup>
