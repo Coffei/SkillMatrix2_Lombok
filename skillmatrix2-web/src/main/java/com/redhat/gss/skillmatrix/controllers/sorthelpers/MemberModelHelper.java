@@ -268,11 +268,11 @@ public abstract class MemberModelHelper {
     }
 
     public String getGeoFilter() {
-        Filter roleFilter = filtersOrders.get("roleFilter");
-        if(roleFilter == null)
+        Filter geoFilter = filtersOrders.get("geoFilter");
+        if(geoFilter == null)
             return null;
 
-        return roleFilter.getValue();
+        return geoFilter.getValue();
     }
 
     public void setExtensionFilter(String extFilter) {

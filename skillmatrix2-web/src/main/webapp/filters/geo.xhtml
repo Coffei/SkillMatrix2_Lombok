@@ -1,0 +1,16 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:my="http://java.sun.com/jsf/composite/composites">
+
+    <h:outputText value=" is "/>
+    <h:selectOneMenu value="#{filter.value}"  styleClass="form-control"
+                     style="width:auto; display: inline-block;" tabindex="#{index*10 + 2}">
+        <f:selectItems value="#{allGeos}" var="geo" itemValue="#{geo}" itemLabel="#{geo}"/>
+    </h:selectOneMenu>
+
+</ui:composition>

@@ -103,14 +103,14 @@ public interface MemberProducer {
 
     /**
      * Adds a filter of knowledge count on certain level. Only members with count of knowledges on specified level greater,
-     * smaller, or equal to (according to {@code operatorEnum}) the specified count are considered.
+     * smaller, or equal to (according to {@code operatorEnum}) the specified amount are considered.
      * @param level level of knowledge considered in this filter.
      * @param count count of knowledges the member must meet.
      * @param operatorEnum operator, specifies whether the member must have more, less or exactly equal number of knowledges
      *                     then specified
      * @return itself, good for chaining.
      */
-    MemberProducer filterKnowledgeLevelCount(int level, int count, OperatorEnum operatorEnum);
+    MemberProducer filterKnowledgeLevelCount(int level, int amount, OperatorEnum operatorEnum);
 
     //TODO: explain KnowScore
     /**

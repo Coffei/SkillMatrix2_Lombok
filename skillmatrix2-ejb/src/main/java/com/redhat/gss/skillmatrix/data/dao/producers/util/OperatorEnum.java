@@ -46,4 +46,37 @@ public enum OperatorEnum {
 
         return null;
     }
+
+    public String toReadableText() {
+        switch (this) {
+            case BIGGER:
+                return "bigger than";
+            case EQUAL:
+                return "equal to";
+            case SMALLER:
+                return "smaller than";
+            default:
+                //should not happen
+                assert false;
+        }
+
+        return null;
+    }
+
+    public static OperatorEnum fromReadableText(String text) {
+        if(text==null)
+            return null;
+
+        if (text.equals("bigger than")) {
+            return OperatorEnum.BIGGER;
+        }
+        if (text.equals("equal to")) {
+            return OperatorEnum.EQUAL;
+        }
+        if (text.equals("smaller than")) {
+            return OperatorEnum.SMALLER;
+        }
+
+        return null;
+    }
 }

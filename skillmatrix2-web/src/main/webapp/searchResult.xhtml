@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jstl/core"
+                template="/WEB-INF/templates/default.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:my="http://java.sun.com/jsf/composite/composites">
+    <ui:define name="title">Member search</ui:define>
+    <ui:define name="content">
+        <div class="page-header"><h2>Search results</h2>
+        <h:panelGroup rendered="#{not empty memberSearchResults.filters}">
+            <h4>
+                <ul>
+                   <a4j:repeat value="#{memberSearchResults.filters}" var="filter">
+                       <li><h:outputText value="#{filter.explain()}"/></li>
+                   </a4j:repeat>
+                </ul>
+            </h4>
+        </h:panelGroup>
+            <h:panelGroup rendered="#{empty memberSearchResults.filters}" styleClass="alert alert-info"  style="margin: 5px; display:inline-block;">
+                No search filters specified.
+            </h:panelGroup><br/>
+            <h:panelGroup rendered="#{memberSearchResults.failedFilters gt 0}" styleClass="alert alert-warning" style="margin: 5px; display:inline-block;">
+                <h:outputText value="1 filter was " rendered="#{memberSearchResults.failedFilters eq 1}"/>
+                <h:outputText value="#{memberSearchResults.failedFilters} filters were " rendered="#{memberSearchResults.failedFilters gt 1}"/>
+                <h:outputText value="not initialized properly."/>
+            </h:panelGroup>
+        </div>
+        <h:form>
+            <rich:dataTable styleClass="table table-striped table-hover" id="members" value="#{memberSearchResults.modelHelper.model}" var="member">
+
+                <f:facet name="header">
+                    <rich:columnGroup>
+                        <rich:column >
+                            <a4j:commandLink value="Nick" action="#{memberSearchResults.modelHelper.sortByNick}" render="@header @body @footer" styleClass="headerlink"/>
+                            <my:caret value="#{memberSearchResults.modelHelper.nick}"/>
+                            <my:filter value="#{memberSearchResults.modelHelper.nickFilter}"/>
+
+                        </rich:column>
+                        <rich:column >
+                            <a4j:commandLink value="Name" action="#{memberSearchResults.modelHelper.sortByName}" render="@header @body @footer" styleClass="headerlink"/>
+                            <my:caret value="#{memberSearchResults.modelHelper.name}"/>
+                            <my:filter value="#{memberSearchResults.modelHelper.nameFilter}"/>
+                        </rich:column>
+                        <rich:column >
+                            <a4j:commandLink value="Email" action="#{memberSearchResults.modelHelper.sortByEmail}" render="@header @body @footer" styleClass="headerlink"/>
+                            <my:caret value="#{memberSearchResults.modelHelper.email}"/>
+                            <my:filter value="#{memberSearchResults.modelHelper.emailFilter}"/>
+                        </rich:column>
+                        <rich:column >
+                            <a4j:commandLink value="Extension" action="#{memberSearchResults.modelHelper.sortByExtension}" render="@header @body @footer" styleClass="headerlink"/>
+                            <my:caret value="#{memberSearchResults.modelHelper.extension}"/>
+                            <my:filter value="#{memberSearchResults.modelHelper.extensionFilter}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="Languages"/>
+                            <my:filter value="#{memberSearchResults.modelHelper.languagesFilter}"/>
+                        </rich:column>
+
+                        <rich:column >
+                            <a4j:commandLink value="Geo" action="#{memberSearchResults.modelHelper.sortByGeo}" render="@header @body @footer" styleClass="headerlink"/>
+                            <my:caret value="#{memberSearchResults.modelHelper.geo}"/>
+                            <my:filter value="#{memberSearchResults.modelHelper.geoFilter}"/>
+                        </rich:column>
+                        <rich:column >
+                            SBR groups
+                        </rich:column>
+                        <rich:column>
+                            <a4j:commandLink value="Role" action="#{memberSearchResults.modelHelper.sortByRole}" render="@header @body @footer" styleClass="headerlink"/>
+                            <my:caret value="#{memberSearchResults.modelHelper.role}"/>
+                            <my:filter value="#{memberSearchResults.modelHelper.roleFilter}"/>
+                        </rich:column>
+
+                        <rich:column/>
+                    </rich:columnGroup>
+                </f:facet>
+
+                <rich:column>
+                    <h:outputText value="#{member.nick}"/>
+                </rich:column>
+
+                <rich:column>
+                    <h:outputText value="#{member.name}"/>
+
+                </rich:column>
+
+                <rich:column>
+
+                    <h:outputText value="#{member.email}"/>
+                </rich:column>
+
+                <rich:column>
+
+                    <h:outputText value="#{member.extension}"/>
+                </rich:column>
+
+                <rich:column>
+                    <h:outputText value="#{memberUtils.langs(member)}" rendered="#{not empty memberUtils.langs(member)}"/>
+                    <h:outputText value="no languages" styleClass="text-muted" rendered="#{empty memberUtils.langs(member)}"/>
+                </rich:column>
+
+                <rich:column>
+
+                    <h:outputText value="#{memberUtils.geo(member)}"/>
+                </rich:column>
+
+                <rich:column>
+                    <h:outputText value="#{memberUtils.sbrs(member)}"/>
+                </rich:column>
+
+                <rich:column>
+                    <h:outputText value="#{member.role}"/>
+                </rich:column>
+                <rich:column>
+                    <div class="btn-group pull-right">
+                        <h:outputLink value="memberform.jsf" styleClass="btn btn-default" rendered="#{dao.canMemberModify()}">
+                            <f:param name="id" value="#{member.id}"/>
+                            <i class="icon-edit-sign"/>
+                        </h:outputLink>
+                        <h:outputLink value="member.jsf" styleClass="btn btn-info">
+                            <f:param name="id" value="#{member.id}"/>
+                            <i class="icon-info-sign"/>
+                        </h:outputLink>
+                        <h:commandLink action="#{deleter.deleteMember(member)}" styleClass="btn btn-danger"
+                                       rendered="#{dao.canMemberModify()}" onclick="return confirm('Are you sure you want to do this?')">
+                            <i class="icon-remove-sign"/>
+                        </h:commandLink>
+                    </div>
+                </rich:column>
+
+                <f:facet name="footer">
+                    <ul class="pagination">
+                        <a4j:repeat value="#{memberSearchResults.modelHelper.pagination.listPages(5)}" var="page">
+                            <li class="#{memberSearchResults.modelHelper.pagination.currentPage eq page ? 'active' : ''}">
+                                <a4j:commandLink value="#{page}" action="#{memberSearchResults.modelHelper.pagination.goToPage(page)}"
+                                                 render="@body @footer" execute="@this" />
+                            </li>
+                        </a4j:repeat>
+                    </ul>
+                </f:facet>
+            </rich:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

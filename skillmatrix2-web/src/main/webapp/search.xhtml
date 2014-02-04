@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jstl/core"
+                template="/WEB-INF/templates/default.xhtml"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:my="http://java.sun.com/jsf/composite/composites">
+    <ui:define name="title">Member search</ui:define>
+    <ui:define name="content">
+        <div class="page-header"><h2>Member search</h2></div>
+        <h:form>
+            <a4j:commandLink styleClass="btn btn-default" action="#{memberSearch.addBasicFilter()}" render="@form" style="margin:5px;">
+                <i class="icon-plus-sign"/>
+                Add a basic filter
+            </a4j:commandLink>
+
+            <c:forEach items="${memberSearch.basicFilters}" var="filter" varStatus="state">
+
+                    <div class="well" style="width:50%">
+                        <p>Select attribute</p><br/>
+
+                        <h:selectOneMenu value="#{memberSearch.basicFiltersNames[state.index]}" styleClass="form-control"
+                                         style="width: auto; display: inline-block;" tabindex="#{state.index*10 + 1}">
+                            <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{memberSearch.availableBasicFilters.entrySet()}" var="attr"
+                                           itemValue="#{attr.key}" itemLabel="#{attr.key}"/>
+
+                            <a4j:ajax event="change" render="advanced_#{state.index}"/>
+                        </h:selectOneMenu>
+
+                        <h:panelGroup id="advanced_#{state.index}">
+                            <ui:include src="#{memberSearch.resolve(filter)}">
+                                <ui:param name="filter" value="#{filter}"/>
+                                <ui:param name="index" value="#{state.index}"/>
+                            </ui:include>
+                        </h:panelGroup>
+                        <a4j:commandLink action="#{memberSearch.removeBasicFilter(state.index)}" execute="@form" render="@form" styleClass="btn btn-danger pull-right">
+                            <i class="icon-remove-sign"/>
+                        </a4j:commandLink>
+                    </div>
+
+            </c:forEach>
+            <a4j:commandButton value="Submit" styleClass="btn btn-default" action="#{memberSearch.submit}"/>
+
+
+        </h:form>
+    </ui:define>
+</ui:composition>
