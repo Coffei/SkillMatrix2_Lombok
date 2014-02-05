@@ -388,12 +388,9 @@ public abstract class MemberModelHelper {
         this.filtersOrders.put("order", new Filter<MemberProducer>() {
             @Override
             public MemberProducer apply(MemberProducer producer) {
-                System.out.println("Setting nickorder to " + (nick==SortOrder.ascending));
                 return producer.sortNick(nick == SortOrder.ascending);
             }
         });
-
-        System.out.println("Order " + this.filtersOrders.get("order"));
     }
 
     /**

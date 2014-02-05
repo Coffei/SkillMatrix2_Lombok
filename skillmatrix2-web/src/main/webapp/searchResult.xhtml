@@ -13,22 +13,33 @@
     <ui:define name="content">
         <div class="page-header"><h2>Search results</h2>
         <h:panelGroup rendered="#{not empty memberSearchResults.filters}">
-            <h4>
+
                 <ul>
                    <a4j:repeat value="#{memberSearchResults.filters}" var="filter">
-                       <li><h:outputText value="#{filter.explain()}"/></li>
+                       <li><h:outputText value="#{filter.explain()}" escape="false"/></li>
                    </a4j:repeat>
                 </ul>
-            </h4>
+
         </h:panelGroup>
-            <h:panelGroup rendered="#{empty memberSearchResults.filters}" styleClass="alert alert-info"  style="margin: 5px; display:inline-block;">
-                No search filters specified.
+            <h:panelGroup rendered="#{empty memberSearchResults.filters}" styleClass="alert alert-info alert-dismissable"  style="margin: 5px; display:inline-block;">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="icon-remove"/></button>
+
+                <strong>No search filters specified.</strong> You can use <h:link outcome="members" value="this" style="text-decoration: underline"/> instead.
             </h:panelGroup><br/>
-            <h:panelGroup rendered="#{memberSearchResults.failedFilters gt 0}" styleClass="alert alert-warning" style="margin: 5px; display:inline-block;">
-                <h:outputText value="1 filter was " rendered="#{memberSearchResults.failedFilters eq 1}"/>
-                <h:outputText value="#{memberSearchResults.failedFilters} filters were " rendered="#{memberSearchResults.failedFilters gt 1}"/>
+            <h:panelGroup rendered="#{memberSearchResults.failedFilters gt 0}" styleClass="alert alert-warning alert-dismissable" style="margin: 5px; display:inline-block;">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="icon-remove"/></button>
+
+                <strong>Watchout!</strong>
+                <h:outputText value=" 1 filter was " rendered="#{memberSearchResults.failedFilters eq 1}"/>
+                <h:outputText value=" #{memberSearchResults.failedFilters} filters were " rendered="#{memberSearchResults.failedFilters gt 1}"/>
                 <h:outputText value="not initialized properly."/>
             </h:panelGroup>
+            <h:panelGroup rendered="#{memberSearchResults.modelHelper.model.rowCount eq 0}" styleClass="alert alert-warning alert-dismissable"
+                          style="margin:5px; display: inline-block;">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="icon-remove"/></button>
+
+                <strong>Too specific!</strong> The search did not returned any results. Try again maybe.
+                          </h:panelGroup>
         </div>
         <h:form>
             <rich:dataTable styleClass="table table-striped table-hover" id="members" value="#{memberSearchResults.modelHelper.model}" var="member">

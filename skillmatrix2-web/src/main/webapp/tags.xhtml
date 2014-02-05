@@ -25,7 +25,7 @@
             <h:messages globalOnly="true" styleClass="no-dot" infoClass="alert alert-success" errorClass="alert alert-danger"/>
 
             <h:panelGroup rendered="#{packages.modelHelper.model.rowCount eq 0}">
-                <p class="lead">There are no SBRs.</p>
+                <p class="lead">There are no tags.</p>
             </h:panelGroup>
 
             <rich:dataTable value="#{packages.modelHelper.model}" var="pkg" styleClass="table table-striped table-hover" id="pkgs"

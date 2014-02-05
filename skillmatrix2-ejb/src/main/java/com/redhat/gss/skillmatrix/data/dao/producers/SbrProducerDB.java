@@ -10,9 +10,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,6 +24,7 @@ import java.util.Locale;
  * To change this template use File | Settings | File Templates.
  */
 public class SbrProducerDB implements SbrProducer {
+    private final Logger log = Logger.getLogger(getClass().getName());
 
     private EntityManager em;
 
@@ -164,9 +167,9 @@ public class SbrProducerDB implements SbrProducer {
         try {
             transaction.begin();
         } catch (NotSupportedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (SystemException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         }
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -200,13 +203,13 @@ public class SbrProducerDB implements SbrProducer {
         try {
             transaction.commit();
         } catch (RollbackException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (HeuristicMixedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (HeuristicRollbackException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (SystemException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         }
 
         //return the results

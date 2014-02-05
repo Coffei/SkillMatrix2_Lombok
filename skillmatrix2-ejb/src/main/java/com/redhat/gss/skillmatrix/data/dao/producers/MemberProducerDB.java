@@ -13,6 +13,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Database implementation of {@link MemberProducer}.
@@ -22,6 +23,7 @@ import java.util.*;
  */
 public class MemberProducerDB implements MemberProducer {
     private static final int EXPERT_LEVEL = 2;
+    private final Logger log = Logger.getLogger(getClass().getName());
 
     private List<Filter> filters;
     private List<Ordering> orders;
@@ -510,9 +512,9 @@ public class MemberProducerDB implements MemberProducer {
         try {
             transaction.begin();
         } catch (NotSupportedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (SystemException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         }
         em.joinTransaction();
 
@@ -555,13 +557,13 @@ public class MemberProducerDB implements MemberProducer {
         try {
             transaction.commit();
         } catch (RollbackException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (HeuristicMixedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (HeuristicRollbackException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (SystemException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         }
         return result;
     }
@@ -571,9 +573,9 @@ public class MemberProducerDB implements MemberProducer {
         try {
             transaction.begin();
         } catch (NotSupportedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (SystemException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         }
         em.joinTransaction();
 
@@ -607,13 +609,13 @@ public class MemberProducerDB implements MemberProducer {
         try {
             transaction.commit();
         } catch (RollbackException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (HeuristicMixedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (HeuristicRollbackException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (SystemException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         }
 
         return result;
@@ -649,11 +651,7 @@ public class MemberProducerDB implements MemberProducer {
      * @return
      */
     private List<Member> sortMembersByKnowledgesAtLevel(List<Member> tosort) {
-        System.out.println("Level: " + sortKnowledgesAtLevel + "\nBefore:");
-        for(Member m : tosort)
-            System.out.println("Member: " + m.getNick());
-
-        Collections.sort(tosort, new Comparator<Member>() {
+       Collections.sort(tosort, new Comparator<Member>() {
             @Override
             public int compare(Member member1, Member member2) {
                 int count1 = getNumberOfPKgsAtLevel(MemberProducerDB.this.sortKnowledgesAtLevel, member1);

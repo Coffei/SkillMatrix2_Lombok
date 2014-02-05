@@ -104,7 +104,6 @@ public class SbrForm implements Serializable {
     }
 
     public void removeCoach(int i) {
-        System.out.println("removing " + i);
         this.sbr.getCoaches().remove(i);
     }
 

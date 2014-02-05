@@ -14,13 +14,19 @@ import org.reflections.vfs.ZipDir;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.jar.JarFile;
+import java.util.logging.Logger;
 
 @Singleton
 public class ReflectionsResources {
+
+    @Inject
+    private Logger log;
 
     @Produces
     public Reflections createReflections() {
@@ -64,7 +70,7 @@ public class ReflectionsResources {
                         try {
                             return file.exists() && file.canRead() ? file.isDirectory() ? new SystemDir(file) : new ZipDir(new JarFile(file)) : null;
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            log.warning(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
                         }
                         return null;
                     }
