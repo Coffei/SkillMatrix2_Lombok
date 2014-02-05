@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:my="http://java.sun.com/jsf/composite/composites">
+
+    <button class="btn btn-primary" data-toggle="modal" data-target="#pkgPopup#{index}">
+        <i class="icon-plus-sign"/> Add tags
+    </button>
+
+    <h:panelGroup id="pkglist#{index}" >
+        <rich:dataTable value="#{filter.packages}" var="pkg" styleClass="table table-hover table-striped"
+                        rendered="#{not empty filter.packagesMap}" style="width:80%">
+            <rich:column>
+                <f:facet name="header">Name</f:facet>
+                <h:outputText value="#{pkg.name}"/>
+            </rich:column>
+            <rich:column>
+                <f:facet name="header">Knowledge level</f:facet>
+                <h:selectOneMenu value="#{filter.packagesMap[pkg]}" styleClass="form-control" style="width: auto;" converter="javax.faces.Integer">
+                    <f:selectItem itemValue="0" itemLabel="any knowledge"/>
+                    <f:selectItem itemValue="1" itemLabel="intermediate or better"/>
+                    <f:selectItem itemValue="2" itemLabel="must be expert"/>
+                </h:selectOneMenu>
+            </rich:column>
+            <rich:column>
+                <a4j:commandLink action="#{filter.removePackage(pkg)}" styleClass="btn btn-danger" render="pkglist#{index} pkgs#{index}" execute="pkglist#{index}">
+                    <i class="icon-remove-sign"/>
+                </a4j:commandLink>
+            </rich:column>
+        </rich:dataTable>
+    </h:panelGroup>
+
+
+
+    <div class="modal fade" id="pkgPopup#{index}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="icon-remove"/>
+                    </button>
+                    <h4 class="modal-title">Select tags</h4>
+                </div>
+                <div class="modal-body" style="padding-bottom: 0px">
+                    <rich:dataTable value="#{pkgKnowHelper.pkgModelHelper.model}" var="pkg" styleClass="table table-striped table-hover" id="pkgs#{index}"
+                            >
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column>
+                                    <a4j:commandLink value="Name" styleClass="headerlink" action="#{pkgKnowHelper.pkgModelHelper.sortByName}"
+                                                     render="@header @body @footer"/>
+                                    <my:caret value="#{pkgKnowHelper.pkgModelHelper.nameOrder}"/>
+                                    <my:filter value="#{pkgKnowHelper.pkgModelHelper.nameFilter}"/>
+                                </rich:column>
+
+                                <rich:column>
+                                    <a4j:commandLink value="SBR" styleClass="headerlink" action="#{pkgKnowHelper.pkgModelHelper.sortBySbr}"
+                                                     render="@header @body @footer"/>
+                                    <my:caret value="#{pkgKnowHelper.pkgModelHelper.sbrOrder}"/>
+                                    <my:filter value="#{pkgKnowHelper.pkgModelHelper.sbrFilter}"/>
+                                </rich:column>
+                                <rich:column/>
+                            </rich:columnGroup>
+                        </f:facet>
+
+                        <rich:column>
+                            <h:outputText value="#{pkg.name}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{pkg.sbr.name}"/>
+                        </rich:column>
+                        <rich:column>
+                            <div class="btn-group pull-right">
+                                <a4j:commandLink styleClass="btn btn-success" action="#{filter.addPackage(pkg)}"
+                                                 render="pkglist#{index} pkgs#{index}" rendered="#{not filter.isPackageUsed(pkg)}" execute="pkglist#{index}">
+                                    <i class="icon-plus-sign"/>
+                                </a4j:commandLink>
+                                <h:outputText value="already added" styleClass="text-success" rendered="#{filter.isPackageUsed(pkg)}"/>
+                            </div>
+                        </rich:column>
+
+                        <f:facet name="footer">
+                            <div style="text-align: center;">
+                                <ul class="pagination" style="margin-left: auto; margin-right: auto; margin-bottom: 0px">
+                                    <a4j:repeat value="#{pkgKnowHelper.pkgModelHelper.pagination.listPages(5)}" var="page">
+                                        <li class="#{pkgKnowHelper.pkgModelHelper.pagination.currentPage eq page ? 'active' : ''}">
+                                            <a4j:commandLink value="#{page}" action="#{pkgKnowHelper.pkgModelHelper.pagination.goToPage(page)}"
+                                                             render="@body @footer @header"/>
+                                        </li>
+                                    </a4j:repeat>
+                                </ul>
+                            </div>
+                        </f:facet>
+
+                    </rich:dataTable>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+
+</ui:composition>

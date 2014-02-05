@@ -27,7 +27,7 @@ public class OperatorEnumConverter implements Converter {
       if(s==null || s.isEmpty())
           return null;
 
-       return OperatorEnum.fromReadableText(s);
+       return OperatorEnum.valueOf(s);
     }
 
     @Override
@@ -35,6 +35,6 @@ public class OperatorEnumConverter implements Converter {
         if(o==null || !(o instanceof OperatorEnum))
             return "";
 
-        return ((OperatorEnum)o).toReadableText();
+        return o.toString();
     }
 }

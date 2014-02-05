@@ -8,6 +8,7 @@ import org.reflections.Reflections;
 import javax.enterprise.context.Dependent;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -42,23 +43,26 @@ public class FilterCreator {
         //lookup filter class
         Class<? extends Filter> filterClass = lookupFilterClass(type);
 
-        //TODO: what if no class is found
-
+        if (filterClass == null) {// if no filter class found
+            throw new IllegalArgumentException("Unsupported or unknown filter.");
+        }
 
         Filter filter = null;
         try {
             filter = filterClass.newInstance();
-        } catch (InstantiationException e) { //TODO: handle
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (InstantiationException e) {
+            throw new IllegalArgumentException(String.format("Unable to create new filter of type %s. \nRoot: %s\n%s",
+                    type, e.toString(), Arrays.toString(e.getStackTrace())));
         } catch (IllegalAccessException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new IllegalArgumentException(String.format("Unable to create new filter of type %s. \nRoot: %s\n%s",
+                    type, e.toString(), Arrays.toString(e.getStackTrace())));
         }
 
         if (filter != null) {
             try {
                 filter.decode(encodedFilter);
             } catch (TypeMismatchException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                throw new IllegalArgumentException(String.format("Unable to decode a filter. %s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
             }
         }
 

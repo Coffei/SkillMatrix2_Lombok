@@ -13,15 +13,21 @@
     <ui:define name="content">
         <div class="page-header"><h2>Member search</h2></div>
         <h:form>
-            <a4j:commandLink styleClass="btn btn-default" action="#{memberSearch.addBasicFilter()}" render="@form" style="margin:5px;">
+            <a4j:commandLink styleClass="btn btn-default" action="#{memberSearch.addBasicFilter()}" render="@form"
+                             execute="@form" style="margin:5px;">
                 <i class="icon-plus-sign"/>
                 Add a basic filter
+            </a4j:commandLink>
+            <a4j:commandLink styleClass="btn btn-success" action="#{memberSearch.addAdvancedFilter()}" render="@form"
+                             execute="@form" style="margin: 5px;">
+                <i class="icon-plus-sign"/>
+                Add an advanced filter
             </a4j:commandLink>
 
             <c:forEach items="${memberSearch.basicFilters}" var="filter" varStatus="state">
 
                     <div class="well" style="width:50%">
-                        <p>Select attribute</p><br/>
+                        <p>Select attribute</p>
 
                         <h:selectOneMenu value="#{memberSearch.basicFiltersNames[state.index]}" styleClass="form-control"
                                          style="width: auto; display: inline-block;" tabindex="#{state.index*10 + 1}">
@@ -29,7 +35,7 @@
                             <f:selectItems value="#{memberSearch.availableBasicFilters.entrySet()}" var="attr"
                                            itemValue="#{attr.key}" itemLabel="#{attr.key}"/>
 
-                            <a4j:ajax event="change" render="advanced_#{state.index}"/>
+                            <a4j:ajax event="change" execute="@this" render="advanced_#{state.index}"/>
                         </h:selectOneMenu>
 
                         <h:panelGroup id="advanced_#{state.index}">
@@ -44,6 +50,37 @@
                     </div>
 
             </c:forEach>
+
+            <c:forEach items="${memberSearch.advancedFilters}" var="filter" varStatus="state">
+                <div class="well" style="width: 65%; border-color: #419641;">
+                    <a4j:commandLink action="#{memberSearch.removeAdvancedFilter(state.index)}" execute="@form" render="@form" styleClass="btn btn-danger pull-right">
+                        <i class="icon-remove-sign"/>
+                    </a4j:commandLink>
+                    <p>Choose filter:
+                    <h:selectOneMenu value="#{memberSearch.advancedFiltersNames[state.index]}" styleClass="form-control"
+                                     style="width:auto; display: inline-block;"
+                                     tabindex="#{memberSearch.basicFilters.size()*10 + state.index*10 + 1}">
+                        <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{memberSearch.availableAdvancedFilters.entrySet()}" var="attr"
+                                       itemValue="#{attr.key}" itemLabel="#{attr.key}"/>
+
+                        <a4j:ajax event="change" execute="@this" render="advanced_#{1000 + state.index}"/>
+                    </h:selectOneMenu></p>
+
+
+
+                    <h:panelGroup id="advanced_#{1000 + state.index}">
+                        <ui:include src="#{memberSearch.resolve(filter)}">
+                            <ui:param name="filter" value="#{filter}"/>
+                            <ui:param name="index" value="#{state.index}"/>
+                            <ui:param name="tabindex" value="#{memberSearch.basicFilters.size()*10 + state.index*10+1}"/>
+                        </ui:include>
+                    </h:panelGroup>
+
+
+                </div>
+            </c:forEach>
+
             <a4j:commandButton value="Submit" styleClass="btn btn-default" action="#{memberSearch.submit}"/>
 
 

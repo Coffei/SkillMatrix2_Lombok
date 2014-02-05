@@ -17,9 +17,11 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,6 +35,7 @@ import java.util.Map;
         page = "sbr.xhtml",
         type = FilterType.BASIC)
 public class SbrFilter implements Filter {
+    private final Logger log = Logger.getLogger(getClass().getName());
 
     private SBR value;
 
@@ -48,8 +51,7 @@ public class SbrFilter implements Filter {
                 CreationalContext<SbrDAO> context = beanManager.createCreationalContext(bean);
                 sbrDAO = (SbrDAO)beanManager.getReference(bean, SbrDAO.class, context);
             } catch (NamingException e) {
-                //TODO: handle exception somehow
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                log.severe(String.format("Unable to create/inject SBRDao. %s\n%S", e.toString(), Arrays.toString(e.getStackTrace())));
             }
         }
 
@@ -117,8 +119,7 @@ public class SbrFilter implements Filter {
         try {
             producer.filterSBRMembership(this.value);
         } catch (SbrInvalidException e) {
-            //TODO: log message
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.warning(String.format("Invalid SBR. %s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         }
     }
 

@@ -50,14 +50,14 @@ public class MemberSearchResults {
         for (String paramKey : context.getRequestParameterMap().keySet()) {
             if(paramKey.startsWith("filter")) {
                 String encodedFilter = context.getRequestParameterMap().get(paramKey);
-                //TODO: handle all exceptions
+
                 try {
                     Filter filter = filterCreator.createFilter(encodedFilter);
 
                     if (filter != null)
                         filters.add(filter);
                 } catch (Exception e) { //not kocher, but no exception should get to the user
-                    log.warning(e.toString()); //warn dev, otherwise ignore
+                    log.warning("Filter failed" + e.toString()); //warn dev, otherwise ignore
                     failedFilters++;
                 }
             }

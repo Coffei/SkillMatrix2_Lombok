@@ -35,22 +35,34 @@ public class MemberSearch {
     private Reflections reflections;
 
     private SortedMap<String, Class<?>> availableBasicFilters;
+    private SortedMap<String, Class<?>> availableAdvancedFilters;
     //should be list of filters, but we need to have
     private List<Filter> basicFilters;
     private List<String> basicFiltersNames;
 
+    private List<Filter> advancedFilters;
+    private List<String> advancedFiltersNames;
+
+
+
     @PostConstruct
     private void init() {
-        //create collections
+        //create collections- basic
         availableBasicFilters = new TreeMap<String, Class<?>>();
         basicFilters = new ArrayList<Filter>();
         basicFiltersNames = new FilterNameList(basicFilters, availableBasicFilters);
+        //advanced
+        availableAdvancedFilters = new TreeMap<String, Class<?>>();
+        advancedFilters = new ArrayList<Filter>();
+        advancedFiltersNames = new FilterNameList(advancedFilters, availableAdvancedFilters);
 
         //find all basic filters on CP
         for(Class<?> c : reflections.getTypesAnnotatedWith(MemberFilter.class)) {
             MemberFilter filter = c.getAnnotation(MemberFilter.class);
             if(filter.type().equals(FilterType.BASIC)) {
                 availableBasicFilters.put(filter.name(), c);
+            } else if (filter.type().equals(FilterType.ADVANCED)) {
+                availableAdvancedFilters.put(filter.name(), c);
             }
         }
     }
@@ -60,6 +72,14 @@ public class MemberSearch {
         StringBuilder targetURL = new StringBuilder("searchResult.jsf?faces-redirect=true");
         int i = 0;
         for (Filter filter : basicFilters) {
+            targetURL.append("&filter");
+            targetURL.append(i); //&filterX=...
+            targetURL.append("=");
+
+            targetURL.append(filter.encode());
+            i++;
+        }
+        for (Filter filter : advancedFilters) {
             targetURL.append("&filter");
             targetURL.append(i); //&filterX=...
             targetURL.append("=");
@@ -81,10 +101,17 @@ public class MemberSearch {
     public void addBasicFilter() {
         basicFiltersNames.add(null);
     }
+    public void addAdvancedFilter() {
+        advancedFiltersNames.add(null);
+    }
 
 
     public void removeBasicFilter(int index) {
         basicFiltersNames.remove(index);
+    }
+
+    public void removeAdvancedFilter(int index) {
+        advancedFiltersNames.remove(index);
     }
 
     public List<Filter> getBasicFilters() {
@@ -100,12 +127,10 @@ public class MemberSearch {
     public String resolve(Filter filter) {
         
         if(filter==null) {
-            System.out.println("resolved null");
             return null;
         }
 
         MemberFilter annt = filter.getClass().getAnnotation(MemberFilter.class);
-        System.out.println("resolved filters/" + annt.page());
         return "filters/" + annt.page();
     }
 
@@ -122,8 +147,20 @@ public class MemberSearch {
         return Arrays.asList(OperatorEnum.values());
     }
 
+    public SortedMap<String, Class<?>> getAvailableAdvancedFilters() {
+        return availableAdvancedFilters;
+    }
+
+    public List<Filter> getAdvancedFilters() {
+        return advancedFilters;
+    }
+
+    public List<String> getAdvancedFiltersNames() {
+        return advancedFiltersNames;
+    }
 
     private static class FilterNameList extends AbstractList<String> {
+        private final Logger log = Logger.getLogger(getClass().getName());
 
         private List<Filter> backingList;
         private Map<String, Class<?>> allFilters;
@@ -164,8 +201,14 @@ public class MemberSearch {
                     return null;
                 }
             }
+
             Class<?> filterClass = allFilters.get(element);
             if(filterClass!=null) {
+                //check if there already isn't the correct element, in that case do not recreate
+                Filter oldFilter = backingList.get(index);
+                if(oldFilter!=null && filterClass.equals(oldFilter.getClass()))
+                    return element;
+
                 try {
                     Filter filter =  backingList.set(index,(Filter)filterClass.newInstance());
                     printBackingList();
@@ -176,14 +219,12 @@ public class MemberSearch {
                         return null;
                     }
                 } catch (InstantiationException e) {
-                    //TODO: handle this exception
-                    e.printStackTrace();
+                    log.severe(String.format("Unable to instantiate a filter. %s\n%s",e.toString(),Arrays.toString(e.getStackTrace())));
                 } catch (IllegalAccessException e) {
-                    //TODO: handle this exception
-                    e.printStackTrace();
+                    log.severe(String.format("Not allowed to instantiate a filter. %s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
                 }
             } else {
-                //TODO: log this situation, unsupported filter found
+                log.severe(String.format("Unsupported filter found! Filter type name: %s", element));
             }
             return null;
         }
@@ -199,14 +240,12 @@ public class MemberSearch {
                 try {
                     backingList.add(index,(Filter)filterClass.newInstance());
                 } catch (InstantiationException e) {
-                    //TODO: handle this exception
-                    e.printStackTrace();
+                    log.severe(String.format("Unable to instantiate a filter. %s\n%s",e.toString(),Arrays.toString(e.getStackTrace())));
                 } catch (IllegalAccessException e) {
-                    //TODO: handle this exception
-                    e.printStackTrace();
+                    log.severe(String.format("Not allowed to instantiate a filter. %s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
                 }
             } else {
-                //TODO: log this situation, unsupported filter found
+                log.severe(String.format("Unsupported filter found! Filter type name: %s", element));
             }
 
         }
@@ -223,12 +262,12 @@ public class MemberSearch {
         }
 
         private void printBackingList() {
-            System.out.println("Filters:");
+            log.info("Filters:");
             for (Filter filter : backingList) {
                 if(filter==null)
-                    System.out.println("   null");
+                    log.info("    null");
                 else
-                    System.out.println("   " + filter.getClass().getName());
+                    log.info("    " + filter.getClass().getName());
             }
         }
     }
