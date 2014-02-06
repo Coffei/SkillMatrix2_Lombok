@@ -39,6 +39,7 @@ public abstract class PaginationHelper {
     //TODO: this is not correct I think
     // there must be better way to generate this, THINK!
     public String[] listPages(int maxPages) {
+        checkPageRange();
         maxPages = Math.min(maxPages, getMaxPages()); //choose the lower from max displayed pages and how many pages there actually is
 
         if(maxPages < 1) //extreme causes
@@ -91,6 +92,11 @@ public abstract class PaginationHelper {
         fireOnChange();
     }
 
+    private void checkPageRange() {
+        if(currentPage > getMaxPages())
+            goToPage(1);
+    }
+
     public int getRecordsPerPage() {
         return recordsPerPage;
     }
@@ -99,6 +105,7 @@ public abstract class PaginationHelper {
 
 
     public int getCurrentPage() {
+        checkPageRange();
         return currentPage;
     }
 

@@ -6,7 +6,8 @@
                 template="/WEB-INF/templates/default.xhtml"
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:rich="http://richfaces.org/rich"
-                xmlns:a4j="http://richfaces.org/a4j">
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:my="http://java.sun.com/jsf/composite/composites">
     <ui:define name="title">Edit knowledges</ui:define>
     <ui:define name="content">
         <h:panelGroup rendered="#{knowledgeForm.member eq null}">
@@ -51,39 +52,16 @@
                             <f:facet name="header">
                                 <rich:columnGroup>
                                     <rich:column>
-                                        <div class="parent">
-                                            <div class="cell">
-                                                <h:panelGroup rendered="#{knowledgeForm.pkgModelHelper.nameOrder ne 'unsorted'}">
-                                                    <i class="caret"/>
-                                                </h:panelGroup>
-                                                <a4j:commandLink value="Name" action="#{knowledgeForm.pkgModelHelper.sortByName()}"
-                                                                 render="@body @footer @header" />
-                                            </div>
-                                            <div class="col-lg-8 cell">
-                                                <h:inputText value="#{knowledgeForm.pkgModelHelper.nameFilter}" styleClass="form-control input-sm" >
-                                                    <a4j:ajax event="keyup" render="@body @footer" execute="@header" queueId="slowQueue" />
-                                                    <a4j:ajax event="focus" execute="knows" queueId="slowQueue"/>
-                                                </h:inputText>
-                                            </div>
-                                        </div>
-
+                                        <a4j:commandLink value="Name" action="#{knowledgeForm.pkgModelHelper.sortByName()}"
+                                                         render="@body @footer @header" />
+                                        <my:caret value="#{knowledgeForm.pkgModelHelper.nameOrder}"/>
+                                        <my:filter value="#{knowledgeForm.pkgModelHelper.nameFilter}"/>
                                     </rich:column>
                                     <rich:column>
-                                        <div class="parent">
-                                            <div class="cell">
-                                                <h:panelGroup rendered="#{knowledgeForm.pkgModelHelper.sbrOrder ne 'unsorted'}">
-                                                    <i class="caret"/>
-                                                </h:panelGroup>
-                                                <a4j:commandLink value="SBR" action="#{knowledgeForm.pkgModelHelper.sortBySbr()}"
-                                                                 render="@body @footer @header" />
-                                            </div>
-                                            <div class="col-lg-8 cell">
-                                                <h:inputText value="#{knowledgeForm.pkgModelHelper.sbrFilter}" styleClass="form-control input-sm" >
-                                                    <a4j:ajax event="keyup" render="knows@body knows@footer" execute="@header" queueId="slowQueue"/>
-                                                    <a4j:ajax event="mousedown" execute="knows" queueId="slowQueue"/>
-                                                </h:inputText>
-                                            </div>
-                                        </div>
+                                        <a4j:commandLink value="SBR" action="#{knowledgeForm.pkgModelHelper.sortBySbr()}"
+                                                         render="@body @footer @header" />
+                                        <my:caret value="#{knowledgeForm.pkgModelHelper.sbrOrder}"/>
+                                        <my:filter value="#{knowledgeForm.pkgModelHelper.sbrFilter}"/>
                                     </rich:column>
                                     <rich:column/>
                                 </rich:columnGroup>
@@ -96,7 +74,7 @@
                                 <h:outputText value="#{pkg.sbr.name}"/>
                             </rich:column>
                             <rich:column>
-                                <h:selectOneMenu value="#{knowledgeForm.knowledges[pkg]}" converter="javax.faces.Integer" styleClass="form-control" style="width: 200px;y">
+                                <h:selectOneMenu value="#{knowledgeForm.knowledges[pkg]}" converter="javax.faces.Integer" styleClass="form-control" style="width: 200px;">
                                     <f:selectItem itemLabel="-- no knowledge --" itemValue="-1" noSelectionOption="true"/>
                                     <f:selectItem itemLabel="Beginner" itemValue="0"/>
                                     <f:selectItem itemLabel="Intermediate" itemValue="1"/>
@@ -105,13 +83,8 @@
                             </rich:column>
 
                             <f:facet name="footer">
-                                <ul class="pagination">
-                                    <a4j:repeat value="#{knowledgeForm.pkgModelHelper.pagination.listPages(5)}" var="page">
-                                        <li class="#{knowledgeForm.pkgModelHelper.pagination.currentPage eq page ? 'active' : ''}">
-                                            <a4j:commandLink value="#{page}" action="#{knowledgeForm.pkgModelHelper.pagination.goToPage(page)}" render="@body @header @footer" />
-                                        </li>
-                                    </a4j:repeat>
-                                </ul>
+                                <my:paginator paginationHelper="#{knowledgeForm.pkgModelHelper.pagination}" render="@body @header @footer"
+                                              execute=""/>
                             </f:facet>
 
                         </rich:dataTable>
