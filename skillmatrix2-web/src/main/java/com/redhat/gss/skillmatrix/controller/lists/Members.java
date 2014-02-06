@@ -23,7 +23,7 @@ import java.io.Serializable;
 @ViewScoped
 @ManagedBean
 public class Members implements Serializable {
-    public static final int MAX_RECORDS_PER_PAGE = 20;
+    public static final int MAX_RECORDS_PER_PAGE = 3;
 
     private MemberModelHelper modelHelper;
 

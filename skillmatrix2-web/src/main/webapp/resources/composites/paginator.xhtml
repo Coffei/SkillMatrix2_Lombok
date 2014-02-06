@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:my="http://java.sun.com/jsf/composite/composites"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+<composite:interface>
+    <composite:attribute name="paginationHelper" required="true" type="com.redhat.gss.skillmatrix.util.PaginationHelper"/>
+    <composite:attribute name="render" required="false" default="@body @footer"/>
+    <composite:attribute name="execute" required="false" default="@this"/>
+    <composite:attribute name="pages" default="5" type="java.lang.Integer"/>
+</composite:interface>
+<composite:implementation>
+    <ul class="pagination">
+        <a4j:repeat value="#{cc.attrs.paginationHelper.listPages(cc.attrs.pages)}" var="page">
+            <li class="#{cc.attrs.paginationHelper.currentPage eq page ? 'active' : ''}">
+                <a4j:commandLink value="#{page}" action="#{cc.attrs.paginationHelper.goToPage(page)}"
+                                 render="#{cc.attrs.render}"
+                                 execute="#{cc.attrs.execute}" />
+            </li>
+        </a4j:repeat>
+    </ul>
+</composite:implementation>
+
+
+</html>

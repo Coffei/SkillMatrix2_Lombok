@@ -2,6 +2,7 @@ package com.redhat.gss.skillmatrix.controllers.sorthelpers;
 
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.util.Filter;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
+import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.util.PaginationHelper;
 import org.ajax4jsf.model.SequenceRange;
 import org.richfaces.component.SortOrder;
@@ -9,6 +10,7 @@ import org.richfaces.component.SortOrder;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Model helper class for {@link com.redhat.gss.skillmatrix.model.Package}. This class has two functions:
@@ -21,6 +23,7 @@ import java.util.Map;
  * Time: 10:17 AM
  */
 public abstract class PackageModelHelper implements Serializable {
+    private final Logger log = Logger.getLogger(getClass().getName());
 
     private PackagesModel model;
     private PaginationHelper pagination;
@@ -39,7 +42,12 @@ public abstract class PackageModelHelper implements Serializable {
             }
         };
 
-        this.pagination = new PaginationHelper(recordsPerPage, model.getRowCount());
+        this.pagination = new PaginationHelper(recordsPerPage) {
+            @Override
+            public int getMaxRecords() {
+                return (int)model.getProducer().getCount();
+            }
+        };
         this.pagination.addOnChangeListener(new PaginationHelper.RangeListener() {
             @Override
             public void doListen(SequenceRange range) {
@@ -50,6 +58,8 @@ public abstract class PackageModelHelper implements Serializable {
         //set intial range
         this.model.setRange(this.pagination.getRange());
     }
+
+
 
     /**
      * This method must return valid {@link PackageProducer} implementation. The producer can already be modified (e.g.
@@ -62,10 +72,6 @@ public abstract class PackageModelHelper implements Serializable {
         PackageProducer producer = getProducer();
         for(Filter filter : filtersOrders.values()) {
             filter.apply(producer);
-        }
-
-        if(pagination!= null) {
-            pagination.setMaxRecords((int)producer.getCount());
         }
 
         return producer;

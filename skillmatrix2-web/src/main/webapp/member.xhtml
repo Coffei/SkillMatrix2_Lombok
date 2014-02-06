@@ -84,7 +84,7 @@
                             <i class="icon-remove-sign"/>
                         </h:commandLink>
                     </h:panelGroup>
-                    <h:outputLink value="knowledges.jsf" styleClass="btn btn-success">
+                    <h:outputLink value="knowledges.jsf" styleClass="btn btn-success" style="margin-left:5px;">
                         <f:param name="id" value="#{memberDetail.member.id}"/>
                         <i class="icon-cog"/>
                         Edit knowledge
@@ -130,14 +130,7 @@
                 </rich:column>
 
                 <f:facet name="footer">
-                    <ul class="pagination">
-                        <a4j:repeat value="#{memberDetail.expertModel.pagination.listPages(5)}" var="page">
-                            <li class="#{page eq memberDetail.expertModel.pagination.currentPage ? 'active' : ''}">
-                                <a4j:commandLink value="#{page}" action="#{memberDetail.expertModel.pagination.goToPage(page)}"
-                                    render="@body @footer"/>
-                            </li>
-                        </a4j:repeat>
-                    </ul>
+                   <my:paginator paginationHelper="#{memberDetail.expertModel.pagination}"/>
                 </f:facet>
             </rich:dataTable>
 
@@ -179,14 +172,7 @@
                     </rich:column>
 
                     <f:facet name="footer">
-                        <ul class="pagination">
-                            <a4j:repeat value="#{memberDetail.intermediateModel.pagination.listPages(5)}" var="page">
-                                <li class="#{page eq memberDetail.intermediateModel.pagination.currentPage ? 'active' : ''}">
-                                    <a4j:commandLink value="#{page}" action="#{memberDetail.intermediateModel.pagination.goToPage(page)}"
-                                                     render="@body @footer"/>
-                                </li>
-                            </a4j:repeat>
-                        </ul>
+                        <my:paginator paginationHelper="#{memberDetail.intermediateModel.pagination}"/>
                     </f:facet>
                 </rich:dataTable>
 
@@ -227,14 +213,7 @@
                 </rich:column>
 
                 <f:facet name="footer">
-                    <ul class="pagination">
-                        <a4j:repeat value="#{memberDetail.beginnerModel.pagination.listPages(5)}" var="page">
-                            <li class="#{page eq memberDetail.beginnerModel.pagination.currentPage ? 'active' : ''}">
-                                <a4j:commandLink value="#{page}" action="#{memberDetail.beginnerModel.pagination.goToPage(page)}"
-                                                 render="@body @footer"/>
-                            </li>
-                        </a4j:repeat>
-                    </ul>
+                   <my:paginator paginationHelper="#{memberDetail.beginnerModel.pagination}"/>
                 </f:facet>
             </rich:dataTable>
 

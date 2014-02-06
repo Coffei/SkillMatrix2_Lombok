@@ -54,7 +54,13 @@ public abstract class SbrModelHelper implements Serializable {
             }
         };
 
-        this.pagination = new PaginationHelper(recordsPerPage, model.getRowCount());
+        this.pagination = new PaginationHelper(recordsPerPage) {
+            @Override
+            public int getMaxRecords() {
+                return (int)model.getProducer().getCount();
+            }
+        };
+
         this.pagination.addOnChangeListener(new PaginationHelper.RangeListener() {
             @Override
             public void doListen(SequenceRange range) {
@@ -73,8 +79,6 @@ public abstract class SbrModelHelper implements Serializable {
             filterOrder.apply(producer); //apply all filters and orders
         }
 
-        if(pagination!=null)
-            pagination.setMaxRecords((int)producer.getCount());
         return producer;
     }
 

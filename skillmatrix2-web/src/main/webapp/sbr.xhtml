@@ -141,14 +141,7 @@
                     </rich:column>
 
                     <f:facet name="footer">
-                        <ul class="pagination">
-                            <a4j:repeat value="#{sbrDetail.packageModel.pagination.listPages(5)}" var="page">
-                                <li class="#{sbrDetail.packageModel.pagination.currentPage eq page ? 'active' : ''}">
-                                    <a4j:commandLink value="#{page}" action="#{sbrDetail.packageModel.pagination.goToPage(page)}"
-                                                     render="@body @footer" execute="@this" />
-                                </li>
-                            </a4j:repeat>
-                        </ul>
+                       <my:paginator paginationHelper="#{sbrDetail.packageModel.pagination}"/>
                     </f:facet>
                 </rich:dataTable>
             </h:form>

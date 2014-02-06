@@ -4,6 +4,7 @@ import org.ajax4jsf.model.SequenceRange;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,18 +13,19 @@ import java.util.List;
  * Time: 2:11 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PaginationHelper {
+public abstract class PaginationHelper {
+    private final Logger log = Logger.getLogger(getClass().getName());
+
     //TODO: document
 
     private int recordsPerPage;
-    private int maxRecords;
+
 
     private List<RangeListener> onChangeListeners;
 
-    public PaginationHelper(int recordsPerPage, int maxRecords) {
+    public PaginationHelper(int recordsPerPage) {
         // TODO: check validity
         this.recordsPerPage = recordsPerPage;
-        this.maxRecords = maxRecords;
 
         currentPage = 1;
         offset = 0;
@@ -41,8 +43,9 @@ public class PaginationHelper {
 
         if(maxPages < 1) //extreme causes
             return new String[0];
-        if(maxPages == 1)
+        if(maxPages == 1) {
             return new String[]{String.valueOf(currentPage)};
+        }
 
         int maxVisiblePage;
         int minVisiblePage;
@@ -92,26 +95,15 @@ public class PaginationHelper {
         return recordsPerPage;
     }
 
-    public int getMaxRecords() {
-        return maxRecords;
-    }
+    public abstract int getMaxRecords();
 
-    public void setMaxRecords(int maxRecords) {
-        this.maxRecords = maxRecords;
-        int maxPages = getMaxPages();
-
-        if(currentPage > maxPages) { // current page is not valid anymore
-            currentPage = 1; // default to first page, other option is to display the last page
-        }
-
-        fireOnChange();
-    }
 
     public int getCurrentPage() {
         return currentPage;
     }
 
     public int getMaxPages() {
+        int maxRecords = getMaxRecords();
         return maxRecords % recordsPerPage == 0 ? maxRecords / recordsPerPage : (maxRecords / recordsPerPage) + 1;
     }
 

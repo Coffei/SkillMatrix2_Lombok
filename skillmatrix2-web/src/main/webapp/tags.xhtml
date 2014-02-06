@@ -73,14 +73,7 @@
                 </rich:column>
 
                 <f:facet name="footer">
-                    <ul class="pagination">
-                        <a4j:repeat value="#{packages.modelHelper.pagination.listPages(5)}" var="page">
-                            <li class="#{packages.modelHelper.pagination.currentPage eq page ? 'active' : ''}">
-                                <a4j:commandLink value="#{page}" action="#{packages.modelHelper.pagination.goToPage(page)}"
-                                                 render="@body @footer @header"/>
-                            </li>
-                        </a4j:repeat>
-                    </ul>
+                   <my:paginator paginationHelper="#{packages.modelHelper.pagination}"/>
                 </f:facet>
 
             </rich:dataTable>

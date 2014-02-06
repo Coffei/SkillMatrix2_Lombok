@@ -209,7 +209,7 @@
     </profiles>
 
     <properties>
-        <org.richfaces.bom.version>4.3.1.Final</org.richfaces.bom.version>
+        <org.richfaces.bom.version>4.3.4.Final</org.richfaces.bom.version>
     </properties>
 
 </project>
