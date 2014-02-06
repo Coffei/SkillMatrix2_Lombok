@@ -3,10 +3,6 @@ package com.redhat.gss.skillmatrix.controller.lists;
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
-import com.redhat.gss.skillmatrix.model.Member;
-import com.redhat.gss.skillmatrix.model.SBR;
-import org.joda.time.Duration;
-import org.joda.time.Period;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -23,7 +19,7 @@ import java.io.Serializable;
 @ViewScoped
 @ManagedBean
 public class Members implements Serializable {
-    public static final int MAX_RECORDS_PER_PAGE = 3;
+    public static final int MAX_RECORDS_PER_PAGE = 20;
 
     private MemberModelHelper modelHelper;
 

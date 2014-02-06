@@ -19,7 +19,7 @@ import java.io.Serializable;
 @ManagedBean
 @ViewScoped
 public class Packages  implements Serializable {
-    private static final int MAX_RECORDS_ON_PAGE = 3;
+    private static final int MAX_RECORDS_ON_PAGE = 20;
 
     @Inject
     private PackageDAO pkgDao;

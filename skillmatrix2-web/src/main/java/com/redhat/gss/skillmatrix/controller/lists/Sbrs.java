@@ -19,7 +19,7 @@ import java.io.Serializable;
 @ManagedBean
 @ViewScoped
 public class Sbrs implements Serializable {
-    private static final int MAX_RECORDS_ON_PAGE = 3;
+    private static final int MAX_RECORDS_ON_PAGE = 20;
 
     @Inject
     private SbrDAO sbrDAO;

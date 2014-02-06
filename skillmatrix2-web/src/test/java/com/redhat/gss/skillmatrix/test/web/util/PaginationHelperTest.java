@@ -6,30 +6,52 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Created with IntelliJ IDEA.
+ * Test class for PaginationHelper
  * User: jtrantin
  * Date: 8/20/13
  * Time: 4:53 PM
- * To change this template use File | Settings | File Templates.
+ * @see com.redhat.gss.skillmatrix.util.PaginationHelper
  */
 
 public class PaginationHelperTest {
 
-/*    @Test
+    /**
+     * Mock class, that simplifies maxRecords handling of PaginationHelper.
+     */
+    private static class FixedRecordsPaginationHelper extends PaginationHelper {
+
+        private int maxRecords;
+
+        private FixedRecordsPaginationHelper(int recordsPerPage, int maxRecords) {
+            super(recordsPerPage);
+            this.maxRecords = maxRecords;
+        }
+
+        @Override
+        public int getMaxRecords() {
+            return maxRecords;
+        }
+
+        public void setMaxRecords(int maxRecords) {
+            this.maxRecords = maxRecords;
+        }
+    }
+
+    @Test
     public void testMaxPages() throws Exception {
-        PaginationHelper helper = new PaginationHelper(20, 650);
+        PaginationHelper helper = new FixedRecordsPaginationHelper(20, 650);
         assertEquals("wrong max pages calculated", 33, helper.getMaxPages());
 
-        helper = new PaginationHelper(20, 15);
+        helper = new FixedRecordsPaginationHelper(20, 15);
         assertEquals("wrong max pages calculated", 1, helper.getMaxPages());
 
-        helper = new PaginationHelper(10, 50);
+        helper = new FixedRecordsPaginationHelper(10, 50);
         assertEquals("wrong max pages calculated", 5, helper.getMaxPages());
     }
 
     @Test
     public void testPaging() throws Exception {
-        PaginationHelper helper = new PaginationHelper(20, 650);
+        PaginationHelper helper = new FixedRecordsPaginationHelper(20, 650);
         helper.goToPage(20);
 
         assertEquals("wrong current page", 20, helper.getCurrentPage());
@@ -74,7 +96,7 @@ public class PaginationHelperTest {
 
     @Test
     public void testListPages() throws Exception {
-        PaginationHelper helper = new PaginationHelper(20, 650);
+        PaginationHelper helper = new FixedRecordsPaginationHelper(20, 650);
 
         String[] pages = helper.listPages(5);
         assertEquals("wrong number of generated pages", 5, pages.length);
@@ -118,7 +140,7 @@ public class PaginationHelperTest {
         assertEquals("wrong page generated", "31", pages[3]);
         assertEquals("wrong page generated", "32", pages[4]);
 
-        helper = new PaginationHelper(3, 12);
+        helper = new FixedRecordsPaginationHelper(3, 12);
         helper.goToPage(4);
         pages = helper.listPages(5);
         assertEquals("wrong number of generated pages", 4, pages.length);
@@ -144,12 +166,12 @@ public class PaginationHelperTest {
         assertEquals("wrong page generated", "4", pages[3]);
 
 
-        helper = new PaginationHelper(20, 10);
+        helper = new FixedRecordsPaginationHelper(20, 10);
         pages = helper.listPages(5);
         assertEquals("wrong number of generated pages", 1, pages.length);
         assertEquals("wrong page generated", "1", pages[0]);
 
-    }*/
+    }
 
     //TODO: improve, e.g. validity checks
 }

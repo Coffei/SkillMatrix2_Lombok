@@ -5,18 +5,15 @@ import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
-import com.redhat.gss.skillmatrix.model.*;
-import com.redhat.gss.skillmatrix.model.Package;
+import com.redhat.gss.skillmatrix.model.Member;
+import com.redhat.gss.skillmatrix.model.SBR;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -29,7 +26,7 @@ import java.util.logging.Logger;
 @ManagedBean
 @ViewScoped
 public class MemberDetail {
-    private static final int PACKAGE_RECORDS = 3;
+    private static final int PACKAGE_RECORDS = 5;
 
     @Inject
     private MemberDAO memberDAO;
@@ -74,7 +71,7 @@ public class MemberDetail {
                             try {
                                 return pkgDao.getProducerFactory().filterKnowledgeByPerson(member, 2);
                             } catch (MemberInvalidException e) {
-                                log.severe(e.getStackTrace().toString());
+                                log.severe(Arrays.toString(e.getStackTrace()));
                                 return null; //should not happen
                             }
                         }
@@ -86,7 +83,7 @@ public class MemberDetail {
                             try {
                                 return pkgDao.getProducerFactory().filterKnowledgeByPerson(member, 1);
                             } catch (MemberInvalidException e) {
-                                log.severe(e.getStackTrace().toString());
+                                log.severe(Arrays.toString(e.getStackTrace()));
                                 return null;
                             }
                         }
@@ -98,7 +95,7 @@ public class MemberDetail {
                             try {
                                 return pkgDao.getProducerFactory().filterKnowledgeByPerson(member, 0);
                             } catch (MemberInvalidException e) {
-                                log.severe(e.getStackTrace().toString());
+                                log.severe(Arrays.toString(e.getStackTrace()));
                                 return null;
                             }
                         }

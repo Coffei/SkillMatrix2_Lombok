@@ -6,8 +6,8 @@ import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
-import com.redhat.gss.skillmatrix.model.*;
-import com.redhat.gss.skillmatrix.model.Package;
+import com.redhat.gss.skillmatrix.model.Coach;
+import com.redhat.gss.skillmatrix.model.SBR;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -28,7 +28,7 @@ import java.util.List;
 @ManagedBean
 @ViewScoped
 public class SbrDetail {
-    private static final int RECORDS_PER_PAGE = 20;
+    private static final int RECORDS_PER_PAGE = 10;
 
     @Inject
     private SbrDAO dao;
@@ -89,7 +89,4 @@ public class SbrDetail {
         return packageModel;
     }
 
-    public void setPackageModel(PackageModelHelper packageModel) {
-        this.packageModel = packageModel;
-    }
 }

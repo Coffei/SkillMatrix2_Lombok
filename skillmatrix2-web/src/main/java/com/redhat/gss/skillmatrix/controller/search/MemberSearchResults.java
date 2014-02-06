@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 @ManagedBean
 @ViewScoped
 public class MemberSearchResults {
-    public static final int MAX_RECORDS_PER_PAGE = 3;
+    public static final int MAX_RECORDS_PER_PAGE = 20;
 
     private List<Filter> filters;
 
