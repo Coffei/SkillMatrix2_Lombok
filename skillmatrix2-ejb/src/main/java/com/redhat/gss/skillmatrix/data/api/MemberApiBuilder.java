@@ -74,7 +74,7 @@ public class MemberApiBuilder {
         }
         Period offsetPeriod = new Duration(offset * 60 * 1000).toPeriod();
 
-        builder.append(String.format("%02d:02d)", offsetPeriod.getHours(), offsetPeriod.getMinutes()));
+        builder.append(String.format("%02d:%02d)", offsetPeriod.getHours(), offsetPeriod.getMinutes()));
 
         return builder.toString();
     }
