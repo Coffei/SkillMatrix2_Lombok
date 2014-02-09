@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -27,6 +28,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  */
 @Entity
+@ToString(includeFieldNames=true, exclude={"coaches", "packages", "members"})
 public class SBR implements Serializable {
 	/**
 	 * Serial ID, change with care
@@ -101,12 +103,5 @@ public class SBR implements Serializable {
 
 		return true;
 	}
-
-	@Override
-	public String toString() {
-		return "SBR [id=" + id + ", name=" + name + "]";
-	}
-	
-	
 
 }

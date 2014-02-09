@@ -5,6 +5,7 @@ import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
@@ -26,20 +27,14 @@ import com.redhat.gss.skillmatrix.model.GeoEnum;
         name = "GEO",
         page = "geo.xhtml",
         type = FilterType.BASIC)
+@ToString(includeFieldNames=true)
 public class GeoFilter implements Filter {
 
 	@Getter
 	@Setter
     private GeoEnum value;
 
-    @Override
-    public String toString() {
-        return "GeoFilter{" +
-                "value=" + value +
-                '}';
-    }
-
-    @Override
+	@Override
     public String encode() {
        Map<String, String> data  = new HashMap<String, String>(1);
        data.put("geo", value.toString());
