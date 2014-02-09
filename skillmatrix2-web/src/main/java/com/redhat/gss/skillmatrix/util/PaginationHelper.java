@@ -1,10 +1,12 @@
 package com.redhat.gss.skillmatrix.util;
 
-import org.ajax4jsf.model.SequenceRange;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import lombok.Getter;
+
+import org.ajax4jsf.model.SequenceRange;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +19,7 @@ public abstract class PaginationHelper {
     private final Logger log = Logger.getLogger(getClass().getName());
 
     //TODO: document
-
+    @Getter
     private int recordsPerPage;
 
 
@@ -97,9 +99,7 @@ public abstract class PaginationHelper {
             goToPage(1);
     }
 
-    public int getRecordsPerPage() {
-        return recordsPerPage;
-    }
+    
 
     public abstract int getMaxRecords();
 

@@ -1,5 +1,8 @@
 package com.redhat.gss.skillmatrix.data.dao.exceptions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import com.redhat.gss.skillmatrix.model.Member;
 
 /**
@@ -11,6 +14,7 @@ import com.redhat.gss.skillmatrix.model.Member;
  */
 public class MemberInvalidException extends Exception {
 
+	@Getter @Setter
     private Member invalidMember;
 
     public MemberInvalidException() {
@@ -44,11 +48,4 @@ public class MemberInvalidException extends Exception {
         super(cause);
     }
 
-    public Member getInvalidMember() {
-        return invalidMember;
-    }
-
-    public void setInvalidMember(Member invalidMember) {
-        this.invalidMember = invalidMember;
-    }
 }

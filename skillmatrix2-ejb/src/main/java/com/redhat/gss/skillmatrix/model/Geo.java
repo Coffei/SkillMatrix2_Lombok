@@ -1,8 +1,15 @@
 package com.redhat.gss.skillmatrix.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Entity class representing a Geographic location. It is represented by a code of the geo (e.g. EMEA, NA/SA) and the time zone offset.
@@ -21,28 +28,17 @@ public class Geo implements Serializable {
 
     @Id
     @GeneratedValue
+    @Getter @Setter
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Getter @Setter
     private GeoEnum geocode;
 
+    @Getter @Setter
     private int offset;
 
-    public GeoEnum getGeocode() {
-        return geocode;
-    }
 
-    public void setGeocode(GeoEnum geocode) {
-        this.geocode = geocode;
-    }
-
-    public int getOffset() {
-        return offset;
-    }
-
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
 
     @Override
     // compares ids, if ids are null, it compares geocode and offset

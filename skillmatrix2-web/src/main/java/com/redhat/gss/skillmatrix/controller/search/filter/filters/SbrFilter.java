@@ -1,5 +1,20 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
 import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
@@ -10,18 +25,6 @@ import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.model.SBR;
-
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.inject.Inject;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,6 +40,7 @@ import java.util.logging.Logger;
 public class SbrFilter implements Filter {
     private final Logger log = Logger.getLogger(getClass().getName());
 
+    @Getter @Setter
     private SBR value;
 
     private SbrDAO sbrDAO;
@@ -58,14 +62,6 @@ public class SbrFilter implements Filter {
         return sbrDAO;
     }
 
-
-    public SBR getValue() {
-        return value;
-    }
-
-    public void setValue(SBR value) {
-        this.value = value;
-    }
 
     @Override
     public String toString() {

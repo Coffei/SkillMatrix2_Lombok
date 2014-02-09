@@ -1,5 +1,22 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import lombok.Getter;
+
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
 import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
@@ -8,20 +25,9 @@ import com.redhat.gss.skillmatrix.controller.search.filter.filters.util.Attribut
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
 import com.redhat.gss.skillmatrix.model.Package;
-
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,17 +43,18 @@ import java.util.regex.Pattern;
 public class PackageKnowledgeFilter implements Filter {
     private Logger log = Logger.getLogger(getClass().getName());
 
-   private Map<Package, Integer> packages;
+    @Getter
+    private Map<Package, Integer> packagesMap;
 
     public PackageKnowledgeFilter() {
-        packages = new HashMap<Package, Integer>();
+        packagesMap = new HashMap<Package, Integer>();
         log.info(getClass().getSimpleName() + " filter created");
     }
 
     @Override
     public String encode() {
-        Map<String, String> data = new HashMap<String, String>(packages.size());
-        for (Map.Entry<Package, Integer> entry : packages.entrySet()) {
+        Map<String, String> data = new HashMap<String, String>(packagesMap.size());
+        for (Map.Entry<Package, Integer> entry : packagesMap.entrySet()) {
             String key = "pkg" + entry.getKey().getId();
             String value = entry.getValue().toString();
             data.put(key, value); //put 'pkgXX'-> Y, where XX is pkg ID, Y is min. know level
@@ -69,7 +76,7 @@ public class PackageKnowledgeFilter implements Filter {
               long id = Long.parseLong(keyMatcher.group(1));
                 Package pkg = loadPackage(id);
                 if(pkg!=null)
-                    packages.put(pkg, Integer.parseInt(entry.getValue()));
+                    packagesMap.put(pkg, Integer.parseInt(entry.getValue()));
             }
         }
 
@@ -106,7 +113,7 @@ public class PackageKnowledgeFilter implements Filter {
 
     @Override
     public void applyOnProducer(MemberProducer producer) {
-        for (Map.Entry<Package, Integer> entry : packages.entrySet()) {
+        for (Map.Entry<Package, Integer> entry : packagesMap.entrySet()) {
             try {
             producer.filterKnowledgeOfPackage(entry.getKey(), entry.getValue(), OperatorEnum.BIGGER_OR_EQUAL);
             } catch (PackageInvalidException e) { //log and ignore
@@ -118,7 +125,7 @@ public class PackageKnowledgeFilter implements Filter {
     @Override
     public String explain() {
         StringBuilder desc = new StringBuilder("knowledge of packages: <ul>");
-        for (Map.Entry<Package, Integer> entry : packages.entrySet()) {
+        for (Map.Entry<Package, Integer> entry : packagesMap.entrySet()) {
             desc.append("<li>");
             desc.append(entry.getKey().getName());
 
@@ -136,26 +143,22 @@ public class PackageKnowledgeFilter implements Filter {
         return desc.toString();
     }
 
-    public Map<Package, Integer> getPackagesMap() {
-        return packages;
-    }
-
     public List<Package> getPackages() {
-        return new ArrayList<Package>(packages.keySet());
+        return new ArrayList<Package>(packagesMap.keySet());
     }
 
     public void addPackage(Package pkg) {
         if(pkg==null)
             return;
-        packages.put(pkg, 0);
+        packagesMap.put(pkg, 0);
         log.info(pkg.getName() + " pkg added");
     }
 
     public void removePackage(Package pkg) {
-        packages.remove(pkg);
+        packagesMap.remove(pkg);
     }
 
-    public boolean  isPackageUsed(Package pkg) {
-        return packages.containsKey(pkg);
+    public boolean isPackageUsed(Package pkg) {
+        return packagesMap.containsKey(pkg);
     }
 }

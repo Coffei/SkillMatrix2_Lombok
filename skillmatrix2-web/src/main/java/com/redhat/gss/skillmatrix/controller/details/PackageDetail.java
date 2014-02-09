@@ -1,21 +1,22 @@
 package com.redhat.gss.skillmatrix.controller.details;
 
-import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
 import com.redhat.gss.skillmatrix.model.Package;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Produces;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * ManagedBean for Package detail view.
@@ -37,6 +38,8 @@ public class PackageDetail {
     @Inject
     private MemberDAO memberDao;
 
+    @Getter
+    @Setter
     private Package pkg;
 
     @PostConstruct
@@ -101,14 +104,4 @@ public class PackageDetail {
         return beginners;
     }
 
-
-
-
-    public Package getPkg() {
-        return pkg;
-    }
-
-    public void setPkg(Package pkg) {
-        this.pkg = pkg;
-    }
 }

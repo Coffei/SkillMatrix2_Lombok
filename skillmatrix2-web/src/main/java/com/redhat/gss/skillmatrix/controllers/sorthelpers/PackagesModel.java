@@ -1,16 +1,18 @@
 package com.redhat.gss.skillmatrix.controllers.sorthelpers;
 
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.SbrProducer;
-import com.redhat.gss.skillmatrix.model.*;
-import com.redhat.gss.skillmatrix.model.Package;
+import java.util.List;
+
+import javax.faces.context.FacesContext;
+
+import lombok.Getter;
+
 import org.ajax4jsf.model.DataVisitor;
 import org.ajax4jsf.model.ExtendedDataModel;
 import org.ajax4jsf.model.Range;
 import org.ajax4jsf.model.SequenceRange;
 
-import javax.faces.context.FacesContext;
-import java.util.List;
+import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
+import com.redhat.gss.skillmatrix.model.Package;
 
 /**
  * RichFaces model for {@link Package}. This model is very flexible and can be used for any package-related tables. Just modify
@@ -21,7 +23,8 @@ import java.util.List;
  */
 public abstract class PackagesModel extends ExtendedDataModel<Package> {
 
-    private Integer key;
+	@Getter
+    private Integer rowKey;
 
     private PackageProducer producer;
 
@@ -37,14 +40,11 @@ public abstract class PackagesModel extends ExtendedDataModel<Package> {
     @Override
     public void setRowKey(Object o) {
         if(o instanceof Integer) {
-            key = (Integer)o;
+            rowKey = (Integer)o;
         }
     }
 
-    @Override
-    public Object getRowKey() {
-        return key;
-    }
+   
 
     @Override
     public void walk(FacesContext facesContext, DataVisitor dataVisitor, Range range, Object o) {
@@ -62,7 +62,7 @@ public abstract class PackagesModel extends ExtendedDataModel<Package> {
 
     @Override
     public boolean isRowAvailable() {
-        return key!=null;
+        return rowKey!=null;
     }
 
     @Override
@@ -74,7 +74,7 @@ public abstract class PackagesModel extends ExtendedDataModel<Package> {
 
     @Override
     public Package getRowData() {
-        return pkgs.get(key);
+        return pkgs.get(rowKey);
     }
 
     @Override

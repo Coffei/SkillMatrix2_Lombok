@@ -1,10 +1,8 @@
 package com.redhat.gss.skillmatrix.controller.search;
 
-import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
-import com.redhat.gss.skillmatrix.controller.search.filter.filters.util.FilterCreator;
-import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -12,9 +10,14 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
+
+import lombok.Getter;
+
+import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
+import com.redhat.gss.skillmatrix.controller.search.filter.filters.util.FilterCreator;
+import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
+import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,6 +31,7 @@ import java.util.logging.Logger;
 public class MemberSearchResults {
     public static final int MAX_RECORDS_PER_PAGE = 20;
 
+    @Getter
     private List<Filter> filters;
 
     @Inject
@@ -39,7 +43,9 @@ public class MemberSearchResults {
     @Inject
     private Logger log;
 
+    @Getter
     private MemberModelHelper modelHelper;
+    @Getter
     private int failedFilters = 0;
 
     @PostConstruct
@@ -84,17 +90,5 @@ public class MemberSearchResults {
         }
 
         log.info(String.format("There are %d filters- %d are applied to model.", filters.size(), modelFilters.size()));
-    }
-
-    public MemberModelHelper getModelHelper() {
-        return modelHelper;
-    }
-
-    public List<Filter> getFilters() {
-        return filters;
-    }
-
-    public int getFailedFilters() {
-        return failedFilters;
     }
 }

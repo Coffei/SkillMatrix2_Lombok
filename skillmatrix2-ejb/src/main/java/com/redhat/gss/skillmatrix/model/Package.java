@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -25,58 +28,27 @@ public class Package implements Serializable {
 
 	@Id
 	@GeneratedValue
+	@Getter @Setter
 	private Long id;
 
-
+	@Getter @Setter
 	private boolean deprecated;
 
+	/**
+	 * Name of package
+	 */
 	@NotNull
 	@NotEmpty
+	@Getter @Setter
 	private String name;
 
+	/**
+	 * Package SBR
+	 */
 	@ManyToOne(optional=true)
 	@JoinColumn(nullable=true)
+	@Getter @Setter
 	private SBR sbr;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
-	public boolean isDeprecated() {
-		return deprecated;
-	}
-
-	public void setDeprecated(boolean deprecated) {
-		this.deprecated = deprecated;
-	}
-
-	/**
-	 * @return packages name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return packages SBR
-	 * @see SBR
-	 */
-	public SBR getSbr() {
-		return sbr;
-	}
-
-	public void setSbr(SBR sbr) {
-		this.sbr = sbr;
-	}
 
 
 

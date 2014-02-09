@@ -1,14 +1,17 @@
 package com.redhat.gss.skillmatrix.controller.lists;
 
-import com.redhat.gss.skillmatrix.controllers.sorthelpers.SbrModelHelper;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.SbrProducer;
+import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import java.io.Serializable;
+
+import lombok.Getter;
+
+import com.redhat.gss.skillmatrix.controllers.sorthelpers.SbrModelHelper;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
+import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.SbrProducer;
 
 /**
  * Controller bean for all SBRs view.
@@ -24,6 +27,7 @@ public class Sbrs implements Serializable {
     @Inject
     private SbrDAO sbrDAO;
 
+    @Getter
     private SbrModelHelper modelHelper;
 
 
@@ -39,9 +43,5 @@ public class Sbrs implements Serializable {
 
     public int getMaxRecordsOnPage() {
         return MAX_RECORDS_ON_PAGE;
-    }
-
-    public SbrModelHelper getModelHelper() {
-        return modelHelper;
     }
 }

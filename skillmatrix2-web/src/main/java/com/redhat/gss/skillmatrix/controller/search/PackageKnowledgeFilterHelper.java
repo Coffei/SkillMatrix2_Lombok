@@ -1,21 +1,17 @@
 package com.redhat.gss.skillmatrix.controller.search;
 
-import com.redhat.gss.skillmatrix.controllers.sorthelpers.PackageModelHelper;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
-import com.redhat.gss.skillmatrix.model.*;
-import com.redhat.gss.skillmatrix.model.Package;
+import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import lombok.Getter;
+
+import com.redhat.gss.skillmatrix.controllers.sorthelpers.PackageModelHelper;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
+import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,6 +28,7 @@ public class PackageKnowledgeFilterHelper implements Serializable {
 
     @Inject
     private PackageDAO pkgDao;
+    @Getter
     private PackageModelHelper pkgModelHelper;
 
 
@@ -46,10 +43,4 @@ public class PackageKnowledgeFilterHelper implements Serializable {
 
 
     }
-
-
-    public PackageModelHelper getPkgModelHelper() {
-        return pkgModelHelper;
-    }
-
 }

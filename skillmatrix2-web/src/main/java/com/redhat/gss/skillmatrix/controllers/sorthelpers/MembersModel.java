@@ -1,14 +1,19 @@
 package com.redhat.gss.skillmatrix.controllers.sorthelpers;
 
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
-import com.redhat.gss.skillmatrix.model.Member;
+import java.util.List;
+
+import javax.faces.context.FacesContext;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import org.ajax4jsf.model.DataVisitor;
 import org.ajax4jsf.model.ExtendedDataModel;
 import org.ajax4jsf.model.Range;
 import org.ajax4jsf.model.SequenceRange;
 
-import javax.faces.context.FacesContext;
-import java.util.List;
+import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
+import com.redhat.gss.skillmatrix.model.Member;
 
 /**
  * RichFaces model for Members. This model is very flexible and can be used for any member-related tables. Just modify
@@ -19,13 +24,23 @@ import java.util.List;
  */
 public abstract class MembersModel extends ExtendedDataModel<Member> {
 
-    private Integer key;
+	@Getter
+    private Integer rowKey;
 
+	
     private MemberProducer producer;
 
     private List<Member> members;
 
+    /**
+	 * Range of displayed data.
+	 * 
+	 * @return range of currently displayed data
+	 * @param range valid sequence range
+	 */
+	@Getter @Setter
     private SequenceRange range;
+    
 
     public MembersModel() {
         this.range = new SequenceRange(0, Integer.MAX_VALUE);
@@ -34,14 +49,11 @@ public abstract class MembersModel extends ExtendedDataModel<Member> {
     @Override
     public void setRowKey(Object o) {
         if(o instanceof Integer) {
-            key = (Integer)o;
+            rowKey = (Integer)o;
         }
     }
 
-    @Override
-    public Object getRowKey() {
-        return key;
-    }
+   
 
     @Override
     public void walk(FacesContext facesContext, DataVisitor dataVisitor, Range range, Object o) {
@@ -59,7 +71,7 @@ public abstract class MembersModel extends ExtendedDataModel<Member> {
 
     @Override
     public boolean isRowAvailable() {
-        return key!=null;
+        return rowKey!=null;
     }
 
     @Override
@@ -71,7 +83,7 @@ public abstract class MembersModel extends ExtendedDataModel<Member> {
 
     @Override
     public Member getRowData() {
-        return members.get(key);
+        return members.get(rowKey);
     }
 
     @Override
@@ -94,21 +106,7 @@ public abstract class MembersModel extends ExtendedDataModel<Member> {
         // noop
     }
 
-    /**
-     *
-     * @return range of displayed data.
-     */
-    public SequenceRange getRange() {
-        return range;
-    }
-
-    /**
-     * Sets the range of displayed data
-     * @param range valid sequence range.
-     */
-    public void setRange(SequenceRange range) {
-        this.range = range;
-    }
+   
 
     /**
      * Must return a valid {@link MemberProducer}. The producer can be already modified.

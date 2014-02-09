@@ -1,21 +1,29 @@
 package com.redhat.gss.skillmatrix.controller.search;
 
 
-import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
-import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
-import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
-import com.redhat.gss.skillmatrix.controller.search.filter.filters.util.AttributeEncoder;
-import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
-import com.redhat.gss.skillmatrix.model.GeoEnum;
-import org.reflections.Reflections;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.util.*;
-import java.util.logging.Logger;
+
+import lombok.Getter;
+
+import org.reflections.Reflections;
+
+import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
+import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
+import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
+import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,13 +42,19 @@ public class MemberSearch {
     @Inject
     private Reflections reflections;
 
+    @Getter
     private SortedMap<String, Class<?>> availableBasicFilters;
+    @Getter
     private SortedMap<String, Class<?>> availableAdvancedFilters;
     //should be list of filters, but we need to have
+    @Getter
     private List<Filter> basicFilters;
+    @Getter
     private List<String> basicFiltersNames;
 
+    @Getter
     private List<Filter> advancedFilters;
+    @Getter
     private List<String> advancedFiltersNames;
 
 
@@ -94,9 +108,6 @@ public class MemberSearch {
     }
 
 
-    public SortedMap<String, Class<?>> getAvailableBasicFilters() {
-        return availableBasicFilters;
-    }
 
     public void addBasicFilter() {
         basicFiltersNames.add(null);
@@ -114,14 +125,7 @@ public class MemberSearch {
         advancedFiltersNames.remove(index);
     }
 
-    public List<Filter> getBasicFilters() {
-        return basicFilters;
-    }
-
-    public List<String> getBasicFiltersNames() {
-        return basicFiltersNames;
-    }
-
+   
 
 
     public String resolve(Filter filter) {
@@ -147,17 +151,9 @@ public class MemberSearch {
         return Arrays.asList(OperatorEnum.values());
     }
 
-    public SortedMap<String, Class<?>> getAvailableAdvancedFilters() {
-        return availableAdvancedFilters;
-    }
+     
 
-    public List<Filter> getAdvancedFilters() {
-        return advancedFilters;
-    }
-
-    public List<String> getAdvancedFiltersNames() {
-        return advancedFiltersNames;
-    }
+    
 
     private static class FilterNameList extends AbstractList<String> {
         private final Logger log = Logger.getLogger(getClass().getName());

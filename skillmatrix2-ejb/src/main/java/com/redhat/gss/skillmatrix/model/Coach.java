@@ -1,7 +1,16 @@
 package com.redhat.gss.skillmatrix.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Entity representing an SBR coach.
@@ -15,66 +24,30 @@ public class Coach {
 
     @Id
     @GeneratedValue
+    @Getter @Setter
     private Long id;
 
+    /**
+     * The member that is this coach
+     */
     @OneToOne
     @NotNull
+    @Getter @Setter
     private Member member;
 
-    @ManyToOne()
+    @ManyToOne
+    @Getter @Setter
     private SBR sbr;
 
+    /**
+     * SBR role of this coach
+     */
+    @Getter @Setter
     private String sbr_role;
 
     @Enumerated(EnumType.STRING)
+    @Getter @Setter
     private GeoEnum geocode;
-
-    /**
-     * @return the member that is the coach
-     */
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-    /**
-     * The sbr role of this coach
-     * @return
-     */
-    public String getSbr_role() {
-        return sbr_role;
-    }
-
-    public void setSbr_role(String sbr_role) {
-        this.sbr_role = sbr_role;
-    }
-
-    public SBR getSbr() {
-        return sbr;
-    }
-
-    public void setSbr(SBR sbr) {
-        this.sbr = sbr;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public GeoEnum getGeocode() {
-        return geocode;
-    }
-
-    public void setGeocode(GeoEnum geocode) {
-        this.geocode = geocode;
-    }
 
     @Override
     // compares first the ids, then the members if ids are null

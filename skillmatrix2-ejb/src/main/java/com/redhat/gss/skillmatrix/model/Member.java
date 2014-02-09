@@ -3,10 +3,21 @@ package com.redhat.gss.skillmatrix.model;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -26,158 +37,81 @@ public class Member implements Serializable {
 	private static final long serialVersionUID = 5167447177946142914L;
 
 	
-
+	/**
+	 * Database ID
+	 */
 	@Id
 	@GeneratedValue
+	@Getter @Setter
     private Long id;
 
+	/**
+	 * Members name
+	 */
 	@NotNull
 	@Size(min = 1, max = 50)
+	@Getter @Setter
 	private String name;
 
+	/**
+	 * Unified Id
+	 */
     @Column(unique = true)
+    @Getter @Setter
     private String unifiedId;
 
+    /**
+     * Members email
+     */
 	@NotNull
 	@NotEmpty
 	@Email
+	@Getter @Setter
 	private String email;
 	
+	/**
+	 * Members nick- usually kerberos
+	 */
 	@NotNull
 	@NotEmpty
     @Column(unique = true)
+	@Getter @Setter
 	private String nick;
 	
+	/**
+	 * Members extension- phone number
+	 */
 	@Pattern(regexp="[0-9]*", message="must contain only digits")
+	@Getter @Setter
 	private String extension;
 
+	/**
+	 * The geo members located in
+	 */
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @Getter @Setter
 	private Geo geo;
-	
+    
+    /**
+     * Members role
+     */
+    @Getter @Setter
 	private String role;
 	
-
+    /**
+     * SBRs member is in.
+     */
 	@ManyToMany()
+	@Getter @Setter
     private List<SBR> sbrs;
 
+	/**
+	 * Knowledges member has
+	 */
 	@OneToMany(mappedBy="member", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@Getter @Setter
     private List<Knowledge> knowledges;
 	
-	/**
-	 * @return persons nick
-	 */
-	public String getNick() {
-		return nick;
-	}
-
-	public void setNick(String nick) {
-		this.nick = nick;
-	}
-
-	/**
-	 * @return persons ID
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return persons name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the extension
-	 */
-	public String getExtension() {
-		return extension;
-	}
-
-	/**
-	 * @param extension the extension to set
-	 */
-	public void setExtension(String extension) {
-		this.extension = extension;
-	}
-
-    /**
-     * @return the geo the member is based in
-     * @see Geo
-     */
-    public Geo getGeo() {
-        return geo;
-    }
-
-    public void setGeo(Geo geo) {
-        this.geo = geo;
-    }
-
-    /**
-	 * @return the role
-	 */
-	public String getRole() {
-		return role;
-	}
-
-	/**
-	 * @param role the role to set
-	 */
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	/**
-	 * @return persons email
-	 */
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
-	 * @return List of knowledges, all of which belong to this member. No other knowledges belong to this member.
-	 * @see Knowledge
-	 */
-	public List<Knowledge> getKnowledges() {
-		return knowledges;
-	}
-
-	public void setKnowledges(List<Knowledge> knowledge) {
-		this.knowledges = knowledge;
-	}
-
-    /**
-     * @return list of sbrs the member is joined in.
-     * @see SBR
-     */
-    public List<SBR> getSbrs() {
-        return sbrs;
-    }
-
-    public void setSbrs(List<SBR> sbrs) {
-        this.sbrs = sbrs;
-    }
-
-    public String getUnifiedId() {
-        return unifiedId;
-    }
-
-    public void setUnifiedId(String unifiedId) {
-        this.unifiedId = unifiedId;
-    }
 
     @Override
 	public String toString() {

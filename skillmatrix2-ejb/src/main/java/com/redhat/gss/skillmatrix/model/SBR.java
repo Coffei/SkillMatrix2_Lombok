@@ -15,6 +15,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -30,78 +33,43 @@ public class SBR implements Serializable {
 	 */
 	private static final long serialVersionUID = 3124032505555307073L;
 
+	/**
+	 * Database ID
+	 */
 	@Id
 	@GeneratedValue
+	@Getter @Setter
 	private Long id;
 
+	/**
+	 * List of coaches of this SBR
+	 */
 	@OneToMany(mappedBy = "sbr", cascade = CascadeType.ALL)
+	@Getter @Setter
     private List<Coach> coaches;
 
+	/**
+	 * Name of this SBR
+	 */
 	@NotNull
 	@NotEmpty
+	@Getter @Setter
 	private String name;
 
+	/**
+	 * List of packages within this SBR
+	 */
 	@OneToMany(mappedBy="sbr")
+	@Getter @Setter
     private List<Package> packages;
 	
+	/**
+	 * List of members of this SBR
+	 */
 	@ManyToMany(mappedBy = "sbrs")
+	@Getter @Setter
     private List<Member> members;
 
-	/**
-	 * @return ID
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return list of packages within this SBR
-	 */
-	public List<Package> getPackages() {
-		return packages;
-	}
-
-	public void setPackages(List<Package> packages) {
-		this.packages = packages;
-	}
-
-    /**
-     * @return list of coaches of this SBR
-     */
-    public List<Coach> getCoaches() {
-        return coaches;
-    }
-
-    public void setCoaches(List<Coach> coaches) {
-        this.coaches = coaches;
-    }
-
-    /**
-	 * @return name of this SBR
-	 */
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-    /**
-     * @return list of members of this sbr
-     * @see Member
-     */
-    public List<Member> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<Member> members) {
-        this.members = members;
-    }
 
     @Override
 	public int hashCode() {

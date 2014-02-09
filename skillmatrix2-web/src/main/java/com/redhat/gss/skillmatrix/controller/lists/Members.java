@@ -3,6 +3,8 @@ package com.redhat.gss.skillmatrix.controller.lists;
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -21,6 +23,7 @@ import java.io.Serializable;
 public class Members implements Serializable {
     public static final int MAX_RECORDS_PER_PAGE = 20;
 
+    @Getter
     private MemberModelHelper modelHelper;
 
     @Inject
@@ -39,13 +42,9 @@ public class Members implements Serializable {
     }
 
 
-    public MemberModelHelper getModelHelper() {
-        return modelHelper;
-    }
-
-
-
+ 
     public int getMaxRecordsPerPage() {
         return MAX_RECORDS_PER_PAGE;
+
     }
 }

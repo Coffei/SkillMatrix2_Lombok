@@ -1,6 +1,8 @@
 package com.redhat.gss.skillmatrix.data.dao.exceptions;
 
-import com.redhat.gss.skillmatrix.model.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import com.redhat.gss.skillmatrix.model.Package;
 
 /**
@@ -12,6 +14,7 @@ import com.redhat.gss.skillmatrix.model.Package;
  */
 public class PackageInvalidException extends Exception {
 
+	@Getter @Setter
     private Package pkg;
 
     public PackageInvalidException() {
@@ -43,13 +46,5 @@ public class PackageInvalidException extends Exception {
 
     public PackageInvalidException(Throwable cause) {
         super(cause);
-    }
-
-    public Package getPkg() {
-        return pkg;
-    }
-
-    public void setPkg(Package pkg) {
-        this.pkg = pkg;
     }
 }
