@@ -10,11 +10,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.*;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,29 +27,23 @@ import java.util.logging.Logger;
  * Time: 9:39 AM
  * To change this template use File | Settings | File Templates.
  */
+@RequiredArgsConstructor
 public class SbrProducerDB implements SbrProducer {
     private final Logger log = Logger.getLogger(getClass().getName());
 
+    @NonNull
     private EntityManager em;
 
-    private List<Filter> filters;
-    private List<Ordering> orders;
+    @NonNull
     private UserTransaction transaction;
+    
+    private List<Filter> filters = new LinkedList<Filter>();
+    private List<Ordering> orders = new LinkedList<Ordering>();
+    
+    
 
     private Integer maxRecords;
     private Integer startOffset;
-
-    public SbrProducerDB(EntityManager em, UserTransaction transaction) {
-        if(em==null)
-            throw new IllegalArgumentException("entity manager must be provided", new NullPointerException("em"));
-        if(transaction==null)
-            throw new IllegalArgumentException("user transaction must be provided", new NullPointerException("transaction"));
-
-        this.em = em;
-        this.filters = new LinkedList<Filter>();
-        this.orders = new LinkedList<Ordering>();
-        this.transaction = transaction;
-    }
 
     @Override
     public SbrProducer filterId(final long id) {

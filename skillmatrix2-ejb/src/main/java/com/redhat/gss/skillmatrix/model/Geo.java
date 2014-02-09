@@ -9,6 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -19,12 +22,9 @@ import lombok.Setter;
  * @see GeoEnum
  */
 @Entity
+@RequiredArgsConstructor
+@NoArgsConstructor
 public class Geo implements Serializable {
-    public Geo() {}
-    public Geo(GeoEnum geocode, int offset) {
-        this.geocode = geocode;
-        this.offset = offset;
-    }
 
     @Id
     @GeneratedValue
@@ -33,9 +33,11 @@ public class Geo implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Getter @Setter
+    @NonNull
     private GeoEnum geocode;
 
     @Getter @Setter
+    @NonNull
     private int offset;
 
 

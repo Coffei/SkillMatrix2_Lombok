@@ -10,9 +10,13 @@ import com.redhat.gss.skillmatrix.model.Package;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Database implementation of {@link PackageProducer}.
@@ -21,24 +25,17 @@ import java.util.Locale;
  * Time: 2:53 PM
  * To change this template use File | Settings | File Templates.
  */
+@RequiredArgsConstructor
 public class PackageProducerDB implements PackageProducer {
 
+	@NonNull
     private EntityManager em;
 
-    private List<Filter> filters;
-    private List<Ordering> orderings;
+    private List<Filter> filters = new LinkedList<Filter>();
+    private List<Ordering> orderings = new LinkedList<Ordering>();
 
     private Integer startOffset;
     private Integer maxResults;
-
-    public PackageProducerDB(EntityManager em) {
-        if(em==null)
-            throw new IllegalArgumentException("entity manager must be provided!", new NullPointerException("em"));
-
-        this.em = em;
-        this.orderings = new LinkedList<Ordering>();
-        this.filters = new LinkedList<Filter>();
-    }
 
     @Override
     public PackageProducer filterId(final long id) {
