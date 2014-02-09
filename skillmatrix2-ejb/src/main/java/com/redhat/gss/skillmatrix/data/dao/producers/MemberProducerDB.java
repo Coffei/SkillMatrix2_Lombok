@@ -12,8 +12,12 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.*;
+
 import java.util.*;
 import java.util.logging.Logger;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Database implementation of {@link MemberProducer}.
@@ -21,13 +25,16 @@ import java.util.logging.Logger;
  * Date: 8/7/13
  * Time: 10:48 AM
  */
+@RequiredArgsConstructor
 public class MemberProducerDB implements MemberProducer {
     private static final int EXPERT_LEVEL = 2;
     private final Logger log = Logger.getLogger(getClass().getName());
 
-    private List<Filter> filters;
-    private List<Ordering> orders;
+    private List<Filter> filters = new LinkedList<Filter>();
+    private List<Ordering> orders = new LinkedList<Ordering>();
+    @NonNull //required in constructor
     private EntityManager em;
+    @NonNull //required in constructor
     private UserTransaction transaction;
 
     private Integer maxRecords;
@@ -36,18 +43,6 @@ public class MemberProducerDB implements MemberProducer {
     private Integer sortKnowledgesAtLevel;
     private SBR sortKnowScoreOfSBR;
     private boolean ascending = true;
-
-    public MemberProducerDB(EntityManager em, UserTransaction transaction) {
-        if(em==null)
-            throw new IllegalArgumentException("entity manager must be provided", new NullPointerException("em"));
-        if(transaction==null)
-            throw new IllegalArgumentException("user transaction must be provided", new NullPointerException("transaction"));
-
-        this.filters = new LinkedList<Filter>();
-        this.orders = new LinkedList<Ordering>();
-        this.em = em;
-        this.transaction = transaction;
-    }
 
     @Override
     public MemberProducer filterId(final long id) {

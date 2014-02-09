@@ -17,6 +17,8 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import org.reflections.Reflections;
 
@@ -154,17 +156,14 @@ public class MemberSearch {
      
 
     
-
+    @RequiredArgsConstructor
     private static class FilterNameList extends AbstractList<String> {
         private final Logger log = Logger.getLogger(getClass().getName());
 
+        @NonNull
         private List<Filter> backingList;
+        @NonNull
         private Map<String, Class<?>> allFilters;
-
-        public FilterNameList(List<Filter> backingList, Map<String, Class<?>> allFilters) {
-            this.backingList = backingList;
-            this.allFilters = allFilters;
-        }
 
 
         @Override
