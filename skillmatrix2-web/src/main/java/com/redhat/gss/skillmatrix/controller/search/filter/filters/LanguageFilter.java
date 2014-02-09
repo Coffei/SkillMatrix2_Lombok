@@ -2,6 +2,7 @@ package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import com.redhat.gss.skillmatrix.controller.search.filter.BasicAttributeFilter;
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
@@ -23,17 +24,11 @@ import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
         name = "language",
         page = "basic.xhtml",
         type = FilterType.BASIC)
+@ToString(includeFieldNames=true)
 public class LanguageFilter implements Filter, BasicAttributeFilter {
 
 	@Getter @Setter
     private String value;
-
-    @Override
-    public String toString() {
-        return "LanguageFilter{" +
-                "value='" + value + '\'' +
-                '}';
-    }
 
     @Override
     public String encode() {

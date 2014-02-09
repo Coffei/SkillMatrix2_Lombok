@@ -14,6 +14,7 @@ import javax.naming.NamingException;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
@@ -37,6 +38,7 @@ import com.redhat.gss.skillmatrix.model.SBR;
         name = "SBR",
         page = "sbr.xhtml",
         type = FilterType.BASIC)
+@ToString(includeFieldNames=true, exclude={"log", "sbrDAO"})
 public class SbrFilter implements Filter {
     private final Logger log = Logger.getLogger(getClass().getName());
 
@@ -60,14 +62,6 @@ public class SbrFilter implements Filter {
         }
 
         return sbrDAO;
-    }
-
-
-    @Override
-    public String toString() {
-        return "SbrFilter{" +
-                "value=" + value +
-                '}';
     }
 
     @Override

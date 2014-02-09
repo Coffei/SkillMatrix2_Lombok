@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Entity representing members knowledge (skill) of certain package.
@@ -15,6 +16,7 @@ import lombok.Setter;
  */
 @Entity
 @DiscriminatorValue("PACKAGE")
+@ToString(includeFieldNames=true, callSuper=true)
 public class PackageKnowledge extends Knowledge {
 
 	/**
@@ -68,12 +70,5 @@ public class PackageKnowledge extends Knowledge {
 	}
 
 
-	@Override
-	public String toString() {
-		return "PackageKnowledge [id=" + getId() + "; level=" + getLevel() + "; pkgname=" + pkg.getName() + "]";
-	}
-
-	
-	
 	
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
@@ -26,6 +27,7 @@ import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
         type = FilterType.ADVANCED,
         page = "knowCount.xhtml",
         name = "knowledge count")
+@ToString(includeFieldNames=true)
 public class KnowledgeCountFilter implements Filter {
 
 	@Getter @Setter

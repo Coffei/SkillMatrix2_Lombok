@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -20,6 +21,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  */
 @Entity
+@ToString(includeFieldNames=true, exclude={"deprecated", "sbr"})
 public class Package implements Serializable {
 	/**
 	 * Serial ID, change with care
@@ -87,10 +89,4 @@ public class Package implements Serializable {
 
 		return true;
 	}
-
-	@Override
-	public String toString() {
-		return String.format("Package [id=%s, name=%s]", id==null? "null" : id.toString(), name);
-	}
-
 }

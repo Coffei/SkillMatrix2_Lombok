@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -29,6 +30,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  */
 @Entity
+@ToString(includeFieldNames=true, exclude={"unifiedId","extension","geo","role","sbrs","knowledges"})
 public class Member implements Serializable {
 
 	/**
@@ -112,12 +114,6 @@ public class Member implements Serializable {
 	@Getter @Setter
     private List<Knowledge> knowledges;
 	
-
-    @Override
-	public String toString() {
-		return String.format("Person id:%s, name:%s, nick:%s, email:%s", this.id, this.name, this.nick, this.email);
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
