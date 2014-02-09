@@ -1,5 +1,11 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
 import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
@@ -8,9 +14,6 @@ import com.redhat.gss.skillmatrix.controller.search.filter.filters.util.Attribut
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.model.GeoEnum;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,15 +28,9 @@ import java.util.Map;
         type = FilterType.BASIC)
 public class GeoFilter implements Filter {
 
+	@Getter
+	@Setter
     private GeoEnum value;
-
-    public GeoEnum getValue() {
-        return value;
-    }
-
-    public void setValue(GeoEnum value) {
-        this.value = value;
-    }
 
     @Override
     public String toString() {

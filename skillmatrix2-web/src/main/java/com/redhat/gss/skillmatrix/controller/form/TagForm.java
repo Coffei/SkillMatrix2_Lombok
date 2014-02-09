@@ -1,8 +1,7 @@
 package com.redhat.gss.skillmatrix.controller.form;
 
-import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
-import com.redhat.gss.skillmatrix.model.Package;
+import java.io.Serializable;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -10,8 +9,13 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.io.Serializable;
-import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
+import com.redhat.gss.skillmatrix.model.Package;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,6 +28,8 @@ import java.util.List;
 @ViewScoped
 public class TagForm  implements Serializable {
 
+	@Getter
+	@Setter
     private Package pkg;
 
     @Inject
@@ -84,13 +90,5 @@ public class TagForm  implements Serializable {
 
         //TODO: go to tag detail
         return "";
-    }
-
-    public Package getPkg() {
-        return pkg;
-    }
-
-    public void setPkg(Package pkg) {
-        this.pkg = pkg;
     }
 }

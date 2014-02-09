@@ -1,16 +1,19 @@
 package com.redhat.gss.skillmatrix.controllers.sorthelpers;
 
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.SbrProducer;
-import com.redhat.gss.skillmatrix.model.Member;
-import com.redhat.gss.skillmatrix.model.SBR;
+import java.util.List;
+
+import javax.faces.context.FacesContext;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import org.ajax4jsf.model.DataVisitor;
 import org.ajax4jsf.model.ExtendedDataModel;
 import org.ajax4jsf.model.Range;
 import org.ajax4jsf.model.SequenceRange;
 
-import javax.faces.context.FacesContext;
-import java.util.List;
+import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.SbrProducer;
+import com.redhat.gss.skillmatrix.model.SBR;
 
 /**
  * RichFaces model for {@link SBR}. This model is very flexible and can be used for any sbr-related tables. Just modify
@@ -21,13 +24,17 @@ import java.util.List;
  */
 public abstract class SbrsModel extends ExtendedDataModel<SBR> {
 
-
-    private Integer key;
+	@Getter
+    private Integer rowKey;
 
     private SbrProducer producer;
 
     private List<SBR> sbrs;
 
+    /**
+     * Range of displayed data
+     */
+    @Getter @Setter
     private SequenceRange range;
 
     public SbrsModel() {
@@ -37,14 +44,10 @@ public abstract class SbrsModel extends ExtendedDataModel<SBR> {
     @Override
     public void setRowKey(Object o) {
         if(o instanceof Integer) {
-            key = (Integer)o;
+            rowKey = (Integer)o;
         }
     }
 
-    @Override
-    public Object getRowKey() {
-        return key;
-    }
 
     @Override
     public void walk(FacesContext facesContext, DataVisitor dataVisitor, Range range, Object o) {
@@ -62,7 +65,7 @@ public abstract class SbrsModel extends ExtendedDataModel<SBR> {
 
     @Override
     public boolean isRowAvailable() {
-        return key!=null;
+        return rowKey!=null;
     }
 
     @Override
@@ -74,7 +77,7 @@ public abstract class SbrsModel extends ExtendedDataModel<SBR> {
 
     @Override
     public SBR getRowData() {
-        return sbrs.get(key);
+        return sbrs.get(rowKey);
     }
 
     @Override
@@ -95,22 +98,6 @@ public abstract class SbrsModel extends ExtendedDataModel<SBR> {
     @Override
     public void setWrappedData(Object o) {
         // noop
-    }
-
-    /**
-     *
-     * @return range of displayed data.
-     */
-    public SequenceRange getRange() {
-        return range;
-    }
-
-    /**
-     * Sets the range of displayed data.
-     * @param range
-     */
-    public void setRange(SequenceRange range) {
-        this.range = range;
     }
 
     /**

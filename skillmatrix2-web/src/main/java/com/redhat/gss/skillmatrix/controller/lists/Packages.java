@@ -1,14 +1,17 @@
 package com.redhat.gss.skillmatrix.controller.lists;
 
-import com.redhat.gss.skillmatrix.controllers.sorthelpers.PackageModelHelper;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
+import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import java.io.Serializable;
+
+import lombok.Getter;
+
+import com.redhat.gss.skillmatrix.controllers.sorthelpers.PackageModelHelper;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
+import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
 
 /**
  * Controller bean for all packages view.
@@ -24,6 +27,7 @@ public class Packages  implements Serializable {
     @Inject
     private PackageDAO pkgDao;
 
+    @Getter
     private PackageModelHelper modelHelper;
 
     @PostConstruct
@@ -34,10 +38,6 @@ public class Packages  implements Serializable {
                 return pkgDao.getProducerFactory();
             }
         };
-    }
-
-    public PackageModelHelper getModelHelper() {
-        return modelHelper;
     }
 
     public int getMaxRecordsOnPage() {

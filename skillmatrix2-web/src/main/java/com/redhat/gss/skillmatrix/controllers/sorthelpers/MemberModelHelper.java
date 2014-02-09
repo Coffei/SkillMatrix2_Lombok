@@ -1,13 +1,17 @@
 package com.redhat.gss.skillmatrix.controllers.sorthelpers;
 
+import java.util.HashMap;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import org.ajax4jsf.model.SequenceRange;
+import org.richfaces.component.SortOrder;
+
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.util.Filter;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.model.GeoEnum;
 import com.redhat.gss.skillmatrix.util.PaginationHelper;
-import org.ajax4jsf.model.SequenceRange;
-import org.richfaces.component.SortOrder;
-
-import java.util.HashMap;
 
 /**
  * Model helper class for {@link com.redhat.gss.skillmatrix.model.Member}. This class has two functions:
@@ -23,18 +27,29 @@ import java.util.HashMap;
 public abstract class MemberModelHelper {
 
     private HashMap<String, Filter<MemberProducer>> filtersOrders;
-
+    /**
+     * RichFaces model
+     */
+    @Getter
     private MembersModel model;
+    @Getter
     private PaginationHelper pagination;
 
 
     // sorting
+    @Getter @Setter
     private SortOrder name = SortOrder.unsorted;
+    @Getter @Setter
     private SortOrder nick = SortOrder.unsorted;
+    @Getter @Setter
     private SortOrder email = SortOrder.unsorted;
+    @Getter @Setter
     private SortOrder experts = SortOrder.unsorted;
+    @Getter @Setter
     private SortOrder role = SortOrder.unsorted;
+    @Getter @Setter
     private SortOrder geo = SortOrder.unsorted;
+    @Getter @Setter
     private SortOrder extension = SortOrder.unsorted;
 
     /**
@@ -67,7 +82,6 @@ public abstract class MemberModelHelper {
                 MemberModelHelper.this.model.setRange(range);
             }
         });
-
 
         //set initial range
         this.model.setRange(pagination.getRange());
@@ -434,120 +448,5 @@ public abstract class MemberModelHelper {
             }
         });
     }
-
-
-    //getters, setters, uninteresting
-    /**
-     * @return sort order for name.
-     */
-    public SortOrder getName() {
-        return name;
-    }
-    /**
-     * Sets sort order for name
-     * @param name
-     */
-    public void setName(SortOrder name) {
-        this.name = name;
-    }
-
-    /**
-     * @return sort order for nick.
-     */
-    public SortOrder getNick() {
-        return nick;
-    }
-    /**
-     * Sets sort order for nick
-     * @param nick
-     */
-    public void setNick(SortOrder nick) {
-        this.nick = nick;
-    }
-
-    /**
-     * @return sort order for email.
-     */
-    public SortOrder getEmail() {
-        return email;
-    }
-    /**
-     * Sets sort order for email
-     * @param email
-     */
-    public void setEmail(SortOrder email) {
-        this.email = email;
-    }
-
-    /**
-     * @return sort order for experts.
-     */
-    public SortOrder getExperts() {
-        return experts;
-    }
-    /**
-     * Sets sort order for experts
-     * @param experts
-     */
-    public void setExperts(SortOrder experts) {
-        this.experts = experts;
-    }
-
-    /**
-     * @return the role
-     */
-    public SortOrder getRole() {
-        return role;
-    }
-
-    /**
-     * @param role the role to set
-     */
-    public void setRole(SortOrder role) {
-        this.role = role;
-    }
-
-    /**
-     * @return the geo
-     */
-    public SortOrder getGeo() {
-        return geo;
-    }
-
-    /**
-     * @param geo the geo to set
-     */
-    public void setGeo(SortOrder geo) {
-        this.geo = geo;
-    }
-
-    /**
-     * @return the extension
-     */
-    public SortOrder getExtension() {
-        return extension;
-    }
-
-    /**
-     * @param extension the extension to set
-     */
-    public void setExtension(SortOrder extension) {
-        this.extension = extension;
-    }
-
-    /**
-     *
-     * @return RichFaces model.
-     */
-    public MembersModel getModel() {
-        return model;
-    }
-
-    /**
-     *
-     * @return Pagination helper.
-     */
-    public PaginationHelper getPagination() {
-        return pagination;
-    }
+      
 }

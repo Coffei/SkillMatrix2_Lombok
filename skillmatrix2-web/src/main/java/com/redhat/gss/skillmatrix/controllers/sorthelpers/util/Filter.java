@@ -1,7 +1,7 @@
 package com.redhat.gss.skillmatrix.controllers.sorthelpers.util;
 
-import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
 * Created with IntelliJ IDEA.
@@ -11,17 +11,10 @@ import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 * To change this template use File | Settings | File Templates.
 */
 public abstract class Filter<T> {
+	@Getter @Setter
     protected String value;
 
     public abstract T apply(T producer);
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
 
     @Override
     public boolean equals(Object o) {

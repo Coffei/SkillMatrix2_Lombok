@@ -1,5 +1,18 @@
 package com.redhat.gss.skillmatrix.controller.details;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.PackageModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
@@ -8,15 +21,6 @@ import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
 import com.redhat.gss.skillmatrix.model.Coach;
 import com.redhat.gss.skillmatrix.model.SBR;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,8 +43,11 @@ public class SbrDetail {
     @Inject
     private PackageDAO pkgDao;
 
+    @Getter
+    @Setter
     private SBR sbr;
 
+    @Getter
     private PackageModelHelper packageModel;
 
     @PostConstruct
@@ -73,20 +80,6 @@ public class SbrDetail {
                 }
             } catch (NumberFormatException e) {} //ignore if happens
         }
-    }
-
-
-
-    public SBR getSbr() {
-        return sbr;
-    }
-
-    public void setSbr(SBR sbr) {
-        this.sbr = sbr;
-    }
-
-    public PackageModelHelper getPackageModel() {
-        return packageModel;
     }
 
 }

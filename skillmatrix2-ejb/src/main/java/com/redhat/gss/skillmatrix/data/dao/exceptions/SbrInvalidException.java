@@ -1,5 +1,8 @@
 package com.redhat.gss.skillmatrix.data.dao.exceptions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import com.redhat.gss.skillmatrix.model.SBR;
 
 /**
@@ -11,6 +14,7 @@ import com.redhat.gss.skillmatrix.model.SBR;
  */
 public class SbrInvalidException extends Exception {
 
+	@Getter @Setter
     private SBR invalidSbr;
 
     public SbrInvalidException() {
@@ -42,13 +46,5 @@ public class SbrInvalidException extends Exception {
 
     public SbrInvalidException(Throwable cause) {
         super(cause);
-    }
-
-    public SBR getInvalidSbr() {
-        return invalidSbr;
-    }
-
-    public void setInvalidSbr(SBR invalidSbr) {
-        this.invalidSbr = invalidSbr;
     }
 }

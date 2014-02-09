@@ -1,10 +1,11 @@
 package com.redhat.gss.skillmatrix.controller.form;
 
-import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
-import com.redhat.gss.skillmatrix.model.*;
-import org.joda.time.Duration;
-import org.joda.time.Period;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -12,8 +13,20 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.io.Serializable;
-import java.util.*;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import org.joda.time.Duration;
+import org.joda.time.Period;
+
+import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
+import com.redhat.gss.skillmatrix.model.Geo;
+import com.redhat.gss.skillmatrix.model.GeoEnum;
+import com.redhat.gss.skillmatrix.model.Knowledge;
+import com.redhat.gss.skillmatrix.model.LanguageKnowledge;
+import com.redhat.gss.skillmatrix.model.Member;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,8 +39,12 @@ import java.util.*;
 @ViewScoped
 public class MemberForm implements Serializable {
 
+	@Getter
+	@Setter
     private Member member;
 
+	@Getter
+	@Setter
     private List<LanguageKnowledge> langs;
 
     @Inject
@@ -170,41 +187,14 @@ public class MemberForm implements Serializable {
         member.getKnowledges().addAll(langs); //add all langs
     }
 
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-    public List<LanguageKnowledge> getLangs() {
-        return langs;
-    }
-
-    public void setLangs(List<LanguageKnowledge> langs) {
-        this.langs = langs;
-    }
-
     public static class TimeZone {
+    	@Getter
+    	@Setter
         private int offset;
+    	
+    	@Getter
+    	@Setter
         private String name;
-
-        public int getOffset() {
-            return offset;
-        }
-
-        public void setOffset(int offset) {
-            this.offset = offset;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
     }
 
 }

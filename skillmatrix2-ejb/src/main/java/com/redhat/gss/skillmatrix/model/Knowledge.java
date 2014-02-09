@@ -2,8 +2,18 @@ package com.redhat.gss.skillmatrix.model;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Entity, representing some knowledge of member. Good for extending.
@@ -22,47 +32,23 @@ public class Knowledge implements Serializable {
 	
 	@Id
 	@GeneratedValue
+	@Getter @Setter
 	private Long id;
 
+	/**
+	 * Level of knowledge as Integer value
+	 */
+	@Getter @Setter
 	private Integer level;
 
+	/**
+	 * Owner of this knowledge
+	 */
 	@NotNull
 	@ManyToOne(optional=false, fetch = FetchType.EAGER)
+	@Getter @Setter
 	private Member member;
 	
-	/**
-	 * @return ID
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return level of knowledge as Integer value
-	 */
-	public Integer getLevel() {
-		return level;
-	}
-
-	public void setLevel(Integer level) {
-		this.level = level;
-	}
-
-	/**
-	 * @return Member whose knowledge this is.
-	 */
-	public Member getMember() {
-		return member;
-	}
-
-	public void setMember(Member member) {
-		this.member = member;
-	}
 
 	@Override
 	public int hashCode() {
@@ -88,8 +74,5 @@ public class Knowledge implements Serializable {
 			return false;
 		return true;
 	}
-
-	
-
 
 }

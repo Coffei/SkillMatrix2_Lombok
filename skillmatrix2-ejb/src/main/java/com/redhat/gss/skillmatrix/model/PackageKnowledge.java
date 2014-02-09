@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Entity representing members knowledge (skill) of certain package.
  * @author jtrantin
@@ -20,6 +23,7 @@ public class PackageKnowledge extends Knowledge {
 	private static final long serialVersionUID = 8718176125991666863L;
 	
 	
+	// these getters, setters were kept because Lombok cannot rename generated getter/setter and var cannot be named package
 	/**
 	 * @return package this knowledge refers to
 	 */
@@ -33,6 +37,9 @@ public class PackageKnowledge extends Knowledge {
 	}
 
 
+	/**
+	 * Package this knowledge refers to
+	 */
 	@NotNull
 	@ManyToOne(optional=false)
 	private Package pkg;

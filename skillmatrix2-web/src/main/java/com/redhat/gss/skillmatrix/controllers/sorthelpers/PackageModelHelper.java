@@ -1,16 +1,19 @@
 package com.redhat.gss.skillmatrix.controllers.sorthelpers;
 
-import com.redhat.gss.skillmatrix.controllers.sorthelpers.util.Filter;
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
-import com.redhat.gss.skillmatrix.model.*;
-import com.redhat.gss.skillmatrix.util.PaginationHelper;
-import org.ajax4jsf.model.SequenceRange;
-import org.richfaces.component.SortOrder;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import org.ajax4jsf.model.SequenceRange;
+import org.richfaces.component.SortOrder;
+
+import com.redhat.gss.skillmatrix.controllers.sorthelpers.util.Filter;
+import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
+import com.redhat.gss.skillmatrix.util.PaginationHelper;
 
 /**
  * Model helper class for {@link com.redhat.gss.skillmatrix.model.Package}. This class has two functions:
@@ -25,12 +28,22 @@ import java.util.logging.Logger;
 public abstract class PackageModelHelper implements Serializable {
     private final Logger log = Logger.getLogger(getClass().getName());
 
+    /**
+     * RichFaces model
+     */
+    @Getter
     private PackagesModel model;
+    /**
+     * Pagination helper
+     */
+    @Getter
     private PaginationHelper pagination;
 
     private Map<String, Filter<PackageProducer>> filtersOrders;
 
+    @Getter @Setter
     private SortOrder nameOrder = SortOrder.unsorted;
+    @Getter @Setter
     private SortOrder sbrOrder = SortOrder.unsorted;
 
     public PackageModelHelper(int recordsPerPage) {
@@ -77,21 +90,6 @@ public abstract class PackageModelHelper implements Serializable {
         return producer;
     }
 
-    /**
-     *
-     * @return RichFaces model.
-     */
-    public PackagesModel getModel() {
-        return model;
-    }
-
-    /**
-     *
-     * @return Pagination helper
-     */
-    public PaginationHelper getPagination() {
-        return pagination;
-    }
 
     /**
      * @return filter for name
@@ -156,20 +154,6 @@ public abstract class PackageModelHelper implements Serializable {
         filtersOrders.put("sbrFilter", filter);
     }
 
-    /**
-     * @return name sort order
-     */
-    public SortOrder getNameOrder() {
-        return nameOrder;
-    }
-    /**
-     * Sets name sort order
-     * @param nameOrder
-     */
-    public void setNameOrder(SortOrder nameOrder) {
-        this.nameOrder = nameOrder;
-    }
-
 
     /**
      * Sorts by name, sets all corresponding sort orders.
@@ -189,22 +173,6 @@ public abstract class PackageModelHelper implements Serializable {
             }
         });
     }
-
-    /**
-     * @return sbr sort order
-     */
-    public SortOrder getSbrOrder() {
-        return sbrOrder;
-    }
-
-    /**
-     * Sets sbr sort order
-     * @param sbrOrder
-     */
-    public void setSbrOrder(SortOrder sbrOrder) {
-        this.sbrOrder = sbrOrder;
-    }
-
 
     /**
      * Sorts by sbr, sets all corresponding sort orders.

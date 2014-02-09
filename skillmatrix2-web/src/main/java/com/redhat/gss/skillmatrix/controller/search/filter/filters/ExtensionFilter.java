@@ -1,5 +1,8 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import com.redhat.gss.skillmatrix.controller.search.filter.BasicAttributeFilter;
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
@@ -22,17 +25,9 @@ import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
         type = FilterType.BASIC)
 public class ExtensionFilter implements Filter, BasicAttributeFilter {
 
+	@Getter
+	@Setter
     private String value;
-
-    @Override
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public void setValue(String value) {
-        this.value = value;
-    }
 
     @Override
     public String toString() {

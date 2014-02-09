@@ -13,8 +13,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+
 import java.util.*;
 import java.util.logging.Logger;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,14 +41,22 @@ public class MemberDetail {
     @Inject
     private PackageDAO pkgDao;
 
+    @Getter
+    @Setter
     private Member member;
 
+    @Getter
     private PackageModelHelper expertModel;
+    @Getter
     private PackageModelHelper intermediateModel;
+    @Getter
     private PackageModelHelper beginnerModel;
 
+    @Getter
     private boolean expertsAvailable;
+    @Getter
     private boolean intermediatesAvailable;
+    @Getter
     private boolean beginnersAvailable;
 
 
@@ -54,7 +66,6 @@ public class MemberDetail {
         if(sid!=null && !sid.trim().isEmpty()) {
             try {
                 long id = Long.parseLong(sid);
-
                 List<Member> members = memberDAO.getProducerFactory().filterId(id).getMembers();
                 if(members!=null && !members.isEmpty()) {
                     this.member = members.get(0);
@@ -118,49 +129,5 @@ public class MemberDetail {
             return member.getSbrs().subList(1, member.getSbrs().size());
         else
             return new ArrayList<SBR>(0); //cannot use Collections.emptyList(); due to some bug
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-    public PackageModelHelper getExpertModel() {
-        return expertModel;
-    }
-
-    public void setExpertModel(PackageModelHelper expertModel) {
-        this.expertModel = expertModel;
-    }
-
-    public PackageModelHelper getIntermediateModel() {
-        return intermediateModel;
-    }
-
-    public void setIntermediateModel(PackageModelHelper intermediateModel) {
-        this.intermediateModel = intermediateModel;
-    }
-
-    public PackageModelHelper getBeginnerModel() {
-        return beginnerModel;
-    }
-
-    public void setBeginnerModel(PackageModelHelper beginnerModel) {
-        this.beginnerModel = beginnerModel;
-    }
-
-    public boolean isExpertsAvailable() {
-        return expertsAvailable;
-    }
-
-    public boolean isIntermediatesAvailable() {
-        return intermediatesAvailable;
-    }
-
-    public boolean isBeginnersAvailable() {
-        return beginnersAvailable;
     }
 }

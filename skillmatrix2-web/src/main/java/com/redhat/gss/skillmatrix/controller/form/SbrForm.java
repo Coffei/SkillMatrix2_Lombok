@@ -1,10 +1,8 @@
 package com.redhat.gss.skillmatrix.controller.form;
 
-import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
-import com.redhat.gss.skillmatrix.model.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -12,10 +10,17 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
+import com.redhat.gss.skillmatrix.model.Coach;
+import com.redhat.gss.skillmatrix.model.GeoEnum;
+import com.redhat.gss.skillmatrix.model.SBR;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,6 +42,8 @@ public class SbrForm implements Serializable {
     @Inject
     private PackageDAO packageDAO;
 
+    @Getter
+    @Setter
     private SBR sbr;
 
     @PostConstruct
@@ -111,12 +118,4 @@ public class SbrForm implements Serializable {
         return GeoEnum.values();
     }
 
-
-    public SBR getSbr() {
-        return sbr;
-    }
-
-    public void setSbr(SBR sbr) {
-        this.sbr = sbr;
-    }
 }

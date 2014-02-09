@@ -1,5 +1,11 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
 import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
@@ -8,9 +14,6 @@ import com.redhat.gss.skillmatrix.controller.search.filter.filters.util.Attribut
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,8 +28,11 @@ import java.util.Map;
         name = "knowledge count")
 public class KnowledgeCountFilter implements Filter {
 
+	@Getter @Setter
     private int level;
+	@Getter @Setter
     private int amount;
+	@Getter @Setter
     private OperatorEnum operator;
 
 
@@ -80,27 +86,4 @@ public class KnowledgeCountFilter implements Filter {
         return String.format("number of knowledges at %s level is %s %d", (level==0? "beginner" : (level==1? "intermediate" : "expert")), operator.toReadableText(), amount);
     }
 
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public OperatorEnum getOperator() {
-        return operator;
-    }
-
-    public void setOperator(OperatorEnum operator) {
-        this.operator = operator;
-    }
 }

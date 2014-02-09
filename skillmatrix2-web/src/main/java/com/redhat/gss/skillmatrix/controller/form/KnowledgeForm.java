@@ -1,13 +1,9 @@
 package com.redhat.gss.skillmatrix.controller.form;
 
-import com.redhat.gss.skillmatrix.controllers.sorthelpers.PackageModelHelper;
-import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageKnowledgeDAO;
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
-import com.redhat.gss.skillmatrix.model.*;
-import com.redhat.gss.skillmatrix.model.Package;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -15,10 +11,20 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import com.redhat.gss.skillmatrix.controllers.sorthelpers.PackageModelHelper;
+import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageKnowledgeDAO;
+import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
+import com.redhat.gss.skillmatrix.model.Knowledge;
+import com.redhat.gss.skillmatrix.model.Member;
+import com.redhat.gss.skillmatrix.model.Package;
+import com.redhat.gss.skillmatrix.model.PackageKnowledge;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,11 +47,14 @@ public class KnowledgeForm implements Serializable {
     @Inject
     private PackageKnowledgeDAO pkgKnowDAO;
 
+    @Getter
+    @Setter
     private Member member;
 
-
+    @Getter
     private PackageModelHelper pkgModelHelper;
-
+    
+    @Getter
     private Map<Package, Integer> knowledges;
 
 
@@ -105,21 +114,4 @@ public class KnowledgeForm implements Serializable {
 
     }
 
-
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-
-    public PackageModelHelper getPkgModelHelper() {
-        return pkgModelHelper;
-    }
-
-    public Map<Package, Integer> getKnowledges() {
-        return knowledges;
-    }
 }

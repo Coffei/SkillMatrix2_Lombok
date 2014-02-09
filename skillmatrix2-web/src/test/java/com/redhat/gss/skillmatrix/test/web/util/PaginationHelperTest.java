@@ -1,9 +1,12 @@
 package com.redhat.gss.skillmatrix.test.web.util;
 
-import com.redhat.gss.skillmatrix.util.PaginationHelper;
+import static org.junit.Assert.assertEquals;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import com.redhat.gss.skillmatrix.util.PaginationHelper;
 
 /**
  * Test class for PaginationHelper
@@ -20,6 +23,7 @@ public class PaginationHelperTest {
      */
     private static class FixedRecordsPaginationHelper extends PaginationHelper {
 
+    	@Getter @Setter
         private int maxRecords;
 
         private FixedRecordsPaginationHelper(int recordsPerPage, int maxRecords) {
@@ -27,14 +31,6 @@ public class PaginationHelperTest {
             this.maxRecords = maxRecords;
         }
 
-        @Override
-        public int getMaxRecords() {
-            return maxRecords;
-        }
-
-        public void setMaxRecords(int maxRecords) {
-            this.maxRecords = maxRecords;
-        }
     }
 
     @Test
