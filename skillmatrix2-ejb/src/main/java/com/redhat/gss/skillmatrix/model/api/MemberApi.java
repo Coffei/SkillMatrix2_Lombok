@@ -7,7 +7,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -67,6 +69,8 @@ public class MemberApi {
     }
 
     @XmlRootElement(name = "knowledge")
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class KnowledgeHelper {
     	@Getter(onMethod=@_({@XmlAttribute}))
     	@Setter
@@ -80,14 +84,6 @@ public class MemberApi {
     	@Setter
         private String pkgName;
 
-        public KnowledgeHelper() {
-        }
-
-        public KnowledgeHelper(int level, Long pkgId, String pkgName) {
-            this.level = level;
-            this.pkgId = pkgId;
-            this.pkgName = pkgName;
-        }
     }
 
 
