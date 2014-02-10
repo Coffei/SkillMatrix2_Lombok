@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ import lombok.Setter;
  * To change this template use File | Settings | File Templates.
  */
 @XmlRootElement(name = "sbr")
+@EqualsAndHashCode(of={"id","name"})
 public class SbrApi {
 	@Getter(onMethod=@_({@XmlAttribute}))
 	@Setter
@@ -39,7 +41,7 @@ public class SbrApi {
 	@Setter
     private List<MemberHelper> members;
 
-
+	@EqualsAndHashCode(of={"sbrRole", "member"})
     public static class CoachHelper {
     	@Getter(onMethod=@_({@XmlElement(name="sbr-role")}))
     	@Setter
@@ -49,7 +51,7 @@ public class SbrApi {
     	@Setter
         private MemberHelper member;
     }
-
+	@EqualsAndHashCode(of={"id","name"})
     public static class PackageHelper {
     	@Getter(onMethod=@_({@XmlAttribute}))
     	@Setter
@@ -64,6 +66,7 @@ public class SbrApi {
         private boolean deprecated;
     }
 
+	@EqualsAndHashCode(of={"id", "nick"})
     public static class MemberHelper {
     	
     	@Getter(onMethod=@_({@XmlAttribute}))

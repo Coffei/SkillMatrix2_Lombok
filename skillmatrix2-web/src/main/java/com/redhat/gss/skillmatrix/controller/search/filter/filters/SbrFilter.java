@@ -12,6 +12,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -39,6 +40,7 @@ import com.redhat.gss.skillmatrix.model.SBR;
         page = "sbr.xhtml",
         type = FilterType.BASIC)
 @ToString(includeFieldNames=true, exclude={"log", "sbrDAO"})
+@EqualsAndHashCode(of="value")
 public class SbrFilter implements Filter {
     private final Logger log = Logger.getLogger(getClass().getName());
 

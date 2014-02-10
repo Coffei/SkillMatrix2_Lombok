@@ -14,6 +14,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -187,6 +188,7 @@ public class MemberForm implements Serializable {
         member.getKnowledges().addAll(langs); //add all langs
     }
 
+    @EqualsAndHashCode
     public static class TimeZone {
     	@Getter
     	@Setter
@@ -195,6 +197,8 @@ public class MemberForm implements Serializable {
     	@Getter
     	@Setter
         private String name;
+    	
+    	
     }
 
 }

@@ -3,6 +3,7 @@ package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,6 +29,7 @@ import com.redhat.gss.skillmatrix.model.GeoEnum;
         page = "geo.xhtml",
         type = FilterType.BASIC)
 @ToString(includeFieldNames=true)
+@EqualsAndHashCode(of="value")
 public class GeoFilter implements Filter {
 
 	@Getter
