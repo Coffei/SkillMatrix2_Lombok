@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import lombok.Setter;
  * To change this template use File | Settings | File Templates.
  */
 @XmlRootElement(name = "member")
+@EqualsAndHashCode(of={"id","nick"})
 public class MemberApi {
 	
 	@Getter(onMethod=@_({@XmlAttribute}))
@@ -59,6 +61,7 @@ public class MemberApi {
     private List<String> langs;
 
     @XmlRootElement(name = "sbr")
+    @EqualsAndHashCode(of={"id","name"})
     public static class SbrHelper {
     	@Getter(onMethod=@_({@XmlAttribute}))
     	@Setter
@@ -71,6 +74,7 @@ public class MemberApi {
     @XmlRootElement(name = "knowledge")
     @AllArgsConstructor
     @NoArgsConstructor
+    @EqualsAndHashCode(of={"level","pkgId"})
     public static class KnowledgeHelper {
     	@Getter(onMethod=@_({@XmlAttribute}))
     	@Setter

@@ -15,6 +15,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -42,6 +43,7 @@ import com.redhat.gss.skillmatrix.model.Package;
         page = "pkgKnow.xhtml",
         name = "knowledge of tags")
 @ToString(includeFieldNames=true, exclude={"log", "pkgDao"})
+@EqualsAndHashCode(of="packagesMap")
 public class PackageKnowledgeFilter implements Filter {
     private Logger log = Logger.getLogger(getClass().getName());
 

@@ -1,5 +1,6 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,6 +26,7 @@ import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
               page = "basic.xhtml",
               type = FilterType.BASIC)
 @ToString(includeFieldNames=true)
+@EqualsAndHashCode(of="value")
 public class NameFilter implements Filter, BasicAttributeFilter {
 
 	@Getter @Setter

@@ -3,6 +3,7 @@ package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,6 +29,7 @@ import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
         page = "knowCount.xhtml",
         name = "knowledge count")
 @ToString(includeFieldNames=true)
+@EqualsAndHashCode(of={"level", "amount", "operator"})
 public class KnowledgeCountFilter implements Filter {
 
 	@Getter @Setter
