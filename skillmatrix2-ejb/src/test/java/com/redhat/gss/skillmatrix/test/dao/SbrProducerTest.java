@@ -9,6 +9,7 @@ import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.SbrProducer;
 import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.model.Package;
 import com.redhat.gss.skillmatrix.util.Resources;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
@@ -22,10 +23,12 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import lombok.val;
 import static org.junit.Assert.*;
 
 /**
@@ -63,9 +66,9 @@ public class SbrProducerTest {
     //SECTION: Filter tests
     @Test
     public void testFilterId() throws Exception {
-        List<SBR> wfs = sbrDAO.getProducerFactory().filterId(wf_id).getSbrs();
-        List<SBR> jbossases = sbrDAO.getProducerFactory().filterId(jbossas_id).getSbrs();
-        List<SBR> clusterings = sbrDAO.getProducerFactory().filterId(clustering_id).getSbrs();
+        val wfs = sbrDAO.getProducerFactory().filterId(wf_id).getSbrs();
+        val jbossases = sbrDAO.getProducerFactory().filterId(jbossas_id).getSbrs();
+        val clusterings = sbrDAO.getProducerFactory().filterId(clustering_id).getSbrs();
 
         assertNotNull("null result returned", wfs);
         assertNotNull("null result returned", jbossases);
@@ -92,7 +95,7 @@ public class SbrProducerTest {
         if(id < Long.MAX_VALUE / 10)
             id *= 7;
 
-        List<SBR> nones = sbrDAO.getProducerFactory().filterId(id).getSbrs();
+        val nones = sbrDAO.getProducerFactory().filterId(id).getSbrs();
 
         assertNotNull("null result returned", nones);
         assertEquals("some sbrs found on non-existent id: " + id, 0, nones.size());

@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.val;
 
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
@@ -38,7 +39,7 @@ public class GeoFilter implements Filter {
 
 	@Override
     public String encode() {
-       Map<String, String> data  = new HashMap<String, String>(1);
+       val data  = new HashMap<String, String>(1);
        data.put("geo", value.toString());
 
         return AttributeEncoder.encodeFromMap("geoFilter", data);
@@ -46,7 +47,7 @@ public class GeoFilter implements Filter {
 
     @Override
     public void decode(String filter) throws TypeMismatchException, IllegalArgumentException {
-        Map<String, String> data = AttributeEncoder.decodeToMap(filter, "geoFilter");
+        val data = AttributeEncoder.decodeToMap(filter, "geoFilter");
         if(data==null || data.get("geo")==null)
             throw new IllegalArgumentException("missing parameter");
 

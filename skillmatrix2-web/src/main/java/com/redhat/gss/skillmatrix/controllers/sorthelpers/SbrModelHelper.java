@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 import org.ajax4jsf.model.SequenceRange;
 import org.richfaces.component.SortOrder;
@@ -83,7 +84,7 @@ public abstract class SbrModelHelper implements Serializable {
     }
 
     private SbrProducer createProducerFactory() {
-        SbrProducer producer = getProducerFactory();
+        val producer = getProducerFactory();
 
         for(Filter filterOrder : filtersOrders.values()) {
             filterOrder.apply(producer); //apply all filters and orders

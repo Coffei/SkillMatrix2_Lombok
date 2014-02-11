@@ -1,14 +1,15 @@
 package com.redhat.gss.skillmatrix.util.converter;
 
-import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
-import com.redhat.gss.skillmatrix.model.Package;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.List;
+
+import lombok.val;
+
+import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
+import com.redhat.gss.skillmatrix.model.Package;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,7 +29,7 @@ public class PackageConverter implements Converter {
         if(sid!=null && !sid.trim().isEmpty()) {
             try {
                 long id = Long.valueOf(sid.trim());
-                List<Package> pkgs = pkgDao.getProducerFactory().filterId(id).getPackages();
+                val pkgs = pkgDao.getProducerFactory().filterId(id).getPackages();
                 if(!pkgs.isEmpty()) {
                     return pkgs.get(0);
                 }

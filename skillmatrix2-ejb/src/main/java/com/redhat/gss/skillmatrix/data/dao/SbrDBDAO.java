@@ -12,9 +12,12 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.UserTransaction;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import lombok.val;
 
 /**
  * Created with IntelliJ IDEA.
@@ -90,7 +93,7 @@ public class SbrDBDAO implements SbrDAO {
         deleteOldPkgs.executeUpdate();
 
         //delete unassigned coaches
-        Query query = em.createNativeQuery("DELETE FROM coach WHERE sbr_id = :sbr AND id NOT IN (:coaches)");
+        val query = em.createNativeQuery("DELETE FROM coach WHERE sbr_id = :sbr AND id NOT IN (:coaches)");
         query.setParameter("sbr", sbr.getId());
         query.setParameter("coaches", mapIDsCoaches(sbr.getCoaches()));
         query.executeUpdate();
@@ -122,7 +125,7 @@ public class SbrDBDAO implements SbrDAO {
         if(members==null)
             return Collections.emptyList();
 
-        List<Long> ids = new ArrayList<Long>(members.size());
+        val ids = new ArrayList<Long>(members.size());
         for(Member member : members) {
             ids.add(member.getId());
         }
@@ -133,7 +136,7 @@ public class SbrDBDAO implements SbrDAO {
         if(pkgs==null)
             return Collections.emptyList();
 
-        List<Long> ids = new ArrayList<Long>(pkgs.size());
+        val ids = new ArrayList<Long>(pkgs.size());
         for(Package pkg : pkgs) {
             ids.add(pkg.getId());
         }
@@ -162,7 +165,7 @@ public class SbrDBDAO implements SbrDAO {
         if (coaches==null)
             return Collections.emptyList();
 
-        List<Long> ids = new ArrayList<Long>(coaches.size());
+        val ids = new ArrayList<Long>(coaches.size());
         for (Coach coach : coaches) {
             if (coach != null && coach.getId() != null) {
                 ids.add(coach.getId());

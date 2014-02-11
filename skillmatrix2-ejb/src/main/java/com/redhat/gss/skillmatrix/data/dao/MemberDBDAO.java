@@ -14,6 +14,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.UserTransaction;
 
+import lombok.val;
+
 /**
  * Database implementation of member dao.
  * User: jtrantin
@@ -53,7 +55,7 @@ public class MemberDBDAO implements MemberDAO {
         member = em.merge(member);
 
         //clean language knowledge
-        Query query = em.createNativeQuery("DELETE FROM languageknowledge WHERE member_id = :member AND ID NOT IN (:knows)");
+        val query = em.createNativeQuery("DELETE FROM languageknowledge WHERE member_id = :member AND ID NOT IN (:knows)");
         query.setParameter("member", member.getId());
         query.setParameter("knows", member.getKnowledges());
         query.executeUpdate();

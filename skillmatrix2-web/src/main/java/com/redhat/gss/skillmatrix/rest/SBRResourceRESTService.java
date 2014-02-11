@@ -1,9 +1,6 @@
 package com.redhat.gss.skillmatrix.rest;
 
-import com.redhat.gss.skillmatrix.data.api.SbrApiBuilder;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
-import com.redhat.gss.skillmatrix.model.SBR;
-import com.redhat.gss.skillmatrix.model.api.SbrApi;
+import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -11,7 +8,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import java.util.List;
+
+import lombok.val;
+
+import com.redhat.gss.skillmatrix.data.api.SbrApiBuilder;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
+import com.redhat.gss.skillmatrix.model.api.SbrApi;
 
 /**
  * Created with IntelliJ IDEA.
@@ -42,7 +44,7 @@ public class SBRResourceRESTService {
     @Path("/{id:[0-9][0-9]*}")
     @Produces({"text/xml", "application/json"})
     public SbrApi listSBRById(@PathParam("id") long id) {
-        List<SBR> sbrs = sbrDAO.getProducerFactory().filterId(id).getSbrs();
+        val sbrs = sbrDAO.getProducerFactory().filterId(id).getSbrs();
         //TODO: what if not found!
         return builder.buildSbr(sbrs.get(0));
     }

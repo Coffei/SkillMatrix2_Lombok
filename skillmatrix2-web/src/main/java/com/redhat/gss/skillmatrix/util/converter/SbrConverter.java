@@ -1,14 +1,15 @@
 package com.redhat.gss.skillmatrix.util.converter;
 
-import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
-import com.redhat.gss.skillmatrix.model.SBR;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.List;
+
+import lombok.val;
+
+import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
+import com.redhat.gss.skillmatrix.model.SBR;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,7 +29,7 @@ public class SbrConverter implements Converter {
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) {
         try {
             long id = Long.parseLong(s);
-            List<SBR> sbrs = sbrDao.getProducerFactory().filterId(id).getSbrs();
+            val sbrs = sbrDao.getProducerFactory().filterId(id).getSbrs();
             if(!sbrs.isEmpty())
                 return sbrs.get(0);
 

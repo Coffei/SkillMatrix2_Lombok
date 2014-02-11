@@ -2,7 +2,6 @@ package com.redhat.gss.skillmatrix.controller.form;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -13,6 +12,7 @@ import javax.inject.Inject;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
@@ -57,7 +57,7 @@ public class SbrForm implements Serializable {
         if(sid!=null && !sid.trim().isEmpty()) {
             try {
                 long id = Long.valueOf(sid);
-                List<SBR> sbrs = sbrDAO.getProducerFactory().filterId(id).getSbrs();
+                val sbrs = sbrDAO.getProducerFactory().filterId(id).getSbrs();
 
                 if(!sbrs.isEmpty()) { // just take the first one
                     this.sbr = sbrs.get(0); // edit existing package mode
@@ -74,7 +74,7 @@ public class SbrForm implements Serializable {
     }
 
     public String submit() {
-        FacesMessage msg = new FacesMessage();
+        val msg = new FacesMessage();
         msg.setSeverity(FacesMessage.SEVERITY_INFO);
         try{
             if(sbr.getId()==null) {
@@ -85,13 +85,13 @@ public class SbrForm implements Serializable {
                 msg.setSummary("SBR updated!");
             }
         } catch (SbrInvalidException e) {
-            FacesMessage errMsg = new FacesMessage("SBR is invalid, try again. Root cause: " + e.getMessage());
+            val errMsg = new FacesMessage("SBR is invalid, try again. Root cause: " + e.getMessage());
             errMsg.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(null, errMsg);
             FacesContext.getCurrentInstance().validationFailed();
             return "";
         } catch(UnsupportedOperationException e) {
-            FacesMessage errMsg = new FacesMessage("Operation is currently not supported.");
+            val errMsg = new FacesMessage("Operation is currently not supported.");
             errMsg.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(null, errMsg);
             FacesContext.getCurrentInstance().validationFailed();
@@ -104,7 +104,7 @@ public class SbrForm implements Serializable {
     }
 
     public void addNewCoach() {
-        Coach coach = new Coach();
+        val coach = new Coach();
         coach.setSbr(this.sbr);
         coach.setSbr_role("Primary");
         this.sbr.getCoaches().add(coach);

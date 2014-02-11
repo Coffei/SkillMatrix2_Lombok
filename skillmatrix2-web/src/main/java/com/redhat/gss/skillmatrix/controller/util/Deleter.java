@@ -1,19 +1,22 @@
 package com.redhat.gss.skillmatrix.controller.util;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+
+import lombok.val;
+
 import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
-import com.redhat.gss.skillmatrix.model.*;
+import com.redhat.gss.skillmatrix.model.Member;
 import com.redhat.gss.skillmatrix.model.Package;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
+import com.redhat.gss.skillmatrix.model.SBR;
 
 /**
  * Created with IntelliJ IDEA.
@@ -117,7 +120,7 @@ public class Deleter {
 
 
     private void handleMessage(FacesMessage.Severity severity, String messageText) {
-        FacesMessage msg = new FacesMessage(messageText);
+        val msg = new FacesMessage(messageText);
         msg.setSeverity(severity);
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }

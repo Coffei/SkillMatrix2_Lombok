@@ -2,13 +2,17 @@ package com.redhat.gss.skillmatrix.data.api;
 
 import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.model.api.MemberApi;
+
 import org.joda.time.Duration;
 import org.joda.time.Interval;
 import org.joda.time.Period;
 
 import javax.ejb.Stateless;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.val;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,7 +35,7 @@ public class MemberApiBuilder {
         api.setNick(member.getNick());
         api.setRole(member.getRole());
 
-        List<MemberApi.SbrHelper> apiSbrs = new ArrayList<MemberApi.SbrHelper>(member.getSbrs().size());
+        val apiSbrs = new ArrayList<MemberApi.SbrHelper>(member.getSbrs().size());
         for(SBR sbr : member.getSbrs()) {
             MemberApi.SbrHelper sbrApi = new MemberApi.SbrHelper();
             sbrApi.setName(sbr.getName());
@@ -42,11 +46,11 @@ public class MemberApiBuilder {
 
         api.setSbrs(apiSbrs);
 
-        List<MemberApi.KnowledgeHelper> knowledges = new ArrayList<MemberApi.KnowledgeHelper>();
-        List<String> languages = new ArrayList<String>();
+        val knowledges = new ArrayList<MemberApi.KnowledgeHelper>();
+        val languages = new ArrayList<String>();
         for(Knowledge know : member.getKnowledges()) {
             if(know instanceof PackageKnowledge) {
-                PackageKnowledge pkgKnow = (PackageKnowledge)know;
+                val pkgKnow = (PackageKnowledge)know;
                 MemberApi.KnowledgeHelper helper = new MemberApi.KnowledgeHelper(pkgKnow.getLevel(), pkgKnow.getPackage().getId(), pkgKnow.getPackage().getName());
                 knowledges.add(helper);
 
@@ -63,7 +67,7 @@ public class MemberApiBuilder {
     }
 
     String buildGeo(Geo geo) {
-        StringBuilder builder = new StringBuilder();
+        val builder = new StringBuilder();
         builder.append(geo.getGeocode().toString());
 
         builder.append(" (");
@@ -80,7 +84,7 @@ public class MemberApiBuilder {
     }
 
     public List<MemberApi> buildMembers(List<Member> members) {
-        List<MemberApi> apis = new ArrayList<MemberApi>(members.size());
+        val apis = new ArrayList<MemberApi>(members.size());
 
         for(Member member : members) {
             apis.add(buildMember(member));

@@ -1,13 +1,15 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters.util;
 
-import com.redhat.gss.skillmatrix.controller.search.filter.BasicAttributeFilter;
-import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
-import com.redhat.gss.skillmatrix.controller.search.filter.exeptions.TypeMismatchException;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import lombok.val;
+
+import com.redhat.gss.skillmatrix.controller.search.filter.BasicAttributeFilter;
+import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
+import com.redhat.gss.skillmatrix.controller.search.filter.exeptions.TypeMismatchException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,7 +25,7 @@ public class AttributeEncoder {
             return null;
         MemberFilter annt = filter.getClass().getAnnotation(MemberFilter.class);
         String type = annt.id();
-        Map<String, String> data = new HashMap<String, String>(1);
+        val data = new HashMap<String, String>(1);
         data.put("value", filter.getValue());
 
         return encodeFromMap(type, data);
@@ -37,7 +39,7 @@ public class AttributeEncoder {
         String type = annt.id();
 
         //get decoded data
-        Map<String, String> data = decodeToMap(encodedFilter, type);
+        val data = decodeToMap(encodedFilter, type);
 
         String value = data.get("value");
         if(value==null)
@@ -47,7 +49,7 @@ public class AttributeEncoder {
     }
 
     public static Map<String, String> decodeToMap(String encodedFilter, String requestedType) throws TypeMismatchException, IllegalArgumentException {
-        Map<String, String> result = new HashMap<String, String>();
+        val result = new HashMap<String, String>();
         Pattern typeCheckPattern = Pattern.compile("^([^:]+):(.*)$");
         Pattern paramsValidity = Pattern.compile("^(([\\w]+)-((([^;])|(\\\\;))+)?[^\\\\;];)*$");
         Pattern params = Pattern.compile("([\\w]+)-(((([^;])|(\\\\;))+)?[^\\\\;]);"); // all ; in values body are escaped as \;
@@ -88,7 +90,7 @@ public class AttributeEncoder {
 
         StringBuilder builder = new StringBuilder(filterType);
         builder.append(":");
-        for (Map.Entry<String, String> entry : data.entrySet()) {
+        for (val entry : data.entrySet()) {
             builder.append(entry.getKey());
             builder.append("-"); //using '-' instead of '=' because of HTML param encoding
             String value = new String(entry.getValue()); //create new instance of value

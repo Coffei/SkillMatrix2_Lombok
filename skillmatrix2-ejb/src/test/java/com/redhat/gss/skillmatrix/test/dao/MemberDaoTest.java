@@ -9,6 +9,7 @@ import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
 import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.model.Package;
 import com.redhat.gss.skillmatrix.util.Resources;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
@@ -24,6 +25,7 @@ import javax.transaction.*;
 
 import java.util.Arrays;
 
+import lombok.val;
 import static org.junit.Assert.*;
 
 /**
@@ -58,7 +60,7 @@ public class MemberDaoTest {
 
     @Test
     public void testCreate() throws Exception {
-        Member newMember= new Member();
+        val newMember= new Member();
         newMember.setNick("jtrantin");
         newMember.setEmail("jtrantin@redhat.com");
         newMember.setName("Jonas");
@@ -86,7 +88,7 @@ public class MemberDaoTest {
     @Test
     public void testUpdate() throws Exception {
         cleanup();
-        Member newMember= new Member();
+        val newMember= new Member();
         newMember.setNick("jtrantin");
         newMember.setEmail("jtrantin@redhat.com");
         newMember.setName("Jonas");
@@ -169,7 +171,7 @@ public class MemberDaoTest {
 
 
 
-        PackageKnowledge know = new PackageKnowledge();
+        val know = new PackageKnowledge();
         know.setPackage(richfaces);
         know.setLevel(2);
         know.setMember(newMember);

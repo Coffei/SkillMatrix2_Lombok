@@ -2,7 +2,6 @@ package com.redhat.gss.skillmatrix.controller.details;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -12,6 +11,7 @@ import javax.inject.Inject;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.PackageModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
@@ -57,7 +57,7 @@ public class SbrDetail {
             try {
                 long id = Long.parseLong(sid);
 
-                List<SBR> sbrs = dao.getProducerFactory().filterId(id).getSbrs();
+                val sbrs = dao.getProducerFactory().filterId(id).getSbrs();
                 if(sbrs!=null && !sbrs.isEmpty()) {
                     this.sbr = sbrs.get(0);
                     Collections.sort(this.sbr.getCoaches(), new Comparator<Coach>() { //pre sort coaches

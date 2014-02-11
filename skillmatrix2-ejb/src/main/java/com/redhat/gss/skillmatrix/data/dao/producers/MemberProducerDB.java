@@ -1,23 +1,42 @@
 package com.redhat.gss.skillmatrix.data.dao.producers;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.logging.Logger;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
 import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.model.Package;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
-import javax.transaction.*;
-
-import java.util.*;
-import java.util.logging.Logger;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Database implementation of {@link MemberProducer}.
@@ -513,14 +532,14 @@ public class MemberProducerDB implements MemberProducer {
         }
         em.joinTransaction();
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Member> query = cb.createQuery(Member.class);
-        Root<Member> root = query.from(Member.class);
+        val cb = em.getCriteriaBuilder();
+        val query = cb.createQuery(Member.class);
+        val root = query.from(Member.class);
 
         query.select(root);
 
         //add filters
-        List<Predicate> predicates = new LinkedList<Predicate>();
+        val predicates = new LinkedList<Predicate>();
         for(Filter filter : this.filters) {
             predicates.add(filter.apply(cb, root, query));
         }
@@ -537,7 +556,7 @@ public class MemberProducerDB implements MemberProducer {
             query.orderBy(orders.get(0).apply(cb, root, query));
         }
 
-        TypedQuery<Member> typedQuery = em.createQuery(query);
+        val typedQuery = em.createQuery(query);
 
         //apply max count and start offset
         if(maxRecords!=null)
@@ -547,7 +566,7 @@ public class MemberProducerDB implements MemberProducer {
             typedQuery.setFirstResult(startOffset);
 
         //and return the results
-        List<Member> result = fetchCollections(typedQuery.getResultList());
+        val result = fetchCollections(typedQuery.getResultList());
 
         try {
             transaction.commit();
@@ -599,7 +618,7 @@ public class MemberProducerDB implements MemberProducer {
             maxresults = this.maxRecords.intValue();
         }
 
-        List<Member> result = fetchCollections(members.subList(offset, maxresults));
+        val result = fetchCollections(members.subList(offset, maxresults));
 
         try {
             transaction.commit();
@@ -619,14 +638,14 @@ public class MemberProducerDB implements MemberProducer {
 
     @Override
     public long getCount() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Long> query = cb.createQuery(Long.class);
-        Root<Member> root = query.from(Member.class);
+        val cb = em.getCriteriaBuilder();
+        val query = cb.createQuery(Long.class);
+        val root = query.from(Member.class);
 
         query.select(cb.count(root));
 
         //add filters
-        List<Predicate> predicates = new LinkedList<Predicate>();
+        val predicates = new LinkedList<Predicate>();
         for(Filter filter : this.filters) {
             predicates.add(filter.apply(cb, root, query));
         }
@@ -634,7 +653,7 @@ public class MemberProducerDB implements MemberProducer {
 
         //ignoring order
 
-        TypedQuery<Long> typedQuery = em.createQuery(query);
+        val typedQuery = em.createQuery(query);
 
         //and return the results
         return typedQuery.getSingleResult();
@@ -698,7 +717,7 @@ public class MemberProducerDB implements MemberProducer {
                 int score = 0;
                 for(Knowledge know : member.getKnowledges()) {
                     if(know instanceof PackageKnowledge) {
-                        PackageKnowledge pkgKnow = (PackageKnowledge)know;
+                        val pkgKnow = (PackageKnowledge)know;
                         if(pkgKnow.getPackage().getSbr().getId().equals(sbr.getId())) { //we found a package knowledge at the level!
                             score += Math.pow(2, pkgKnow.getLevel());
                         }

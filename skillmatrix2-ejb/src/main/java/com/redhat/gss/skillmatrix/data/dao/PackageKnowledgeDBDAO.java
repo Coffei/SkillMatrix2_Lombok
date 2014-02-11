@@ -11,7 +11,10 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
 import java.util.Map;
+
+import lombok.val;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,15 +38,15 @@ public class PackageKnowledgeDBDAO implements PackageKnowledgeDAO {
             throw new MemberInvalidException("member has no id");
 
         //delete all old knows
-        Query query = em.createQuery("delete from PackageKnowledge know where know.member = :member");
+        val query = em.createQuery("delete from PackageKnowledge know where know.member = :member");
         query.setParameter("member", member);
         query.executeUpdate();
 
         //create new knows
         if(knowlegdes!=null) {
-            for(Map.Entry<Package, Integer> entry : knowlegdes.entrySet()) {
+            for(val entry : knowlegdes.entrySet()) {
                 if(entry.getValue() >= 0) { //level is valid
-                    PackageKnowledge know = new PackageKnowledge();
+                    val know = new PackageKnowledge();
                     know.setPackage(entry.getKey());
                     know.setLevel(entry.getValue());
                     know.setMember(member);
