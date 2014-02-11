@@ -18,6 +18,7 @@ import javax.naming.NamingException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.val;
 
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
@@ -57,8 +58,8 @@ public class PackageKnowledgeFilter implements Filter {
 
     @Override
     public String encode() {
-        Map<String, String> data = new HashMap<String, String>(packagesMap.size());
-        for (Map.Entry<Package, Integer> entry : packagesMap.entrySet()) {
+       val data = new HashMap<String, String>(packagesMap.size());
+        for (val entry : packagesMap.entrySet()) {
             String key = "pkg" + entry.getKey().getId();
             String value = entry.getValue().toString();
             data.put(key, value); //put 'pkgXX'-> Y, where XX is pkg ID, Y is min. know level
@@ -72,9 +73,9 @@ public class PackageKnowledgeFilter implements Filter {
         if(filter==null)
             throw new NullPointerException("filter");
 
-        Map<String, String> data = AttributeEncoder.decodeToMap(filter, "pkgKnow");
+        val data = AttributeEncoder.decodeToMap(filter, "pkgKnow");
         Pattern pkgPattern = Pattern.compile("^pkg([0-9]+)$");
-        for (Map.Entry<String, String> entry : data.entrySet()) {
+        for (val entry : data.entrySet()) {
             Matcher keyMatcher = pkgPattern.matcher(entry.getKey());
             if (keyMatcher.matches() && entry.getValue().matches("^(0|1|2)$")) { //key and value match, this is valid parameter
               long id = Long.parseLong(keyMatcher.group(1));
@@ -92,9 +93,9 @@ public class PackageKnowledgeFilter implements Filter {
             InitialContext initialContext = null;
             try { //acquire BeanManager in order to get SbrDao
                 initialContext = new InitialContext();
-                BeanManager beanManager =  (BeanManager) initialContext.lookup("java:comp/BeanManager");
+                val beanManager =  (BeanManager) initialContext.lookup("java:comp/BeanManager");
 
-                Bean<PackageDAO> bean = (Bean<PackageDAO>)beanManager.getBeans(PackageDAO.class).iterator().next();
+                val bean = (Bean<PackageDAO>)beanManager.getBeans(PackageDAO.class).iterator().next();
                 CreationalContext<PackageDAO> context = beanManager.createCreationalContext(bean);
                 pkgDao = (PackageDAO)beanManager.getReference(bean, PackageDAO.class, context);
             } catch (NamingException e) {
@@ -103,7 +104,7 @@ public class PackageKnowledgeFilter implements Filter {
         }
 
 
-        List<Package> pkgs = pkgDao.getProducerFactory ().filterId(id).getPackages();
+        val pkgs = pkgDao.getProducerFactory ().filterId(id).getPackages();
         if(!pkgs.isEmpty())
             return pkgs.get(0);
 
@@ -117,7 +118,7 @@ public class PackageKnowledgeFilter implements Filter {
 
     @Override
     public void applyOnProducer(MemberProducer producer) {
-        for (Map.Entry<Package, Integer> entry : packagesMap.entrySet()) {
+        for (val entry : packagesMap.entrySet()) {
             try {
             producer.filterKnowledgeOfPackage(entry.getKey(), entry.getValue(), OperatorEnum.BIGGER_OR_EQUAL);
             } catch (PackageInvalidException e) { //log and ignore
@@ -129,7 +130,7 @@ public class PackageKnowledgeFilter implements Filter {
     @Override
     public String explain() {
         StringBuilder desc = new StringBuilder("knowledge of packages: <ul>");
-        for (Map.Entry<Package, Integer> entry : packagesMap.entrySet()) {
+        for (val entry : packagesMap.entrySet()) {
             desc.append("<li>");
             desc.append(entry.getKey().getName());
 

@@ -1,19 +1,21 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters.util;
 
-import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
-import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
-import com.redhat.gss.skillmatrix.controller.search.filter.exeptions.TypeMismatchException;
-import org.reflections.Reflections;
-
-import javax.enterprise.context.Dependent;
-import javax.faces.bean.RequestScoped;
-import javax.inject.Inject;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+
+import lombok.val;
+
+import org.reflections.Reflections;
+
+import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
+import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
+import com.redhat.gss.skillmatrix.controller.search.filter.exeptions.TypeMismatchException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,7 +43,7 @@ public class FilterCreator {
         String type = matcher.group(1);
 
         //lookup filter class
-        Class<? extends Filter> filterClass = lookupFilterClass(type);
+        val filterClass = lookupFilterClass(type);
 
         if (filterClass == null) {// if no filter class found
             throw new IllegalArgumentException("Unsupported or unknown filter.");
@@ -71,7 +73,7 @@ public class FilterCreator {
 
     private Class<? extends Filter> lookupFilterClass(String type) {
         //do the magic
-        Set<Class<?>> classes = reflections.getTypesAnnotatedWith(MemberFilter.class);
+        val classes = reflections.getTypesAnnotatedWith(MemberFilter.class);
 
         for (Class<?> cls : classes) {
             MemberFilter annt = cls.getAnnotation(MemberFilter.class);

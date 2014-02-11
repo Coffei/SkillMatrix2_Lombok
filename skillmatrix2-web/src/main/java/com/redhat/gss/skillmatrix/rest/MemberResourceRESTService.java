@@ -1,9 +1,6 @@
 package com.redhat.gss.skillmatrix.rest;
 
-import com.redhat.gss.skillmatrix.data.api.MemberApiBuilder;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
-import com.redhat.gss.skillmatrix.model.Member;
-import com.redhat.gss.skillmatrix.model.api.MemberApi;
+import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -11,7 +8,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import java.util.List;
+
+import lombok.val;
+
+import com.redhat.gss.skillmatrix.data.api.MemberApiBuilder;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
+import com.redhat.gss.skillmatrix.model.Member;
+import com.redhat.gss.skillmatrix.model.api.MemberApi;
 
 /**
  * JAX-RS Example
@@ -32,7 +35,7 @@ public class MemberResourceRESTService {
     @Produces({"text/xml", "application/json"})
     public List<MemberApi> listAllMembers() {
 
-        final List<Member> results = manager.getProducerFactory().getMembers();
+       val results = manager.getProducerFactory().getMembers();
 
 
         return builder.buildMembers(results);
@@ -42,7 +45,7 @@ public class MemberResourceRESTService {
     @Path("/{id:[0-9][0-9]*}")
     @Produces({"text/xml", "application/json" })
     public MemberApi lookupMemberById(@PathParam("id") long id) {
-        List<Member> members = manager.getProducerFactory().filterId(id).getMembers();
+        val members = manager.getProducerFactory().filterId(id).getMembers();
         //TODO: whatif not found!
         return builder.buildMember(members.get(0));
     }

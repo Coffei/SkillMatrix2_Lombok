@@ -17,6 +17,7 @@ import java.util.Locale;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * Database implementation of {@link PackageProducer}.
@@ -110,9 +111,9 @@ public class PackageProducerDB implements PackageProducer {
         this.filters.add(new Filter() {
             @Override
             public Predicate apply(CriteriaBuilder cb, Root<Package> root, CriteriaQuery query) {
-                Subquery<Long> subquery = query.subquery(Long.class);
-                Root<PackageKnowledge>  pkgKnow = subquery.from(PackageKnowledge.class);
-                subquery.select(cb.count(pkgKnow)).where(cb.equal(pkgKnow.get(PackageKnowledge_.pkg), root), cb.equal(pkgKnow.get(PackageKnowledge_.level), level));
+                val subquery = query.subquery(Long.class);
+                val  pkgKnowRoot = subquery.from(PackageKnowledge.class);
+                subquery.select(cb.count(pkgKnowRoot)).where(cb.equal(pkgKnowRoot.get(PackageKnowledge_.pkg), root), cb.equal(pkgKnowRoot.get(PackageKnowledge_.level), level));
 
                 return operator.createPredicate(cb, subquery, cb.literal((long)count));
 
@@ -133,11 +134,11 @@ public class PackageProducerDB implements PackageProducer {
             @Override
             public Predicate apply(CriteriaBuilder cb, Root<Package> root, CriteriaQuery query) {
                 //get all the relevant pkgs
-                CriteriaQuery<Package> pkgCriteria = cb.createQuery(Package.class);
-                Root<PackageKnowledge> knowRoot = pkgCriteria.from(PackageKnowledge.class);
+                val pkgCriteria = cb.createQuery(Package.class);
+                val knowRoot = pkgCriteria.from(PackageKnowledge.class);
                 pkgCriteria.select(knowRoot.get(PackageKnowledge_.pkg)).where(cb.equal(knowRoot.get(PackageKnowledge_.member),
                         member), cb.equal(knowRoot.get(PackageKnowledge_.level), level));
-                List<Package> pkgs = em.createQuery(pkgCriteria).getResultList();
+                val pkgs = em.createQuery(pkgCriteria).getResultList();
 
                 //create predicate
                 return root.in(pkgs);
@@ -158,11 +159,11 @@ public class PackageProducerDB implements PackageProducer {
             @Override
             public Predicate apply(CriteriaBuilder cb, Root<Package> root, CriteriaQuery query) {
                 //first get all the matching sbrs and their packages
-                CriteriaQuery<SBR> sbrQuery = cb.createQuery(SBR.class);
-                Root<SBR> sbrRoot = sbrQuery.from(SBR.class);
+                val sbrQuery = cb.createQuery(SBR.class);
+                val sbrRoot = sbrQuery.from(SBR.class);
                 sbrQuery.select(sbrRoot).where(cb.like(cb.lower(sbrRoot.get(SBR_.name)), "%" + nameFragment.toLowerCase(Locale.ENGLISH) + "%"));
 
-                List<SBR> sbrs = em.createQuery(sbrQuery).getResultList();
+                val sbrs = em.createQuery(sbrQuery).getResultList();
 
                 //add criteria
 
@@ -190,7 +191,7 @@ public class PackageProducerDB implements PackageProducer {
         this.orderings.add(new Ordering() {
             @Override
             public Order apply(CriteriaBuilder cb, Root<Package> root, CriteriaQuery query) {
-                Join<Package, SBR> join = root.join(Package_.sbr);
+                val join = root.join(Package_.sbr);
                 return createOrder(ascending, cb, cb.lower(join.get(SBR_.name)));
             }
         });
@@ -216,12 +217,12 @@ public class PackageProducerDB implements PackageProducer {
 
     @Override
     public List<Package> getPackages() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Package> criteria = cb.createQuery(Package.class);
-        Root<Package> root = criteria.from(Package.class);
+        val cb = em.getCriteriaBuilder();
+        val criteria = cb.createQuery(Package.class);
+        val root = criteria.from(Package.class);
 
         //create filters
-        List<Predicate> predicates = new LinkedList<Predicate>();
+        val predicates = new LinkedList<Predicate>();
         for(Filter filter : this.filters) {
             predicates.add(filter.apply(cb, root, criteria));
         }
@@ -232,7 +233,7 @@ public class PackageProducerDB implements PackageProducer {
         if(!this.orderings.isEmpty())
             criteria.orderBy(orderings.get(0).apply(cb, root, criteria));
 
-        TypedQuery<Package> query = em.createQuery(criteria);
+        val query = em.createQuery(criteria);
 
         //apply start offset and max results
         if(startOffset!=null)
@@ -246,14 +247,14 @@ public class PackageProducerDB implements PackageProducer {
 
     @Override
     public long getCount() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
-        Root<Package> root = criteria.from(Package.class);
+        val cb = em.getCriteriaBuilder();
+        val criteria = cb.createQuery(Long.class);
+        val root = criteria.from(Package.class);
 
         criteria.select(cb.count(root));
 
         //create filters
-        List<Predicate> predicates = new LinkedList<Predicate>();
+        val predicates = new LinkedList<Predicate>();
         for(Filter filter : this.filters) {
             predicates.add(filter.apply(cb, root, criteria));
         }

@@ -1,17 +1,21 @@
 package com.redhat.gss.skillmatrix.controller.util;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+
+import lombok.val;
+
+import org.joda.time.Duration;
+import org.joda.time.Period;
+
 import com.redhat.gss.skillmatrix.model.Knowledge;
 import com.redhat.gss.skillmatrix.model.LanguageKnowledge;
 import com.redhat.gss.skillmatrix.model.Member;
 import com.redhat.gss.skillmatrix.model.SBR;
-import org.joda.time.Duration;
-import org.joda.time.Period;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,7 +37,7 @@ public class MemberUtils {
         if(member.getGeo()==null)
             return "";
 
-        StringBuilder builder = new StringBuilder(member.getGeo().getGeocode().toString());
+        val builder = new StringBuilder(member.getGeo().getGeocode().toString());
         builder.append(" / ");
 
         int offset = member.getGeo().getOffset();
@@ -57,7 +61,7 @@ public class MemberUtils {
         if(member==null)
             return "";
 
-        StringBuilder builder = new StringBuilder();
+        val builder = new StringBuilder();
         for(SBR sbr : member.getSbrs()) {
             builder.append(sbr.getName());
             builder.append(", ");
@@ -76,14 +80,14 @@ public class MemberUtils {
         if(lastMember!=null && lastMember.equals(member))//simple caching mechanism
             return lastLangs;
 
-        List<String> langs = getLangsList(member);
+        val langs = getLangsList(member);
         if(langs.isEmpty()) {
             lastMember = member;
             lastLangs = null;
             return null;
         }
 
-        StringBuilder builder = new StringBuilder(langs.get(0));
+        val builder = new StringBuilder(langs.get(0));
         for(String lang : langs.subList(1, langs.size())) {
             builder.append(", ");
             builder.append(lang);
@@ -98,7 +102,7 @@ public class MemberUtils {
         if(member==null || member.getKnowledges()==null || member.getKnowledges().isEmpty())
             return Collections.emptyList();
 
-        List<String> langs = new ArrayList<String>();
+       val langs = new ArrayList<String>();
         for(Knowledge know : member.getKnowledges()) {
             if(know instanceof LanguageKnowledge)
                 langs.add(((LanguageKnowledge)know).getLanguage());

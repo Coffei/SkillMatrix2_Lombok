@@ -2,7 +2,6 @@ package com.redhat.gss.skillmatrix.controller.form;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +13,7 @@ import javax.inject.Inject;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.PackageModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
@@ -64,7 +64,7 @@ public class KnowledgeForm implements Serializable {
         if(sid!=null) { // there is some ID param
             try {
                 long id = Long.parseLong(sid); // try parse
-                List<Member> members = memberDAO.getProducerFactory().filterId(id).getMembers();
+                val members = memberDAO.getProducerFactory().filterId(id).getMembers();
                 if(!members.isEmpty()) { // some members were found
                     this.member = members.get(0); //just get the first member
                 }
@@ -105,7 +105,7 @@ public class KnowledgeForm implements Serializable {
             return null;
         }
 
-        FacesMessage msg = new FacesMessage("Knowledges updated!");
+        val msg = new FacesMessage("Knowledges updated!");
         msg.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage(null, msg);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);

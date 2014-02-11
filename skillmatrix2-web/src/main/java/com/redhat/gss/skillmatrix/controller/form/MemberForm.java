@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 import org.joda.time.Duration;
 import org.joda.time.Period;
@@ -60,7 +61,7 @@ public class MemberForm implements Serializable {
         if(sid!=null && !sid.trim().isEmpty()) {
             try {
                 long id = Long.parseLong(sid.trim());
-                List<Member> members = memberDAO.getProducerFactory().filterId(id).getMembers();
+                val members = memberDAO.getProducerFactory().filterId(id).getMembers();
                 if(!members.isEmpty()) {
                     this.member = members.get(0); // get the first (usually the only one)
 
@@ -88,19 +89,19 @@ public class MemberForm implements Serializable {
     }
 
     public void addLanguage() {
-        LanguageKnowledge lang = new LanguageKnowledge();
-        lang.setMember(this.member);
-        langs.add(lang);
+        val langKnow = new LanguageKnowledge();
+        langKnow.setMember(this.member);
+        langs.add(langKnow);
     }
 
     private List<LanguageKnowledge> filterValidLangs(List<? extends Knowledge> knows) {
         if(knows==null || knows.isEmpty())
             return new ArrayList<LanguageKnowledge>(0); //better not use Collections.emptyList() due to EL bug https://bugzilla.redhat.com/show_bug.cgi?id=1029387
-        List<LanguageKnowledge> validLangs = new ArrayList<LanguageKnowledge>(this.langs.size());
+        val validLangs = new ArrayList<LanguageKnowledge>(this.langs.size());
 
         for (Knowledge know : knows) {
             if (know instanceof LanguageKnowledge) {
-                LanguageKnowledge lang = (LanguageKnowledge)know;
+                val lang = (LanguageKnowledge)know;
 
                 if (lang.getLanguage() != null && !lang.getLanguage().trim().isEmpty() && lang.getLanguage().trim().length() <= 5) {
                     lang.setLanguage(lang.getLanguage().trim().toUpperCase(Locale.ENGLISH)); // trim and upper the language
@@ -113,7 +114,7 @@ public class MemberForm implements Serializable {
     }
 
     public String submit() {
-        FacesMessage msg = new FacesMessage();
+        val msg = new FacesMessage();
         preprocessMember(this.member);
         try {
             if(this.member.getId()==null) { // we are creating new member
@@ -124,13 +125,13 @@ public class MemberForm implements Serializable {
                 msg.setSummary("Member updated!");
             }
         } catch (MemberInvalidException miex) {
-            FacesMessage msg_err = new FacesMessage("Member is invalid, try again. Root cause: " + miex.getMessage());
+            val msg_err = new FacesMessage("Member is invalid, try again. Root cause: " + miex.getMessage());
             msg_err.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(null, msg_err);
             FacesContext.getCurrentInstance().validationFailed();
             return "";
         } catch (UnsupportedOperationException unopex) {
-            FacesMessage msg_err = new FacesMessage("Operation is currently not supported.");
+            val msg_err = new FacesMessage("Operation is currently not supported.");
             msg_err.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(null, msg_err);
             FacesContext.getCurrentInstance().validationFailed();
@@ -155,17 +156,17 @@ public class MemberForm implements Serializable {
     }
 
     public List<TimeZone> getAllTimezones() { // kinda misuse of Map.Entry, but seems convenient
-        List<TimeZone> entries = new LinkedList<TimeZone>();
+        val timeZones = new LinkedList<TimeZone>();
         for(int i = -690; i<=720; i+=30) { // generate all timezones by 30 minutes
             TimeZone timezone = new TimeZone();
             timezone.setOffset(i);
 
             Period period = new Duration(Math.abs(i * 60 * 1000)).toPeriod();
             timezone.setName((i < 0 ? "-" : "+") + String.format("%02d:%02d", period.getHours(), period.getMinutes()));
-            entries.add(timezone);
+            timeZones.add(timezone);
         }
 
-        return entries;
+        return timeZones;
     }
 
     // pre-processing before saved

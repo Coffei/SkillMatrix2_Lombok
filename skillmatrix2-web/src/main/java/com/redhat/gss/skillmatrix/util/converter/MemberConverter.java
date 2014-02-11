@@ -1,14 +1,15 @@
 package com.redhat.gss.skillmatrix.util.converter;
 
-import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
-import com.redhat.gss.skillmatrix.model.Member;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.List;
+
+import lombok.val;
+
+import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
+import com.redhat.gss.skillmatrix.model.Member;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,7 +30,7 @@ public class MemberConverter implements Converter {
         if(sid!=null && !sid.trim().isEmpty()) {
             try {
                 long id = Long.valueOf(sid.trim());
-                List<Member> members = memberDAO.getProducerFactory().filterId(id).getMembers();
+                val members = memberDAO.getProducerFactory().filterId(id).getMembers();
                 if(!members.isEmpty()) {
                     return members.get(0);
                 }

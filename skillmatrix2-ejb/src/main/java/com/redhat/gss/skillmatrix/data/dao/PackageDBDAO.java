@@ -12,6 +12,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import lombok.val;
+
 /**
  * Created with IntelliJ IDEA.
  * User: jtrantin
@@ -59,7 +61,7 @@ public class PackageDBDAO implements PackageDAO {
             pkg = em.merge(pkg);
 
         //delete all package knowledges
-        Query query = em.createNativeQuery("DELETE FROM PACKAGEKNOWLEDGE WHERE pkg_id=:pkg");
+        val query = em.createNativeQuery("DELETE FROM PACKAGEKNOWLEDGE WHERE pkg_id=:pkg");
         query.setParameter("pkg", pkg.getId());
         query.executeUpdate();
         em.remove(pkg);

@@ -1,6 +1,5 @@
 package com.redhat.gss.skillmatrix.controller.details;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -11,6 +10,7 @@ import javax.inject.Inject;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
@@ -49,7 +49,7 @@ public class PackageDetail {
             try {
                 long id = Long.parseLong(sid);
 
-                List<Package> pkgs = dao.getProducerFactory().filterId(id).getPackages();
+                val pkgs = dao.getProducerFactory().filterId(id).getPackages();
                 if(pkgs!=null && !pkgs.isEmpty()) {
                     this.pkg = pkgs.get(0);
 

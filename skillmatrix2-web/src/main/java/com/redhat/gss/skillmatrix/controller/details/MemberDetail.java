@@ -1,12 +1,11 @@
 package com.redhat.gss.skillmatrix.controller.details;
 
-import com.redhat.gss.skillmatrix.controllers.sorthelpers.PackageModelHelper;
-import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
-import com.redhat.gss.skillmatrix.model.Member;
-import com.redhat.gss.skillmatrix.model.SBR;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -14,11 +13,17 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
-import java.util.*;
-import java.util.logging.Logger;
-
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
+
+import com.redhat.gss.skillmatrix.controllers.sorthelpers.PackageModelHelper;
+import com.redhat.gss.skillmatrix.data.dao.exceptions.MemberInvalidException;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
+import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
+import com.redhat.gss.skillmatrix.model.Member;
+import com.redhat.gss.skillmatrix.model.SBR;
 
 /**
  * Created with IntelliJ IDEA.
@@ -66,7 +71,7 @@ public class MemberDetail {
         if(sid!=null && !sid.trim().isEmpty()) {
             try {
                 long id = Long.parseLong(sid);
-                List<Member> members = memberDAO.getProducerFactory().filterId(id).getMembers();
+                val members = memberDAO.getProducerFactory().filterId(id).getMembers();
                 if(members!=null && !members.isEmpty()) {
                     this.member = members.get(0);
                     Collections.sort(this.member.getSbrs(), new Comparator<SBR>() {

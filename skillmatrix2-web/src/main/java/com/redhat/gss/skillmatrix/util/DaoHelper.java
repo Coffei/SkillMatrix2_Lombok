@@ -10,9 +10,12 @@ import javax.enterprise.inject.Produces;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import lombok.val;
 
 /**
  * Created with IntelliJ IDEA.
@@ -69,7 +72,7 @@ public class DaoHelper {
     @Produces
     @Named("allGeos")
     public List<GeoEnum> getAllGeos() {
-        List<GeoEnum> geos = Arrays.asList(GeoEnum.values());
+        val geos = Arrays.asList(GeoEnum.values());
         Collections.sort(geos);
         return geos;
     }

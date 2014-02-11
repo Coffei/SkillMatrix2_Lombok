@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * Created with IntelliJ IDEA.
@@ -170,25 +171,25 @@ public class SbrProducerDB implements SbrProducer {
             log.severe(String.format("%s\n%s", e.toString(), Arrays.toString(e.getStackTrace())));
         }
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<SBR> criteria = cb.createQuery(SBR.class);
-        Root<SBR> sbr = criteria.from(SBR.class);
+        val cb = em.getCriteriaBuilder();
+        val criteria = cb.createQuery(SBR.class);
+        val sbrRoot = criteria.from(SBR.class);
 
-        criteria.select(sbr);
+        criteria.select(sbrRoot);
 
         //apply filters
-        List<Predicate> predicates = new LinkedList<Predicate>();
+        val predicates = new LinkedList<Predicate>();
         for(Filter filter : this.filters) {
-            predicates.add(filter.apply(cb, sbr, criteria));
+            predicates.add(filter.apply(cb, sbrRoot, criteria));
         }
         criteria.where(predicates.toArray(new Predicate[0]));
 
         //add orders
         // for now just add the first one
         if(!this.orders.isEmpty())
-            criteria.orderBy(this.orders.get(0).apply(cb, sbr, criteria));
+            criteria.orderBy(this.orders.get(0).apply(cb, sbrRoot, criteria));
 
-        TypedQuery<SBR> query = em.createQuery(criteria);
+        val query = em.createQuery(criteria);
 
         if(this.maxRecords!=null)
             query.setMaxResults(this.maxRecords);
@@ -196,7 +197,7 @@ public class SbrProducerDB implements SbrProducer {
         if(this.startOffset!=null)
             query.setFirstResult(this.startOffset);
 
-        List<SBR> result = fetchCollections(query.getResultList());
+        val result = fetchCollections(query.getResultList());
 
         try {
             transaction.commit();
@@ -216,21 +217,21 @@ public class SbrProducerDB implements SbrProducer {
 
     @Override
     public long getCount() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
-        Root<SBR> sbr = criteria.from(SBR.class);
+        val cb = em.getCriteriaBuilder();
+        val criteria = cb.createQuery(Long.class);
+        val sbrRoot = criteria.from(SBR.class);
 
-        criteria.select(cb.count(sbr));
+        criteria.select(cb.count(sbrRoot));
 
         //apply filters
-        List<Predicate> predicates = new LinkedList<Predicate>();
+        val predicates = new LinkedList<Predicate>();
         for(Filter filter : this.filters) {
-            predicates.add(filter.apply(cb, sbr, criteria));
+            predicates.add(filter.apply(cb, sbrRoot, criteria));
         }
         criteria.where(predicates.toArray(new Predicate[0]));
 
        // we can ignore order
-        TypedQuery<Long> query = em.createQuery(criteria);
+       val query = em.createQuery(criteria);
 
 
         //return the results

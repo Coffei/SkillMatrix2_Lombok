@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import org.reflections.Reflections;
 
@@ -141,7 +142,7 @@ public class MemberSearch {
     }
 
     public Map<String, String> getAllLevels() {
-        Map<String, String> levels = new HashMap<String, String>(3);
+        val levels = new HashMap<String, String>(3);
         levels.put("beginner", "0");
         levels.put("intermediate", "1");
         levels.put("expert", "2");
@@ -197,7 +198,7 @@ public class MemberSearch {
                 }
             }
 
-            Class<?> filterClass = allFilters.get(element);
+            val filterClass = allFilters.get(element);
             if(filterClass!=null) {
                 //check if there already isn't the correct element, in that case do not recreate
                 Filter oldFilter = backingList.get(index);
@@ -230,7 +231,7 @@ public class MemberSearch {
                 backingList.add(index, null);
                 return;
             }
-            Class<?> filterClass = allFilters.get(element);
+            val filterClass = allFilters.get(element);
             if(filterClass!=null) {
                 try {
                     backingList.add(index,(Filter)filterClass.newInstance());

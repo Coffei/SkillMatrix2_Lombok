@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.val;
 
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
@@ -68,7 +69,7 @@ public class SbrFilter implements Filter {
 
     @Override
     public String encode() {
-        Map<String, String> data = new HashMap<String, String>(1);
+        val data = new HashMap<String, String>(1);
         data.put("sbr", value.getId().toString());
 
         return AttributeEncoder.encodeFromMap("sbrFilter", data);
@@ -76,7 +77,7 @@ public class SbrFilter implements Filter {
 
     @Override
     public void decode(String filter) throws TypeMismatchException, IllegalArgumentException {
-        Map<String, String> data = AttributeEncoder.decodeToMap(filter, "sbrFilter");
+       val data = AttributeEncoder.decodeToMap(filter, "sbrFilter");
         if(data==null || data.get("sbr")==null)
             throw new IllegalArgumentException("missing parameter");
 
@@ -91,7 +92,7 @@ public class SbrFilter implements Filter {
             throw new IllegalArgumentException("wrong sbr parameter", e);
         }
 
-        List<SBR> sbrs = getDao().getProducerFactory().filterId(id).getSbrs();
+        val sbrs = getDao().getProducerFactory().filterId(id).getSbrs();
         if(sbrs.isEmpty())
             throw new IllegalArgumentException("unexisting sbr");
 

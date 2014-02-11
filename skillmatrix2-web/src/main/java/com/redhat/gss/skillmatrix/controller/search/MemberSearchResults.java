@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import lombok.Getter;
+import lombok.val;
 
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.filters.util.FilterCreator;
@@ -70,11 +71,11 @@ public class MemberSearchResults {
         }
 
 
-        final List<Filter> modelFilters = new ArrayList<Filter>(); //filters to be applied on the model itself
+        val modelFilters = new ArrayList<Filter>(); //filters to be applied on the model itself
         modelHelper = new MemberModelHelper(MAX_RECORDS_PER_PAGE) {
             @Override
             protected MemberProducer getProducerFactory() {
-                MemberProducer producer =memberDAO.getProducerFactory();
+                val producer =memberDAO.getProducerFactory();
                 for (Filter filter : modelFilters) {
                     filter.applyOnProducer(producer);
                 }

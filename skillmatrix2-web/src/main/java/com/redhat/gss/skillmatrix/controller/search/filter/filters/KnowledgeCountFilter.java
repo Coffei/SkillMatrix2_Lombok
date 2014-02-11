@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.val;
 
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
@@ -42,7 +43,7 @@ public class KnowledgeCountFilter implements Filter {
 
     @Override
     public String encode() {
-        Map<String, String> data = new HashMap<String, String>(3);
+        val data = new HashMap<String, String>(3);
         data.put("level", String.valueOf(level));
         data.put("amount", String.valueOf(amount));
         data.put("operator", operator.toString());
@@ -52,7 +53,7 @@ public class KnowledgeCountFilter implements Filter {
 
     @Override
     public void decode(String filter) throws TypeMismatchException, IllegalArgumentException {
-        Map<String, String> data = AttributeEncoder.decodeToMap(filter, "knowCount");
+        val data = AttributeEncoder.decodeToMap(filter, "knowCount");
         if(data==null || data.isEmpty())
             throw new IllegalArgumentException("no parameters specified");
         if(data.get("level")==null)

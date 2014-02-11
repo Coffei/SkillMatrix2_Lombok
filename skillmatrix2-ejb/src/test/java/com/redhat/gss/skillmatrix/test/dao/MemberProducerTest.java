@@ -11,6 +11,7 @@ import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
 import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.model.Package;
 import com.redhat.gss.skillmatrix.util.Resources;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
@@ -24,10 +25,12 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import lombok.val;
 import static org.junit.Assert.*;
 
 
@@ -80,7 +83,7 @@ public class MemberProducerTest {
         memberDao.create(newMember);
         transaction.commit();
 
-        MemberProducer producer = memberDao.getProducerFactory();
+        val producer = memberDao.getProducerFactory();
 
         List<Member> result = producer.filterId(newMember.getId()).getMembers();
         assertNotNull("null result from producer", result);
@@ -462,7 +465,7 @@ public class MemberProducerTest {
 
     @Test(expected = PackageInvalidException.class)
     public void testFilterKnowledgeOfPackageInvalid() throws Exception {
-        List<Member> members = memberDao.getProducerFactory().filterKnowledgeOfPackage(new Package(), 0, OperatorEnum.EQUAL).getMembers();
+       val members = memberDao.getProducerFactory().filterKnowledgeOfPackage(new Package(), 0, OperatorEnum.EQUAL).getMembers();
     }
 
 

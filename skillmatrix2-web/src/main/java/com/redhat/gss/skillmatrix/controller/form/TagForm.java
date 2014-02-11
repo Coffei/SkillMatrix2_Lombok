@@ -1,7 +1,6 @@
 package com.redhat.gss.skillmatrix.controller.form;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -12,6 +11,7 @@ import javax.inject.Inject;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
@@ -46,7 +46,7 @@ public class TagForm  implements Serializable {
         if(sid!=null && !sid.trim().isEmpty()) {
             try {
                 long id = Long.valueOf(sid);
-                List<Package> pkgs = pkgDao.getProducerFactory().filterId(id).getPackages();
+                val pkgs = pkgDao.getProducerFactory().filterId(id).getPackages();
 
                 if(!pkgs.isEmpty()) { // just take the first one
                     this.pkg = pkgs.get(0); // edit existing package mode
@@ -60,7 +60,7 @@ public class TagForm  implements Serializable {
     }
 
     public String submit(){
-        FacesMessage msg = new FacesMessage();
+        val msg = new FacesMessage();
         try {
             if(pkg.getId() == null) {// we are creating new package
                 pkgDao.create(pkg);
@@ -71,13 +71,13 @@ public class TagForm  implements Serializable {
             }
         } catch(PackageInvalidException piex)  {
 
-            FacesMessage msg_err = new FacesMessage("Package is invalid, try again. Root cause: " + piex.getMessage());
+            val msg_err = new FacesMessage("Package is invalid, try again. Root cause: " + piex.getMessage());
             msg_err.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(null, msg_err);
             FacesContext.getCurrentInstance().validationFailed();
             return "";
         } catch (UnsupportedOperationException unopex) {
-            FacesMessage msg_err = new FacesMessage("Operation is currently not supported.");
+            val msg_err = new FacesMessage("Operation is currently not supported.");
             msg_err.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(null, msg_err);
             FacesContext.getCurrentInstance().validationFailed();
