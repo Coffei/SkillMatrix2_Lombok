@@ -59,9 +59,7 @@ public class SbrProducerDB implements SbrProducer {
     }
 
     @Override
-    public SbrProducer filterName(final String nameFragment) {
-        if(nameFragment == null)
-            throw new NullPointerException("nameFragment");
+    public SbrProducer filterName(@NonNull final String nameFragment) {
         if(nameFragment.isEmpty())
             throw new IllegalArgumentException("nameFragment cannot be empty");
 
@@ -76,9 +74,7 @@ public class SbrProducerDB implements SbrProducer {
     }
 
     @Override
-    public SbrProducer filterNameExact(final String name) {
-        if(name==null)
-            throw new NullPointerException("name");
+    public SbrProducer filterNameExact(@NonNull final String name) {
         if(name.isEmpty())
             throw new IllegalArgumentException("name cannot be empty");
 
@@ -93,9 +89,7 @@ public class SbrProducerDB implements SbrProducer {
     }
 
     @Override
-    public SbrProducer filterMember(final Member member) throws MemberInvalidException {
-        if(member==null)
-            throw new NullPointerException("member");
+    public SbrProducer filterMember(@NonNull final Member member) throws MemberInvalidException {
         if(member.getId()==null)
             throw new MemberInvalidException("member has no db ID", new NullPointerException("member.id"), member);
 
@@ -246,7 +240,7 @@ public class SbrProducerDB implements SbrProducer {
         }
     }
 
-    private SBR fetchCollections(SBR sbr) {
+    private SBR fetchCollections(@NonNull SBR sbr) {
         sbr.getCoaches().size();
         sbr.getMembers().size();
         sbr.getPackages().size();
@@ -254,7 +248,7 @@ public class SbrProducerDB implements SbrProducer {
         return sbr;
     }
 
-    private List<SBR> fetchCollections(List<SBR> sbrs) {
+    private List<SBR> fetchCollections(@NonNull List<SBR> sbrs) {
         for(SBR sbr : sbrs) {
             fetchCollections(sbr);
         }

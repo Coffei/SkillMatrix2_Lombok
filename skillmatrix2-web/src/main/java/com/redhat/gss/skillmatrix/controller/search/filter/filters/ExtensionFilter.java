@@ -13,6 +13,7 @@ import com.redhat.gss.skillmatrix.controller.search.filter.exeptions.TypeMismatc
 import com.redhat.gss.skillmatrix.controller.search.filter.filters.util.AttributeEncoder;
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
+import lombok.NonNull;
 
 /**
  * Created with IntelliJ IDEA.
@@ -44,9 +45,7 @@ public class ExtensionFilter implements Filter, BasicAttributeFilter {
     }
 
     @Override
-    public boolean apply(MemberModelHelper modelHelper) {
-        if(modelHelper==null)
-            throw new NullPointerException("modelHelper");
+    public boolean apply(@NonNull MemberModelHelper modelHelper) {
 
         modelHelper.setExtensionFilter(this.value);
 
@@ -54,9 +53,7 @@ public class ExtensionFilter implements Filter, BasicAttributeFilter {
     }
 
     @Override
-    public void applyOnProducer(MemberProducer producer) {
-        if(producer==null)
-            throw new NullPointerException("producer");
+    public void applyOnProducer(@NonNull MemberProducer producer) {
 
         producer.filterExtension(this.value);
     }

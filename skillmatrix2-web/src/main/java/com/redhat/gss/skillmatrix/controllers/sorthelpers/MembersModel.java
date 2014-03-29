@@ -14,6 +14,7 @@ import org.ajax4jsf.model.SequenceRange;
 
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.model.Member;
+import lombok.NonNull;
 
 /**
  * RichFaces model for Members. This model is very flexible and can be used for any member-related tables. Just modify
@@ -39,6 +40,7 @@ public abstract class MembersModel extends ExtendedDataModel<Member> {
 	 * @param range valid sequence range
 	 */
 	@Getter @Setter
+        @NonNull
     private SequenceRange range;
     
 

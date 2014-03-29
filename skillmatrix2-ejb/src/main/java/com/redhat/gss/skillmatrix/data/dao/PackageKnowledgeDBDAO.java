@@ -6,14 +6,13 @@ import com.redhat.gss.skillmatrix.model.Knowledge;
 import com.redhat.gss.skillmatrix.model.Member;
 import com.redhat.gss.skillmatrix.model.Package;
 import com.redhat.gss.skillmatrix.model.PackageKnowledge;
-
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import java.util.Map;
-
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -30,10 +29,8 @@ public class PackageKnowledgeDBDAO implements PackageKnowledgeDAO {
     private EntityManager em;
 
     @Override
-    public void update(Map<Package, Integer> knowlegdes, Member member) throws MemberInvalidException, UnsupportedOperationException {
+    public void update(@NonNull Map<Package, Integer> knowlegdes, Member member) throws MemberInvalidException, UnsupportedOperationException {
         //verify member is valid
-        if(member==null)
-            throw new MemberInvalidException("null member", new NullPointerException("member"));
         if(member.getId()==null) // invalid member instance
             throw new MemberInvalidException("member has no id");
 

@@ -1,14 +1,5 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.val;
-
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
 import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
@@ -17,6 +8,15 @@ import com.redhat.gss.skillmatrix.controller.search.filter.filters.util.Attribut
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.model.GeoEnum;
+import java.util.HashMap;
+import java.util.Map;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.val;
 
 /**
  * Created with IntelliJ IDEA.
@@ -59,9 +59,7 @@ public class GeoFilter implements Filter {
     }
 
     @Override
-    public boolean apply(MemberModelHelper modelHelper) {
-        if(modelHelper==null)
-            throw new NullPointerException("modelHelper");
+    public boolean apply(@NonNull MemberModelHelper modelHelper) {
 
         modelHelper.setGeoFilter(this.value.toString());
 
@@ -69,9 +67,7 @@ public class GeoFilter implements Filter {
     }
 
     @Override
-    public void applyOnProducer(MemberProducer producer) {
-        if(producer==null)
-            throw new NullPointerException("producer");
+    public void applyOnProducer(@NonNull MemberProducer producer) {
 
         producer.filterGeo(this.value);
     }

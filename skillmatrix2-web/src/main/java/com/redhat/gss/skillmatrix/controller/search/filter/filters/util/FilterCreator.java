@@ -1,21 +1,18 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters.util;
 
+import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
+import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
+import com.redhat.gss.skillmatrix.controller.search.filter.exeptions.TypeMismatchException;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-
+import lombok.NonNull;
 import lombok.val;
-
 import org.reflections.Reflections;
-
-import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
-import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
-import com.redhat.gss.skillmatrix.controller.search.filter.exeptions.TypeMismatchException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,9 +30,7 @@ public class FilterCreator {
     private Reflections reflections;
 
     Pattern typePattern = Pattern.compile("^([^:]+):(.)*$"); //group 1 is filter type
-    public Filter createFilter(String encodedFilter) {
-        if(encodedFilter==null)
-            throw new NullPointerException("encodedFilter");
+    public Filter createFilter(@NonNull String encodedFilter) {
         Matcher matcher = typePattern.matcher(encodedFilter);
         if(!matcher.matches())
             throw new IllegalArgumentException("encodedFilter is not an encoded filter");

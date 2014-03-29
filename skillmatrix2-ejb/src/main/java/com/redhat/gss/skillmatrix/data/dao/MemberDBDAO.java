@@ -7,13 +7,12 @@ import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.model.Knowledge;
 import com.redhat.gss.skillmatrix.model.LanguageKnowledge;
 import com.redhat.gss.skillmatrix.model.Member;
-
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.UserTransaction;
-
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -38,17 +37,12 @@ public class MemberDBDAO implements MemberDAO {
     }
 
     @Override
-    public void create(Member member) throws UnsupportedOperationException, MemberInvalidException {
-        if(member==null)
-            throw new NullPointerException("member");
-
+    public void create(@NonNull Member member) throws UnsupportedOperationException, MemberInvalidException {
         em.persist(member);
     }
 
     @Override
-    public void update(Member member) throws UnsupportedOperationException, MemberInvalidException {
-        if(member==null)
-            throw new NullPointerException("member");
+    public void update(@NonNull Member member) throws UnsupportedOperationException, MemberInvalidException {
         if(member.getId()==null)  // member has no DB ID
             throw new MemberInvalidException("member has to have an ID in order to be updated", member);
 
@@ -62,9 +56,7 @@ public class MemberDBDAO implements MemberDAO {
     }
 
     @Override
-    public void delete(Member member) throws UnsupportedOperationException, MemberInvalidException {
-        if(member==null)
-            throw new NullPointerException("member");
+    public void delete(@NonNull Member member) throws UnsupportedOperationException, MemberInvalidException {
         if(member.getId()==null)
             throw new MemberInvalidException("member has to have an ID in order to be deleted", member);
 

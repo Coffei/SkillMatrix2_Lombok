@@ -2,17 +2,14 @@ package com.redhat.gss.skillmatrix.data.api;
 
 import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.model.api.MemberApi;
-
+import java.util.ArrayList;
+import java.util.List;
+import javax.ejb.Stateless;
+import lombok.NonNull;
+import lombok.val;
 import org.joda.time.Duration;
 import org.joda.time.Interval;
 import org.joda.time.Period;
-
-import javax.ejb.Stateless;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import lombok.val;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +21,7 @@ import lombok.val;
 @Stateless
 public class MemberApiBuilder {
 
-    public MemberApi buildMember(Member member) {
+    public MemberApi buildMember(@NonNull Member member) {
         MemberApi api = new MemberApi();
 
         api.setEmail(member.getEmail());
@@ -66,7 +63,7 @@ public class MemberApiBuilder {
         return api;
     }
 
-    String buildGeo(Geo geo) {
+    String buildGeo(@NonNull Geo geo) {
         val builder = new StringBuilder();
         builder.append(geo.getGeocode().toString());
 
@@ -83,7 +80,7 @@ public class MemberApiBuilder {
         return builder.toString();
     }
 
-    public List<MemberApi> buildMembers(List<Member> members) {
+    public List<MemberApi> buildMembers(@NonNull List<Member> members) {
         val apis = new ArrayList<MemberApi>(members.size());
 
         for(Member member : members) {

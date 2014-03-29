@@ -12,6 +12,7 @@ import com.redhat.gss.skillmatrix.model.Member;
 import com.redhat.gss.skillmatrix.model.Package;
 import com.redhat.gss.skillmatrix.model.SBR;
 import com.redhat.gss.skillmatrix.model.api.SbrApi;
+import lombok.NonNull;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,7 +24,7 @@ import com.redhat.gss.skillmatrix.model.api.SbrApi;
 @Stateless
 public class SbrApiBuilder {
 
-    public SbrApi buildSbr(SBR sbr) {
+    public SbrApi buildSbr(@NonNull SBR sbr) {
         SbrApi api = new SbrApi();
         api.setId(sbr.getId());
         api.setName(sbr.getName());
@@ -58,7 +59,7 @@ public class SbrApiBuilder {
         return api;
     }
 
-    public List<SbrApi> buildSbrs(List<SBR> sbrs) {
+    public List<SbrApi> buildSbrs(@NonNull List<SBR> sbrs) {
        val apis = new ArrayList<SbrApi>(sbrs.size());
         for (SBR sbr : sbrs) {
             apis.add(buildSbr(sbr));
@@ -67,7 +68,7 @@ public class SbrApiBuilder {
         return apis;
     }
 
-    private SbrApi.CoachHelper buildCoachHelper(Coach coach) {
+    private SbrApi.CoachHelper buildCoachHelper(@NonNull Coach coach) {
        val coachHelper = new SbrApi.CoachHelper();
         coachHelper.setSbrRole(coach.getSbr_role());
         coachHelper.setMember(buildMemberHelper(coach.getMember()));
@@ -76,7 +77,7 @@ public class SbrApiBuilder {
     }
 
 
-    private SbrApi.MemberHelper buildMemberHelper(Member member) {
+    private SbrApi.MemberHelper buildMemberHelper(@NonNull Member member) {
     	val memberApi = new SbrApi.MemberHelper();
         memberApi.setName(member.getName());
         memberApi.setId(member.getId());
@@ -89,7 +90,7 @@ public class SbrApiBuilder {
         return memberApi;
     }
 
-    private  SbrApi.PackageHelper buildPackageHelper(Package pkg) {
+    private  SbrApi.PackageHelper buildPackageHelper(@NonNull Package pkg) {
         val pkgApi = new SbrApi.PackageHelper();
         pkgApi.setId(pkg.getId());
         pkgApi.setName(pkg.getName());

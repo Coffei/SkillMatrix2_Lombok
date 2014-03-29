@@ -1,10 +1,5 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 import com.redhat.gss.skillmatrix.controller.search.filter.BasicAttributeFilter;
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
@@ -13,6 +8,11 @@ import com.redhat.gss.skillmatrix.controller.search.filter.exeptions.TypeMismatc
 import com.redhat.gss.skillmatrix.controller.search.filter.filters.util.AttributeEncoder;
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,9 +43,7 @@ public class NickFilter implements Filter, BasicAttributeFilter {
     }
 
     @Override
-    public boolean apply(MemberModelHelper modelHelper) {
-        if(modelHelper==null)
-            throw new NullPointerException("modelHelper");
+    public boolean apply(@NonNull MemberModelHelper modelHelper) {
 
         modelHelper.setNickFilter(this.value);
 
@@ -53,9 +51,7 @@ public class NickFilter implements Filter, BasicAttributeFilter {
     }
 
     @Override
-    public void applyOnProducer(MemberProducer producer) {
-        if(producer==null)
-            throw new NullPointerException("producer");
+    public void applyOnProducer(@NonNull MemberProducer producer) {
 
         producer.filterNick(this.value);
     }

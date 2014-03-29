@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -33,17 +34,12 @@ public class PackageDBDAO implements PackageDAO {
     }
 
     @Override
-    public void create(Package pkg) throws PackageInvalidException {
-        if(pkg==null)
-            throw new NullPointerException("pkg");
-
-        em.persist(pkg);
+    public void create(@NonNull Package pkg) throws PackageInvalidException {
+         em.persist(pkg);
     }
 
     @Override
-    public void update(Package pkg) throws PackageInvalidException {
-        if(pkg==null)
-            throw new NullPointerException("pkg");
+    public void update(@NonNull Package pkg) throws PackageInvalidException {
         if(pkg.getId()==null)
             throw new PackageInvalidException("package has no DB ID", new NullPointerException("pkg.id"), pkg);
 
@@ -51,9 +47,7 @@ public class PackageDBDAO implements PackageDAO {
     }
 
     @Override
-    public void delete(Package pkg) throws PackageInvalidException {
-        if(pkg==null)
-            throw new NullPointerException("pkg");
+    public void delete(@NonNull Package pkg) throws PackageInvalidException {
         if(pkg.getId()==null)
             throw new PackageInvalidException("package has no DB ID", new NullPointerException("pkg.id"), pkg);
 

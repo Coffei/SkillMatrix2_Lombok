@@ -76,9 +76,7 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterNick(final String nick) {
-        if(nick==null)
-            throw new NullPointerException("nick");
+    public MemberProducer filterNick(@NonNull final String nick) {
         if(nick.isEmpty())
             throw new IllegalArgumentException("nick cannot be empty");
 
@@ -93,9 +91,7 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterNickExact(final String nick) {
-        if(nick==null)
-            throw new NullPointerException("nick");
+    public MemberProducer filterNickExact(@NonNull final String nick) {
         if(nick.isEmpty())
             throw new IllegalArgumentException("nick cannot be empty");
 
@@ -110,9 +106,7 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterName(final String name) {
-        if(name==null)
-            throw new NullPointerException("name");
+    public MemberProducer filterName(@NonNull final String name) {
         if(name.isEmpty())
             throw new IllegalArgumentException("name cannot be empty");
 
@@ -127,9 +121,7 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterEmail(final String email) {
-        if(email==null)
-            throw new NullPointerException("email");
+    public MemberProducer filterEmail(@NonNull final String email) {
         if(email.isEmpty())
             throw new IllegalArgumentException("email cannot be empty");
 
@@ -144,9 +136,7 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterRole(final String role) {
-        if(role==null)
-            throw new NullPointerException("role");
+    public MemberProducer filterRole(@NonNull final String role) {
         if(role.isEmpty())
             throw new IllegalArgumentException("role cannot be empty");
 
@@ -161,10 +151,7 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterGeo(final GeoEnum geo) {
-        if(geo==null)
-            throw new NullPointerException("geo");
-
+    public MemberProducer filterGeo(@NonNull final GeoEnum geo) {
         filters.add(new Filter() {
             @Override
             public Predicate apply(CriteriaBuilder cb, Root<Member> root, CriteriaQuery query) {
@@ -181,9 +168,7 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterExtension(final String extension) {
-        if(extension==null)
-            throw new NullPointerException("extension");
+    public MemberProducer filterExtension(@NonNull final String extension) {
         if(extension.isEmpty())
             throw new IllegalArgumentException("extension cannot be empty");
 
@@ -198,9 +183,7 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterSBRMembership(final SBR sbr) throws SbrInvalidException {
-        if(sbr==null)
-            throw new NullPointerException("sbr");
+    public MemberProducer filterSBRMembership(@NonNull final SBR sbr) throws SbrInvalidException {
         if(sbr.getId()==null)
             throw new SbrInvalidException("sbr has no DB ID", new NullPointerException("sbr.id"), sbr);
 
@@ -215,9 +198,7 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterLanguage(final String language) {
-        if(language==null)
-            throw new NullPointerException("language");
+    public MemberProducer filterLanguage(@NonNull final String language) {
         if(language.isEmpty())
             throw new IllegalArgumentException("language cannot be empty");
 
@@ -265,9 +246,7 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterKnowledgeLevelCount(final int level, final int count, final OperatorEnum operatorEnum) {
-        if(operatorEnum==null)
-            throw new NullPointerException("operatorEnum");
+    public MemberProducer filterKnowledgeLevelCount(final int level, final int count, @NonNull final OperatorEnum operatorEnum) {
         if(!(level==0 || level == 1 || level == 2))
             throw new IllegalArgumentException("illegal level, permitted values are 0, 1, 2");
         if(count < 0)
@@ -289,11 +268,7 @@ public class MemberProducerDB implements MemberProducer {
     }
 
     @Override
-    public MemberProducer filterKnowScoreOfSBR(final int score, final OperatorEnum operatorEnum, final SBR sbr) throws SbrInvalidException {
-        if(operatorEnum==null)
-            throw new NullPointerException("operatorEnum");
-        if(sbr==null)
-            throw new NullPointerException("sbr");
+    public MemberProducer filterKnowScoreOfSBR(final int score, @NonNull final OperatorEnum operatorEnum, @NonNull final SBR sbr) throws SbrInvalidException {
         if(sbr.getId()==null)
             throw new SbrInvalidException("sbr has no DB ID", new NullPointerException("sbr.id"), sbr);
 
@@ -353,9 +328,7 @@ public class MemberProducerDB implements MemberProducer {
 
     @Override
     //WORKAROUND: as subquery cannot be used in order by clause in JPQL at the moment, we have to fallback to sorting in JAVA
-    public MemberProducer sortKnowScoreOfSBR(final SBR sbr, final boolean ascending) throws SbrInvalidException {
-        if(sbr==null)
-            throw new NullPointerException("sbr");
+    public MemberProducer sortKnowScoreOfSBR(@NonNull final SBR sbr, final boolean ascending) throws SbrInvalidException {
         if (sbr.getId()==null)
             throw new SbrInvalidException("sbr has no DB ID", new NullPointerException("sbr.id"), sbr);
 
@@ -699,7 +672,7 @@ public class MemberProducerDB implements MemberProducer {
      * Helper method to do the sorting by KnowScore of SBR.
      * @return
      */
-    private List<Member> sortMembersByKnowScoreOfSbr(List<Member> tosort) {
+    private List<Member> sortMembersByKnowScoreOfSbr(@NonNull List<Member> tosort) {
         Collections.sort(tosort, new Comparator<Member>() {
             @Override
             public int compare(Member member1, Member member2) {
@@ -713,7 +686,7 @@ public class MemberProducerDB implements MemberProducer {
                 }
             }
 
-            private int getKnowScore(SBR sbr, Member member) {
+            private int getKnowScore(@NonNull SBR sbr, @NonNull Member member) {
                 int score = 0;
                 for(Knowledge know : member.getKnowledges()) {
                     if(know instanceof PackageKnowledge) {
@@ -731,12 +704,12 @@ public class MemberProducerDB implements MemberProducer {
         return tosort;
     }
 
-    private Member fetchCollections(Member member) {
+    private Member fetchCollections(@NonNull Member member) {
         member.getSbrs().size();
         return member;
     }
 
-    private List<Member> fetchCollections(List<Member> members) {
+    private List<Member> fetchCollections(@NonNull List<Member> members) {
         for(Member member : members) {
             fetchCollections(member);
         }

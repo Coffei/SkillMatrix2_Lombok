@@ -14,6 +14,7 @@ import org.ajax4jsf.model.SequenceRange;
 
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.SbrProducer;
 import com.redhat.gss.skillmatrix.model.SBR;
+import lombok.NonNull;
 
 /**
  * RichFaces model for {@link SBR}. This model is very flexible and can be used for any sbr-related tables. Just modify
@@ -35,6 +36,7 @@ public abstract class SbrsModel extends ExtendedDataModel<SBR> {
      * Range of displayed data
      */
     @Getter @Setter
+    @NonNull
     private SequenceRange range;
 
     public SbrsModel() {
