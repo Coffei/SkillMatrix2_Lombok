@@ -21,12 +21,11 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
+import lombok.extern.java.Log;
 
 @Singleton
+@Log
 public class ReflectionsResources {
-
-    @Inject
-    private Logger log;
 
     @Produces
     public Reflections createReflections() {

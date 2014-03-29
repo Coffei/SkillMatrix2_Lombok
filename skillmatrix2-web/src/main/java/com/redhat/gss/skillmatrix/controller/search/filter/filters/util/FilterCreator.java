@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 import lombok.val;
 import org.reflections.Reflections;
 
@@ -22,9 +23,8 @@ import org.reflections.Reflections;
  * To change this template use File | Settings | File Templates.
  */
 @Dependent
+@Log
 public class FilterCreator {
-
-    private Logger log = Logger.getLogger(getClass().getName());
 
     @Inject
     private Reflections reflections;

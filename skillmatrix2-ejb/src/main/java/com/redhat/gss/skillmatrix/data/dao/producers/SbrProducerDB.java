@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import lombok.val;
 
 /**
@@ -29,8 +30,8 @@ import lombok.val;
  * To change this template use File | Settings | File Templates.
  */
 @RequiredArgsConstructor
+@Log
 public class SbrProducerDB implements SbrProducer {
-    private final Logger log = Logger.getLogger(getClass().getName());
 
     @NonNull
     private EntityManager em;

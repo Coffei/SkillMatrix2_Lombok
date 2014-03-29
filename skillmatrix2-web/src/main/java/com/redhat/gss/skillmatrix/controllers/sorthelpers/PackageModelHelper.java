@@ -14,6 +14,7 @@ import org.richfaces.component.SortOrder;
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.util.Filter;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
 import com.redhat.gss.skillmatrix.util.PaginationHelper;
+import lombok.extern.java.Log;
 
 /**
  * Model helper class for {@link com.redhat.gss.skillmatrix.model.Package}. This class has two functions:
@@ -25,8 +26,8 @@ import com.redhat.gss.skillmatrix.util.PaginationHelper;
  * Date: 9/16/13
  * Time: 10:17 AM
  */
+@Log
 public abstract class PackageModelHelper implements Serializable {
-    private final Logger log = Logger.getLogger(getClass().getName());
 
     /**
      * RichFaces model

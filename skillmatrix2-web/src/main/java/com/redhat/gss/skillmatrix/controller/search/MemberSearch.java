@@ -1,6 +1,10 @@
 package com.redhat.gss.skillmatrix.controller.search;
 
 
+import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
+import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
+import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
+import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,23 +14,16 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Logger;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import lombok.val;
-
 import org.reflections.Reflections;
-
-import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
-import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
-import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
-import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,10 +34,8 @@ import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
  */
 @ManagedBean
 @ViewScoped
+@Log
 public class MemberSearch {
-
-    @Inject
-    private Logger log;
 
     @Inject
     private Reflections reflections;
@@ -158,8 +153,8 @@ public class MemberSearch {
 
     
     @RequiredArgsConstructor
+    @Log
     private static class FilterNameList extends AbstractList<String> {
-        private final Logger log = Logger.getLogger(getClass().getName());
 
         @NonNull
         private List<Filter> backingList;

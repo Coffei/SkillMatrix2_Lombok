@@ -25,6 +25,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.java.Log;
 import lombok.val;
 
 /**
@@ -40,8 +41,8 @@ import lombok.val;
         type = FilterType.BASIC)
 @ToString(includeFieldNames=true, exclude={"log", "sbrDAO"})
 @EqualsAndHashCode(of="value")
+@Log
 public class SbrFilter implements Filter {
-    private final Logger log = Logger.getLogger(getClass().getName());
 
     @Getter @Setter
     private SBR value;
