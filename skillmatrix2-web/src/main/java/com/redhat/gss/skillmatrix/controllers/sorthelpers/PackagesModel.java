@@ -1,19 +1,16 @@
 package com.redhat.gss.skillmatrix.controllers.sorthelpers;
 
+import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
+import com.redhat.gss.skillmatrix.model.Package;
 import java.util.List;
-
 import javax.faces.context.FacesContext;
-
 import lombok.Getter;
-
+import lombok.NonNull;
+import lombok.Setter;
 import org.ajax4jsf.model.DataVisitor;
 import org.ajax4jsf.model.ExtendedDataModel;
 import org.ajax4jsf.model.Range;
 import org.ajax4jsf.model.SequenceRange;
-
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
-import com.redhat.gss.skillmatrix.model.Package;
-import lombok.NonNull;
 
 /**
  * RichFaces model for {@link Package}. This model is very flexible and can be used for any package-related tables. Just modify
@@ -31,7 +28,11 @@ public abstract class PackagesModel extends ExtendedDataModel<Package> {
 
     private List<Package> pkgs;
 
+    /**
+     * Range of displayed data.
+     */
     @NonNull
+    @Getter @Setter
     private SequenceRange range;
 
     public PackagesModel() {
@@ -97,22 +98,6 @@ public abstract class PackagesModel extends ExtendedDataModel<Package> {
     @Override
     public void setWrappedData(Object o) {
         // noop
-    }
-
-    /**
-     *
-     * @return range of displayed data
-     */
-    public SequenceRange getRange() {
-        return range;
-    }
-
-    /**
-     * Sets the range of displayed data.
-     * @param range
-     */
-    public void setRange(SequenceRange range) {
-        this.range = range;
     }
 
     /**
