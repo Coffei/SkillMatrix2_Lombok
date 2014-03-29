@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import lombok.Getter;
+import lombok.extern.java.Log;
 
 import org.ajax4jsf.model.SequenceRange;
 
@@ -15,8 +16,8 @@ import org.ajax4jsf.model.SequenceRange;
  * Time: 2:11 PM
  * To change this template use File | Settings | File Templates.
  */
+@Log
 public abstract class PaginationHelper {
-    private final Logger log = Logger.getLogger(getClass().getName());
 
     //TODO: document
     @Getter

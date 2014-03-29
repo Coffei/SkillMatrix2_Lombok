@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
+import lombok.extern.java.Log;
 import lombok.val;
 
 /**
@@ -44,8 +45,8 @@ import lombok.val;
         name = "knowledge of tags")
 @ToString(includeFieldNames=true, exclude={"log", "pkgDao"})
 @EqualsAndHashCode(of="packagesMap")
+@Log
 public class PackageKnowledgeFilter implements Filter {
-    private Logger log = Logger.getLogger(getClass().getName());
 
     @Getter
     private Map<Package, Integer> packagesMap;

@@ -1,5 +1,10 @@
 package com.redhat.gss.skillmatrix.controller.details;
 
+import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
+import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
+import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
+import com.redhat.gss.skillmatrix.model.Package;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -7,16 +12,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 import lombok.val;
-
-import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
-import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
-import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
-import com.redhat.gss.skillmatrix.model.Package;
 
 /**
  * ManagedBean for Package detail view.
@@ -27,10 +26,8 @@ import com.redhat.gss.skillmatrix.model.Package;
  */
 @ManagedBean(name = "tagDetail")
 @ViewScoped()
+@Log
 public class PackageDetail {
-
-    @Inject
-    private Logger log;
 
     @Inject
     private PackageDAO dao;

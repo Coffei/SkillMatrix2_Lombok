@@ -1,5 +1,11 @@
 package com.redhat.gss.skillmatrix.data.dao.producers;
 
+import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
+import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
+import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
+import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
+import com.redhat.gss.skillmatrix.model.*;
+import com.redhat.gss.skillmatrix.model.Package;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
-
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -26,17 +31,10 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
-
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import lombok.val;
-
-import com.redhat.gss.skillmatrix.data.dao.exceptions.PackageInvalidException;
-import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
-import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
-import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
-import com.redhat.gss.skillmatrix.model.*;
-import com.redhat.gss.skillmatrix.model.Package;
 
 /**
  * Database implementation of {@link MemberProducer}.
@@ -45,9 +43,9 @@ import com.redhat.gss.skillmatrix.model.Package;
  * Time: 10:48 AM
  */
 @RequiredArgsConstructor
+@Log
 public class MemberProducerDB implements MemberProducer {
     private static final int EXPERT_LEVEL = 2;
-    private final Logger log = Logger.getLogger(getClass().getName());
 
     private List<Filter> filters = new LinkedList<Filter>();
     private List<Ordering> orders = new LinkedList<Ordering>();

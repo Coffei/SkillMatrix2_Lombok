@@ -24,6 +24,7 @@ import com.redhat.gss.skillmatrix.data.dao.interfaces.PackageDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
 import com.redhat.gss.skillmatrix.model.Member;
 import com.redhat.gss.skillmatrix.model.SBR;
+import lombok.extern.java.Log;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,14 +35,12 @@ import com.redhat.gss.skillmatrix.model.SBR;
  */
 @ManagedBean
 @ViewScoped
+@Log
 public class MemberDetail {
     private static final int PACKAGE_RECORDS = 5;
 
     @Inject
     private MemberDAO memberDAO;
-
-    @Inject
-    private Logger log;
 
     @Inject
     private PackageDAO pkgDao;

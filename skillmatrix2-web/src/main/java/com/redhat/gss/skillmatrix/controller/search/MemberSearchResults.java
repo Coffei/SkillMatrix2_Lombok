@@ -19,6 +19,7 @@ import com.redhat.gss.skillmatrix.controller.search.filter.filters.util.FilterCr
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.MemberDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
+import lombok.extern.java.Log;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,6 +30,7 @@ import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
  */
 @ManagedBean
 @ViewScoped
+@Log
 public class MemberSearchResults {
     public static final int MAX_RECORDS_PER_PAGE = 20;
 
@@ -40,9 +42,6 @@ public class MemberSearchResults {
 
     @Inject
     private MemberDAO memberDAO;
-
-    @Inject
-    private Logger log;
 
     @Getter
     private MemberModelHelper modelHelper;
