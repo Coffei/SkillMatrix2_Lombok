@@ -1,23 +1,5 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
-
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.val;
-
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
 import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
@@ -28,6 +10,22 @@ import com.redhat.gss.skillmatrix.data.dao.exceptions.SbrInvalidException;
 import com.redhat.gss.skillmatrix.data.dao.interfaces.SbrDAO;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.model.SBR;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.val;
 
 /**
  * Created with IntelliJ IDEA.
@@ -105,10 +103,7 @@ public class SbrFilter implements Filter {
     }
 
     @Override
-    public void applyOnProducer(MemberProducer producer) {
-        if(producer==null)
-            throw new NullPointerException("producer");
-
+    public void applyOnProducer(@NonNull MemberProducer producer) {
         try {
             producer.filterSBRMembership(this.value);
         } catch (SbrInvalidException e) {

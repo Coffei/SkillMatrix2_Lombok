@@ -51,9 +51,7 @@ public class PackageProducerDB implements PackageProducer {
     }
 
     @Override
-    public PackageProducer filterName(final String nameFragment) {
-        if(nameFragment==null)
-            throw new NullPointerException("nameFragment");
+    public PackageProducer filterName(@NonNull final String nameFragment) {
         if(nameFragment.isEmpty())
             throw new IllegalArgumentException("nameFragment cannot be empty");
 
@@ -68,9 +66,7 @@ public class PackageProducerDB implements PackageProducer {
     }
 
     @Override
-    public PackageProducer filterNameExact(final String name) {
-        if(name==null)
-            throw new NullPointerException("name");
+    public PackageProducer filterNameExact(@NonNull final String name) {
         if(name.isEmpty())
             throw new IllegalArgumentException("name cannot be empty");
 
@@ -85,9 +81,7 @@ public class PackageProducerDB implements PackageProducer {
     }
 
     @Override
-    public PackageProducer filterSBR(final SBR sbr) throws SbrInvalidException {
-        if(sbr==null)
-            throw new NullPointerException("sbr");
+    public PackageProducer filterSBR(@NonNull final SBR sbr) throws SbrInvalidException {
         if(sbr.getId()==null)
             throw new SbrInvalidException("sbr has no DB ID", new NullPointerException("sbr.id"), sbr);
 
@@ -102,9 +96,7 @@ public class PackageProducerDB implements PackageProducer {
     }
 
     @Override
-    public PackageProducer filterPeopleAtKnowledgeLevel(final int level, final OperatorEnum operator, final int count) {
-        if(operator==null)
-            throw new NullPointerException("operator");
+    public PackageProducer filterPeopleAtKnowledgeLevel(final int level, @NonNull final OperatorEnum operator, final int count) {
         if(!(level==0 || level==1 || level==2))
             throw new IllegalArgumentException("invalid level, permitted values are 0, 1, 2");
 
@@ -149,9 +141,7 @@ public class PackageProducerDB implements PackageProducer {
     }
 
     @Override
-    public PackageProducer filterSbrName(final String nameFragment) {
-        if(nameFragment==null)
-            throw new NullPointerException("nameFragment");
+    public PackageProducer filterSbrName(@NonNull final String nameFragment) {
         if(nameFragment.trim().isEmpty())  // criteria is empty, just do nothing
             return this;
 

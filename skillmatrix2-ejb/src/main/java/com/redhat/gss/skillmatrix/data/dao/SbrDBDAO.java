@@ -7,16 +7,15 @@ import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.SbrProducer;
 import com.redhat.gss.skillmatrix.model.*;
 import com.redhat.gss.skillmatrix.model.Package;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.UserTransaction;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -42,10 +41,7 @@ public class SbrDBDAO implements SbrDAO {
     }
 
     @Override
-    public void create(SBR sbr) throws SbrInvalidException {
-        if(sbr==null)
-            throw new NullPointerException("sbr");
-
+    public void create(@NonNull SBR sbr) throws SbrInvalidException {
         em.persist(sbr);
 
         //add new members
@@ -72,9 +68,7 @@ public class SbrDBDAO implements SbrDAO {
     }
 
     @Override
-    public void update(SBR sbr) throws SbrInvalidException {
-        if(sbr==null)
-            throw new NullPointerException("sbr");
+    public void update(@NonNull SBR sbr) throws SbrInvalidException {
         if(sbr.getId() == null)
             throw new SbrInvalidException("sbr has no DB ID", new NullPointerException("sbr.id"), sbr);
 
@@ -120,7 +114,7 @@ public class SbrDBDAO implements SbrDAO {
         }
 
     }
-
+    
     private List<Long> mapIDsMembers(List<Member> members) {
         if(members==null)
             return Collections.emptyList();
@@ -144,9 +138,7 @@ public class SbrDBDAO implements SbrDAO {
     }
 
     @Override
-    public void delete(SBR sbr) throws SbrInvalidException {
-        if(sbr==null)
-            throw new NullPointerException("sbr");
+    public void delete(@NonNull SBR sbr) throws SbrInvalidException {
         if(sbr.getId() == null)
             throw new SbrInvalidException("sbr has no DB ID", new NullPointerException("sbr.id"), sbr);
 

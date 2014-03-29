@@ -1,14 +1,5 @@
 package com.redhat.gss.skillmatrix.controller.search.filter.filters;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.val;
-
 import com.redhat.gss.skillmatrix.controller.search.filter.Filter;
 import com.redhat.gss.skillmatrix.controller.search.filter.FilterType;
 import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
@@ -17,6 +8,15 @@ import com.redhat.gss.skillmatrix.controller.search.filter.filters.util.Attribut
 import com.redhat.gss.skillmatrix.controllers.sorthelpers.MemberModelHelper;
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.MemberProducer;
 import com.redhat.gss.skillmatrix.data.dao.producers.util.OperatorEnum;
+import java.util.HashMap;
+import java.util.Map;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.val;
 
 /**
  * Created with IntelliJ IDEA.
@@ -82,7 +82,7 @@ public class KnowledgeCountFilter implements Filter {
     }
 
     @Override
-    public void applyOnProducer(MemberProducer producer) {
+    public void applyOnProducer(@NonNull MemberProducer producer) {
         producer.filterKnowledgeLevelCount(level, amount, operator);
     }
 

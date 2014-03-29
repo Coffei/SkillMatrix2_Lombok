@@ -10,6 +10,7 @@ import lombok.val;
 import com.redhat.gss.skillmatrix.controller.search.filter.BasicAttributeFilter;
 import com.redhat.gss.skillmatrix.controller.search.filter.MemberFilter;
 import com.redhat.gss.skillmatrix.controller.search.filter.exeptions.TypeMismatchException;
+import lombok.NonNull;
 
 /**
  * Created with IntelliJ IDEA.
@@ -48,7 +49,7 @@ public class AttributeEncoder {
         filter.setValue(value);
     }
 
-    public static Map<String, String> decodeToMap(String encodedFilter, String requestedType) throws TypeMismatchException, IllegalArgumentException {
+    public static Map<String, String> decodeToMap(@NonNull String encodedFilter, String requestedType) throws TypeMismatchException, IllegalArgumentException {
         val result = new HashMap<String, String>();
         Pattern typeCheckPattern = Pattern.compile("^([^:]+):(.*)$");
         Pattern paramsValidity = Pattern.compile("^(([\\w]+)-((([^;])|(\\\\;))+)?[^\\\\;];)*$");
@@ -83,7 +84,7 @@ public class AttributeEncoder {
         return result;
     }
 
-    public static String encodeFromMap(String filterType, Map<String, String> data) {
+    public static String encodeFromMap(String filterType, @NonNull Map<String, String> data) {
         if(filterType==null) //maybe other checks?
             return null;
 

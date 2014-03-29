@@ -13,6 +13,7 @@ import org.ajax4jsf.model.SequenceRange;
 
 import com.redhat.gss.skillmatrix.data.dao.producers.interfaces.PackageProducer;
 import com.redhat.gss.skillmatrix.model.Package;
+import lombok.NonNull;
 
 /**
  * RichFaces model for {@link Package}. This model is very flexible and can be used for any package-related tables. Just modify
@@ -30,6 +31,7 @@ public abstract class PackagesModel extends ExtendedDataModel<Package> {
 
     private List<Package> pkgs;
 
+    @NonNull
     private SequenceRange range;
 
     public PackagesModel() {
