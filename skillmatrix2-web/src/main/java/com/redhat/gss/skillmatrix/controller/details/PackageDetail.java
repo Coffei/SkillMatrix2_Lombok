@@ -56,49 +56,50 @@ public class PackageDetail {
         }
     }
 
-    private Integer experts;
-    public int getExperts()  {
-        if(experts==null) {
-            //init experts
-            try {
-                experts = (int)memberDao.getProducerFactory().filterKnowledgeOfPackage(this.pkg, 2, OperatorEnum.EQUAL).getCount();
-            } catch (PackageInvalidException e) {
-                log.warning("error when getting experts count");
-                log.warning(e.toString());
-            }
+    @Getter(lazy = true)
+    private final int experts = computeExperts();
+    
+    public int computeExperts()  {
+        int result = 0;
+        try {
+            result = (int)memberDao.getProducerFactory().filterKnowledgeOfPackage(this.pkg, 2, OperatorEnum.EQUAL).getCount();
+        } catch (PackageInvalidException e) {
+            log.warning("error when getting experts count");
+            log.warning(e.toString());
         }
-
-        return experts;
+        
+        
+        return result;
     }
 
-    private Integer intermediates;
-    public int getIntermediates()  {
-        if(intermediates==null) {
-            //init experts
-            try {
-                intermediates = (int)memberDao.getProducerFactory().filterKnowledgeOfPackage(this.pkg, 1, OperatorEnum.EQUAL).getCount();
-            } catch (PackageInvalidException e) {
-                log.warning("error when getting intermediates count");
-                log.warning(e.toString());
-            }
+    @Getter(lazy = true)
+    private final int intermediates = computeIntermediates();
+    public int computeIntermediates()  {
+        int result = 0;
+        try {
+            result = (int)memberDao.getProducerFactory().filterKnowledgeOfPackage(this.pkg, 1, OperatorEnum.EQUAL).getCount();
+        } catch (PackageInvalidException e) {
+            log.warning("error when getting intermediates count");
+            log.warning(e.toString());
         }
-
-        return intermediates;
+        
+        
+        return result;
     }
-
-    private Integer beginners;
-    public int getBeginners()  {
-        if(beginners==null) {
-            //init experts
-            try {
-                beginners = (int)memberDao.getProducerFactory().filterKnowledgeOfPackage(this.pkg, 0, OperatorEnum.EQUAL).getCount();
-            } catch (PackageInvalidException e) {
-                log.warning("error when getting beginners count");
-                log.warning(e.toString());
-            }
+    
+    @Getter(lazy = true)
+    private final Integer beginners = computeBeginners();
+    public int computeBeginners()  {
+        int result = 0;
+        try {
+            result = (int)memberDao.getProducerFactory().filterKnowledgeOfPackage(this.pkg, 0, OperatorEnum.EQUAL).getCount();
+        } catch (PackageInvalidException e) {
+            log.warning("error when getting beginners count");
+            log.warning(e.toString());
         }
-
-        return beginners;
+        
+        
+        return result;
     }
-
+    
 }
