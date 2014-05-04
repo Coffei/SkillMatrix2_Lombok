@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  * Entity representing members knowledge (skill) of certain package.
@@ -17,34 +18,21 @@ import lombok.ToString;
 @Entity
 @DiscriminatorValue("PACKAGE")
 @ToString(includeFieldNames=true, callSuper=true)
+@Accessors(prefix = "a")
 public class PackageKnowledge extends Knowledge {
 
 	/**
 	 * Serial ID, change with care
 	 */
 	private static final long serialVersionUID = 8718176125991666863L;
-	
-	
-	// these getters, setters were kept because Lombok cannot rename generated getter/setter and var cannot be named package
-	/**
-	 * @return package this knowledge refers to
-	 */
-	public Package getPackage() {
-		return pkg;
-	}
-
-
-	public void setPackage(Package pkg) {
-		this.pkg = pkg;
-	}
-
 
 	/**
 	 * Package this knowledge refers to
 	 */
 	@NotNull
 	@ManyToOne(optional=false)
-	private Package pkg;
+        @Getter @Setter
+	private Package aPackage;
 
 
 	@Override
