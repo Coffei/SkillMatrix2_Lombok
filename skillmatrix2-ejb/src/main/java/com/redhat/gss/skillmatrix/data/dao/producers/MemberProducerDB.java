@@ -230,7 +230,7 @@ public class MemberProducerDB implements MemberProducer {
                 //get members' ids that are in accordance with this predicate
                 //TODO: convert to typed query
                 String operator = operatorEnum.createSQLTextPredicate();
-                Query idquery = em.createNativeQuery("SELECT member_id FROM PACKAGEKNOWLEDGE WHERE PKG_ID = :pkg AND level " + operator + " :level");
+                Query idquery = em.createNativeQuery("SELECT member_id FROM PACKAGEKNOWLEDGE WHERE apackage_id = :pkg AND level " + operator + " :level");
                 idquery.setParameter("pkg", pkg.getId());
                 idquery.setParameter("level", level);
 
@@ -300,7 +300,7 @@ public class MemberProducerDB implements MemberProducer {
                                                         pkgKnow.get(PackageKnowledge_.level).as(Double.class),
                                                         0.5)),
                                         1)).as(Integer.class))
-                        .where(cb.equal(pkgKnow.get(PackageKnowledge_.member), root), pkgKnow.get(PackageKnowledge_.pkg).in(pkgSubquery));
+                        .where(cb.equal(pkgKnow.get(PackageKnowledge_.member), root), pkgKnow.get(PackageKnowledge_.aPackage).in(pkgSubquery));
 
                 return operatorEnum.createPredicate(cb, knowSubquery, cb.literal(score));
 
@@ -366,7 +366,7 @@ public class MemberProducerDB implements MemberProducer {
                                                         pkgKnow.get(PackageKnowledge_.level).as(Double.class),
                                                         0.5)),
                                         1)).as(Integer.class))
-                        .where(cb.equal(pkgKnow.get(PackageKnowledge_.member), root), pkgKnow.get(PackageKnowledge_.pkg).in(pkgSubquery));
+                        .where(cb.equal(pkgKnow.get(PackageKnowledge_.member), root), pkgKnow.get(PackageKnowledge_.aPackage).in(pkgSubquery));
 
 
                 return createOrder(ascending, cb, knowSubquery);

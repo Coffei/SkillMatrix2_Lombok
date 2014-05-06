@@ -55,7 +55,7 @@ public class PackageDBDAO implements PackageDAO {
             pkg = em.merge(pkg);
 
         //delete all package knowledges
-        val query = em.createNativeQuery("DELETE FROM PACKAGEKNOWLEDGE WHERE pkg_id=:pkg");
+        val query = em.createNativeQuery("DELETE FROM PACKAGEKNOWLEDGE WHERE apackage_id=:pkg");
         query.setParameter("pkg", pkg.getId());
         query.executeUpdate();
         em.remove(pkg);

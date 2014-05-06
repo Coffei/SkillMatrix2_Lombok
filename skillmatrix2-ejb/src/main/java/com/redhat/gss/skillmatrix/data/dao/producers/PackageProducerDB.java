@@ -105,7 +105,7 @@ public class PackageProducerDB implements PackageProducer {
             public Predicate apply(CriteriaBuilder cb, Root<Package> root, CriteriaQuery query) {
                 val subquery = query.subquery(Long.class);
                 val  pkgKnowRoot = subquery.from(PackageKnowledge.class);
-                subquery.select(cb.count(pkgKnowRoot)).where(cb.equal(pkgKnowRoot.get(PackageKnowledge_.pkg), root), cb.equal(pkgKnowRoot.get(PackageKnowledge_.level), level));
+                subquery.select(cb.count(pkgKnowRoot)).where(cb.equal(pkgKnowRoot.get(PackageKnowledge_.aPackage), root), cb.equal(pkgKnowRoot.get(PackageKnowledge_.level), level));
 
                 return operator.createPredicate(cb, subquery, cb.literal((long)count));
 
@@ -128,7 +128,7 @@ public class PackageProducerDB implements PackageProducer {
                 //get all the relevant pkgs
                 val pkgCriteria = cb.createQuery(Package.class);
                 val knowRoot = pkgCriteria.from(PackageKnowledge.class);
-                pkgCriteria.select(knowRoot.get(PackageKnowledge_.pkg)).where(cb.equal(knowRoot.get(PackageKnowledge_.member),
+                pkgCriteria.select(knowRoot.get(PackageKnowledge_.aPackage)).where(cb.equal(knowRoot.get(PackageKnowledge_.member),
                         member), cb.equal(knowRoot.get(PackageKnowledge_.level), level));
                 val pkgs = em.createQuery(pkgCriteria).getResultList();
 
