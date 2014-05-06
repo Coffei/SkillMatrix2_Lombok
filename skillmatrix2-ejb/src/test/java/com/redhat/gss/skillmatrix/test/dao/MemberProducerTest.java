@@ -68,8 +68,8 @@ public class MemberProducerTest {
     @Test
     public void testFilterId() throws Exception {
         Member newMember= new Member();
-        newMember.setNick("jtrantin");
-        newMember.setEmail("jtrantin@redhat.com");
+        newMember.setNick("jtrantinrandomx456");
+        newMember.setEmail("jtrantinxrand456@redhat.com");
         newMember.setName("Jonas");
         newMember.setExtension("62918");
         newMember.setGeo(new Geo(GeoEnum.EMEA, 120));
